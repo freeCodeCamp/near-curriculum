@@ -21,7 +21,7 @@ import {
   updateFreeCodeCampConfig
 } from './client-socks.js';
 import hotReload from './hot-reload.js';
-import { hideAll, showFile } from './utils.js';
+import { hideAll, showFile, showAll } from './utils.js';
 import { join } from 'path';
 logover({
   level: process.env.NODE_ENV === 'production' ? 'info' : 'debug'
@@ -93,14 +93,18 @@ async function handleSelectProject(ws, data) {
   // TODO: Should this set the currentProject to `null` (empty string)?
   // for the case where the Camper has navigated to the landing page.
   await setState({ currentProject: selectedProject?.dashedName ?? null });
-  if (!selectedProject) {
+  if (!selectedProject && !data?.data?.id) {
     warn('Selected project does not exist: ', data);
     return ws.send(parse({ data: { event: data.event }, event: 'RESPONSE' }));
   }
 
-  // TODO: Disabled whilst in development because it is annoying
-  // await hideAll();
-  // await showFile(selectedProject.dashedName);
+  // Disabled whilst in development because it is annoying
+  if (process.env.NODE_ENV === 'production') {
+    await hideAll();
+    await showFile(selectedProject.dashedName);
+  } else {
+    await showAll();
+  }
   await runLesson(ws, selectedProject.dashedName);
   return ws.send(parse({ data: { event: data.event }, event: 'RESPONSE' }));
 }
