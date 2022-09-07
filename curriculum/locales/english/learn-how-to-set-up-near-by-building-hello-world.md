@@ -11,6 +11,7 @@ Welcome to the NEAR curriculum! For the duration of this project, you will be wo
 You should use the change directory command (`cd`) in the terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const lastCommand = await __helpers.getLastCommand();
 assert.match(lastCommand, /^\s*cd/);
 ```
@@ -18,6 +19,7 @@ assert.match(lastCommand, /^\s*cd/);
 You should be in the `learn-how-to-set-up-near-by-building-hello-world` directory in your terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const cwdFile = await __helpers.getCWD();
 const cwd = cwdFile.split('\n').filter(Boolean).pop();
 assert.include(cwd, 'learn-how-to-set-up-near-by-building-hello-world');
@@ -34,6 +36,7 @@ You will be building a simple smart contract and deploying it to the NEAR testne
 You should run `npm init` in the terminal and press enter through all the prompts
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const lastCommand = await __helpers.getLastCommand();
 assert.match(lastCommand, /npm\s+init/);
 ```
@@ -57,6 +60,7 @@ Open your `package.json` file and add a `type` of `module` to it so you can use 
 Your `package.json` file should have a `type` property of `module`
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/package.json');
 const packageJson = JSON.parse(fileContents);
 assert.include(packageJson, { type: 'module' });
@@ -123,6 +127,7 @@ You will create your contract in the `src/index.ts` file. Open it and, at the to
 You should have `import { NearContract } from 'near-sdk-js';` at the top of your `src/index.ts` file
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
 assert.match(fileContents, /^\s*import\s*{\s*NearContract\s*}\s*from\s*('|")near-sdk-js\1\s*;?/);
 ```
@@ -142,6 +147,7 @@ class <className> extends <extendedClass> { }
 You should have `class MyContract extends NearContract {}` in your `src/index.ts` file
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
 assert.match(fileContents, /class\s*MyContract\s+extends\s*NearContract\s*{\s*}/);
 ```
@@ -157,6 +163,7 @@ In the import statement at the top of your contract, destruct `NearBindgen` from
 You should have `import { NearContract, NearBindgen } from 'near-sdk-js';` at the top of your `src/index.ts` file
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
 assert.match(fileContents, /^\s*import\s*{\s*(NearContract\s*,\s*NearBindgen|NearBindgen\s*,\s*NearContract)\s*}\s*from\s*('|")near-sdk-js\2\s*;?/);
 ```
@@ -172,6 +179,7 @@ assert.match(fileContents, /^\s*import\s*{\s*(NearContract\s*,\s*NearBindgen|Nea
 You should have `@NearBingen` in your contract file, right above your class declaration
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
 assert.match(fileContents, /@NearBindgen\s*class\s+MyContract/);
 ```
@@ -187,8 +195,9 @@ Your smart contract will store a single string on the blockchain that you will b
 You should have `message: string;` as the first thing in your `MyContract` class
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
-assert.match(fileContents, /class\s*MyContract\s+extends\s*NearContract\s*{\s*message\s*:\s*string\s*;\s*}/);
+assert.match(fileContents, /class\s*MyContract\s+extends\s*NearContract\s*{\s*message\s*:\s*string\s*;?\s*}/);
 ```
 
 ## 11
@@ -202,6 +211,7 @@ Below your message type definition, add the `constructor` function and put the `
 You should have a `constructor() { }` function in your `MyContract` class
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
 assert.match(fileContents, /MyContract[\s\S]*?{[\s\S]*constructor\s*\(\s*\)\s*{[\s\S]*?}\s*}/);
 ```
@@ -209,6 +219,7 @@ assert.match(fileContents, /MyContract[\s\S]*?{[\s\S]*constructor\s*\(\s*\)\s*{[
 You should have a `super();` function in your `constructor()` function
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
 assert.match(fileContents, /constructor\s*\(\s*\)\s*{\s*super\s*\(\s*\)\s*;?\s*}/);
 ```
@@ -224,6 +235,7 @@ In your constructor, below the `super` function, set the default of the `message
 You should have `this.message = 'Hello';` in your constructor function
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
 assert.match(fileContents, /constructor\s*\(\s*\)\s*{[\s\S]*super[\s\S]*this\s*\.message\s*=\s*('|"|`)Hello\1\s*;?\s*}/);
 ```
@@ -239,6 +251,7 @@ Below your constructor, create an empty `default` function. This will run when y
 You should have a `default() { }` function in your `MyContract` class
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
 assert.match(fileContents, /MyContract[\s\S]*default\s*\(\s*\)\s*{\s*}\s*}\s*$/);
 ```
@@ -254,6 +267,7 @@ Inside the `default` function, return a new instance of `MyContract` so when you
 You should have `return new MyContract();` in your `default` function
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
 assert.match(fileContents, /default\s*\(\s*\)\s*{\s*return\s+new\s+MyContract\s*\(\s*\)\s*;?\s*}/);
 ```
@@ -269,6 +283,7 @@ Below your `default` function, create an empty `getGreeting` function and set it
 You should have a `getGreeting(): string { }` function in your `MyContract` class
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
 assert.match(fileContents, /default[\s\S]*?}\s*getGreeting\s*\(\s*\)\s*:\s*string\s*{\s*}\s*}/);
 ```
@@ -284,6 +299,7 @@ In the `getGreeting` function, return the message.
 You should have `return this.message;` in your `getGreeting` function
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
 assert.match(fileContents, /getGreeting[\s\S]*{\s*return\s+this\s*\.\s*message\s*;?\s*}/);
 ```
@@ -299,6 +315,7 @@ You need to tell the blockchain if your `getGreeting` function will modify anyth
 You should have `import { NearContract, NearBindgen, view } from 'near-sdk-js';` at the top of your contract file
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
 assert.match(fileContents, /^\s*import\s*({\s*view\s*,[\s\S*]*}|{[\s\S]*,\s*view\s*,[\s\S]*}|{[\s\S]*,\s*view\s*})\s*from\s*('|")near-sdk-js\2\s*;?/);
 ```
@@ -314,6 +331,7 @@ The `view` decorator means that this function will only read data from the block
 You should have a `@view` decorator right above your `getGreeting` function
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
 assert.match(fileContents, /@view\s*getGreeting/);
 ```
@@ -390,6 +408,7 @@ Enter `near --version` in the terminal to make sure it got installed.
 You should run `near --version` in the terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const lastCommand = await __helpers.getLastCommand();
 assert.match(lastCommand, /near\s+--version/);
 ```
@@ -405,6 +424,7 @@ It worked. Enter `near --help` to see what the CLI tools have to offer.
 You should run `near --help` in the terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const lastCommand = await __helpers.getLastCommand();
 assert.match(lastCommand, /near\s+--help/);
 ```
@@ -428,6 +448,7 @@ assert.match(lastCommand, /near\s+dev-deploy\s+build\/hello-near\.wasm/);
 You should have a `neardev` folder as a result of deploying the contract
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const learnDir = await __helpers.getDirectory('learn-how-to-set-up-near-by-building-hello-world')
 assert.include(learnDir, 'neardev');
 ```
@@ -443,6 +464,7 @@ You contract has been deployed, there's some feedback about it in the terminal. 
 You should enter `near --help` in the terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const lastCommand = await __helpers.getLastCommand();
 assert.match(lastCommand, /near\s+--help/);
 ```
@@ -464,6 +486,7 @@ Deploying your contract created that `neardev` folder for you. In there, you wil
 You should run `near call <contract_id> init --accountId <account_id>` with the correct information from your `neardev` folder
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const id = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/neardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
 const re = new RegExp(`near\\s+call\\s+${id}\\s+init\\s+--accountId\\s+${id}`, 'g');
@@ -487,6 +510,7 @@ Call your `getGreeting` function. Remember that your contract name is in the `ne
 You should run `near view <contract_name> getGreeting` in the terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const id = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/neardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
 const re = new RegExp(`near\\s+view\\s+${id}\\s+getGreeting`, 'g');
@@ -504,6 +528,7 @@ Your contract works! It printed the message. Next, you are going to add a way to
 You should have `setGreeting() { }` in your `index.js` file
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
 assert.match(fileContents, /MyContract\s+extends[\s\S]*?{[\s\S]*setGreeting\s*\(\s*\)\s*{\s*}\s*}\s*$/);
 ```
@@ -523,6 +548,7 @@ Add a parameter to your `setGreeting` function that destructs `message` from an 
 You should have `setGreeting({ message }: { message: string })` in your contract file
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
 assert.match(fileContents, /setGreeting\s*\(\s*{\s*message\s*}\s*:\s*{\s*message\s*:\s*string\s*}\)\s*{\s*}\s*/);
 ```
@@ -538,6 +564,7 @@ In the `setGreeting` function, set the `message` of the contract to the message 
 You should have `this.message = message` in your `setGreeting` function
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
 assert.match(fileContents, /setGreeting[\s\S]*?\)\s*{\s*this\s*\.\s*message\s*=\s*message\s*;?\s*}/);
 ```
@@ -553,6 +580,7 @@ You used the `view` decorator for the `getGreeting` function because the functio
 You should have `import { NearContract, NearBindgen, view, call } from 'near-sdk-js';` at the top of your contract file
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
 assert.match(fileContents, /^\s*import\s*({\s*call\s*,[\s\S*]*}|{[\s\S]*,\s*call\s*,[\s\S]*}|{[\s\S]*,\s*call\s*})\s*from\s*('|")near-sdk-js\2\s*;?/);
 ```
@@ -568,6 +596,7 @@ Add the `call` decorator right above your `setGreeting` function to tell the blo
 You should have `@call` right above your `setGreeting` function
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
 assert.match(fileContents, /@call\s*setGreeting/);
 ```
@@ -583,6 +612,7 @@ There's one more thing you should know about. Import `near` at the top of your f
 You should have `import { NearContract, NearBindgen, view, call, near } from 'near-sdk-js';` at the top of your contract file
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
 assert.match(fileContents, /^\s*import\s*({\s*near\s*,[\s\S*]*}|{[\s\S]*,\s*near\s*,[\s\S]*}|{[\s\S]*,\s*near\s*})\s*from\s*('|")near-sdk-js\2\s*;?/);
 ```
@@ -600,6 +630,7 @@ In your `setGreeting` function, use `near` to log `Saving greeting to '<message>
 You should have ``near.log(`Saving greeting to '${message}'`)`` in your `setGreeting` function
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
 assert.match(fileContents, /setGreeting[\s\S]*?\)\s*{[\s\S]*near\s*\.\s*log\s*\(\s*`Saving greeting to '\${message}'`\s*\)\s*;?[\s\S]*?}\s*}/);
 ```
@@ -615,6 +646,7 @@ You will re-deploy you contract in a minute. Change the initial message of your 
 You should have `this.message = 'Hello world'` in your constructor function
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/src/index.ts');
 assert.match(fileContents, /constructor\s*\(\s*\)\s*{[\s\S]*super[\s\S]*this\s*\.message\s*=\s*('|"|`)Hello world\1\s*;?\s*}/);
 ```
@@ -638,6 +670,7 @@ assert.match(lastCommand, /npm\s+run\s+build:contract/);
 You should be in the `learn-how-to-set-up-near-by-building-hello-world` folder when you run the above command
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const cwdFile = await __helpers.getCWD();
 const cwd = cwdFile.split('\n').filter(Boolean).pop();
 assert.include(cwd, 'learn-how-to-set-up-near-by-building-hello-world');
@@ -656,6 +689,7 @@ In the terminal, use the move command to change the name of your `neardev` folde
 You should run `mv neardev oldneardev` in the terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const lastCommand = await __helpers.getLastCommand();
 assert.match(lastCommand, /mv[\s\S]*oldneardev\/?/);
 ```
@@ -663,6 +697,7 @@ assert.match(lastCommand, /mv[\s\S]*oldneardev\/?/);
 You should have an `oldneardev` folder
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const learnDir = await __helpers.getDirectory('learn-how-to-set-up-near-by-building-hello-world')
 assert.include(learnDir, 'oldneardev');
 ```
@@ -670,6 +705,7 @@ assert.include(learnDir, 'oldneardev');
 You should not have a `neardev` folder
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const learnDir = await __helpers.getDirectory('learn-how-to-set-up-near-by-building-hello-world')
 assert.notInclude(learnDir, 'neardev');
 ```
@@ -693,6 +729,7 @@ assert.match(lastCommand, /near\s+dev-deploy\s+build\/hello-near\.wasm/);
 You should have a `neardev` folder as a result of deploying the contract
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const learnDir = await __helpers.getDirectory('learn-how-to-set-up-near-by-building-hello-world')
 assert.include(learnDir, 'neardev');
 ```
@@ -708,6 +745,7 @@ Your contract should be deployed, and you should have a new `neardev` folder wit
 You should run `near call <contract_name> init --accountId <account_id>` in the terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const id = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/neardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
 const re = new RegExp(`near\\s+call\\s+${id}\\s+init\\s+--accountId\\s+${id}`, 'g');
@@ -725,6 +763,7 @@ Call the `viewGreeting` function on your new contract to make sure it has the co
 You should run `near view <contract_name> getGreeting` in the terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const id = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/neardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
 const re = new RegExp(`near\\s+view\\s+${id}\\s+getGreeting`, 'g');
@@ -748,6 +787,7 @@ Use the `call` command to run your `setGreeting` function and change the `messag
 You should run `near call <contract_name> setGreeting '{ "message": "Hello NEAR" }' --accountId <account_id>` in the terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const id = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/neardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
 const re = new RegExp(`near\\s+call\\s+${id}\\s+setGreeting\\s+'\\s*{\\s*"message"\\s*:\\s*"Hello NEAR"\\s*}\\s*'`, 'g');
@@ -757,6 +797,7 @@ assert.match(lastCommand, re);
 Your contract should currently have a `message` value of `Hello NEAR`
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const id = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/neardev/dev-account');
 const output = await __helpers.getCommandOutput(`near view ${id} getGreeting`, 'learn-how-to-set-up-near-by-building-hello-world');
 const { stdout } = output;
@@ -767,13 +808,14 @@ assert.match(stdout, /'Hello NEAR'/);
 
 ### --description--
 
-Use the `view` command again to make sure your greeting changed.
+You can see your log in there that it is changing the message. Run the `getGreeting` function again to make sure.
 
 ### --tests--
 
 You should run `near view <contract_name> getGreeting`
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const id = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/neardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
 const re = new RegExp(`near\\s+view\\s+${id}\\s+getGreeting`, 'g');
@@ -791,6 +833,7 @@ It worked. Change the greeting one more time to `Hello NEAR!`
 You should run `near call <contract_name> setGreeting '{ "message": "Hello NEAR!" }' --accountId <account_id>` in the terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const id = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/neardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
 const re = new RegExp(`near\\s+call\\s+${id}\\s+setGreeting\\s+'\\s*{\\s*"message"\\s*:\\s*"Hello NEAR!"\\s*}\\s*'`, 'g');
@@ -800,6 +843,7 @@ assert.match(lastCommand, re);
 Your contract should currently have a `message` value of `Hello NEAR`
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const id = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/neardev/dev-account');
 const output = await __helpers.getCommandOutput(`near view ${id} getGreeting`, 'learn-how-to-set-up-near-by-building-hello-world');
 const { stdout } = output;
@@ -817,6 +861,7 @@ You can see that a transaction took place to make the change to your contract. T
 You should run `near tx-status <hash> --accountId <account_id>` in the terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const id = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/neardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
 const re = new RegExp(`near\\s+tx-status\\s+\\S\{44\}\\s+--accountId\\s+${id}`, 'g');
@@ -826,6 +871,7 @@ assert.match(lastCommand, re);
 Your terminal output should include the transaction object after running the above command
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const terminalOutput = await __helpers.getTerminalOutput();
 assert.match(terminalOutput, /receipts_outcome/);
 ```
@@ -843,6 +889,7 @@ View the help menu of the CLI tools again to see what else you can do.
 You should run `near --help` in the terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const lastCommand = await __helpers.getLastCommand();
 assert.match(lastCommand, /near\s+--help/);
 ```
@@ -858,6 +905,7 @@ Looks like you can see some infomation about accounts with `near state <account_
 You should run `near state <account_id>` in the terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const oldId = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/oldneardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
 const re = new RegExp(`near\\s+state\\s+${oldId}`, 'g');
@@ -867,6 +915,7 @@ assert.match(lastCommand, re);
 The `<account_id>` should match the account name in the `oldneardev` folder
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const oldId = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/oldneardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
 const re = new RegExp(`${oldId}`, 'g');
@@ -884,6 +933,7 @@ You've got a lot of coins. Check the state of your new account, the one in the `
 You should run `near state <account_id>` in the terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const id = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/neardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
 const re = new RegExp(`near\\s+state\\s+${id}`, 'g');
@@ -893,6 +943,7 @@ assert.match(lastCommand, re);
 The `<account_id>` should match the account name in the `neardev` folder
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const id = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/neardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
 const re = new RegExp(`${id}`, 'g');
@@ -910,6 +961,7 @@ You can see the `formattedAmount` at the bottom. Both accounts should have about
 You should run `near --help` in the terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const lastCommand = await __helpers.getLastCommand();
 assert.match(lastCommand, /near\s+--help/);
 ```
@@ -925,6 +977,7 @@ It looks like you can use the CLI to send tokens from one account to another wit
 You should run `near send <sender_id> <receiver_id> 20` in the terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const oldId = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/oldneardev/dev-account');
 const id = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/neardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
@@ -935,6 +988,7 @@ assert.match(lastCommand, re);
 The `<sender_id>` should match the account name in the `oldneardev` folder
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const oldId = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/oldneardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
 const re = new RegExp(`${oldId}`, 'g');
@@ -944,6 +998,7 @@ assert.match(lastCommand, re);
 The `<reciever_id>` should match the account name in the `neardev` folder
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const id = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/neardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
 const re = new RegExp(`${id}`, 'g');
@@ -961,6 +1016,7 @@ Check the state of your newer account to see if it worked.
 You should run `near state <account_id>` in the terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const id = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/neardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
 const re = new RegExp(`near\\s+state\\s+${id}`, 'g');
@@ -970,6 +1026,7 @@ assert.match(lastCommand, re);
 The `<account_id>` should match the account name in the `neardev` folder
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const id = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/neardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
 const re = new RegExp(`${id}`, 'g');
@@ -987,6 +1044,7 @@ You should have 20 more coins in the amount at the bottom. Check the state of yo
 You should run `near state <account_id>` in the terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const oldId = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/oldneardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
 const re = new RegExp(`near\\s+state\\s+${oldId}`, 'g');
@@ -996,6 +1054,7 @@ assert.match(lastCommand, re);
 The `<account_id>` should match the account name in the `oldneardev` folder
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const oldId = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/oldneardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
 const re = new RegExp(`${oldId}`, 'g');
@@ -1013,6 +1072,7 @@ You are done with your contract. You created it from scratch and deployed it. Th
 You should run `npm install -g create-near-app@4.0.0` in the terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const lastCommand = await __helpers.getLastCommand();
 assert.match(lastCommand, /npm\s+(install|i)\s+((-g|--global)\s+create-near-app@4\.0\.0|create-near-app@4\.0\.0\s+(-g|--global))/);
 ```
@@ -1036,6 +1096,7 @@ assert.match(lastCommand, /npx\s+create-near-app/);
 You should be in the `learn-how-to-set-up-near-by-building-hello-world` directory in your terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const cwdFile = await __helpers.getCWD();
 const cwd = cwdFile.split('\n').filter(Boolean).pop();
 assert.include(cwd, 'learn-how-to-set-up-near-by-building-hello-world');
@@ -1044,6 +1105,7 @@ assert.include(cwd, 'learn-how-to-set-up-near-by-building-hello-world');
 You should have a `hello-near` folder as a result of running the command
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const learnDir = await __helpers.getDirectory('learn-how-to-set-up-near-by-building-hello-world')
 assert.include(learnDir, 'hello-near');
 ```
@@ -1059,6 +1121,7 @@ It created a `hello-near` folder for you. It has a contract, similar to the one 
 You should run `cd hello-near` in the terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const lastCommand = await __helpers.getLastCommand();
 assert.match(lastCommand, /cd\s+hello-near/);
 ```
@@ -1066,6 +1129,7 @@ assert.match(lastCommand, /cd\s+hello-near/);
 You should be in the `hello-near` directory in your terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const cwdFile = await __helpers.getCWD();
 const cwd = cwdFile.split('\n').filter(Boolean).pop();
 assert.include(cwd, 'hello-near');
@@ -1090,6 +1154,7 @@ assert.match(lastCommand, /npm\s+run\s+deploy/);
 You should be in the `hello-near` directory in your terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const cwdFile = await __helpers.getCWD();
 const cwd = cwdFile.split('\n').filter(Boolean).pop();
 assert.include(cwd, 'hello-near');
@@ -1098,6 +1163,7 @@ assert.include(cwd, 'hello-near');
 You should have a `hello-near/contract/neardev` folder as a result of deploying the contract
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const dir = await __helpers.getDirectory('learn-how-to-set-up-near-by-building-hello-world/hello-near/contract')
 console.log(dir);
 assert.include(dir, 'neardev');
@@ -1114,6 +1180,7 @@ This is a really easy way to get started with NEAR if you want to try it on your
 You should run `near view <contract_name> get_greeting`
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const id = await __helpers.getFile('learn-how-to-set-up-near-by-building-hello-world/hello-near/contract/neardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
 const re = new RegExp(`near\\s+view\\s+${id}\\s+get_greeting`, 'g');
@@ -1133,6 +1200,9 @@ This is the last step, feel free to play with your contracts and accounts. When 
 You should enter `goodbye` in the terminal
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
 const lastCommand = await __helpers.getLastCommand();
 assert.match(lastCommand, /goodbye/);
 ```
+
+## --fcc-end--
