@@ -6,6 +6,6 @@
   ],
   "forwardPorts": [3000],
   "workspaceFolder": "/workspace/near-curriculum",
-  "dockerFile": "./Dockerfile",
+  "dockerFile": "../Dockerfile",
   "context": ".."
 }
