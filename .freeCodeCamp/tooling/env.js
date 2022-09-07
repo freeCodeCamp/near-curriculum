@@ -1,10 +1,15 @@
 import { readFile, writeFile } from 'fs/promises';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import { join } from 'path';
 
-export const ROOT = join(__dirname, '../..');
+export const ROOT = process.env.INIT_CWD || process.cwd();
+
+export async function getConfig() {
+  console.log('ROOT: ', ROOT);
+  const config = await readFile(join(ROOT, 'freecodecamp.conf.json'), 'utf-8');
+  return JSON.parse(config);
+}
+
+export const freeCodeCampConfig = await getConfig();
 
 export async function getState() {
   let defaultState = {
@@ -13,13 +18,16 @@ export async function getState() {
   };
   try {
     const state = JSON.parse(
-      await readFile(join(ROOT, '.freeCodeCamp/config/state.json'), 'utf-8')
+      await readFile(
+        join(ROOT, freeCodeCampConfig.config['state.json']),
+        'utf-8'
+      )
     );
     return { ...defaultState, ...state };
   } catch (err) {
     console.error(err);
   }
-  return meta;
+  return defaultState;
 }
 
 export async function setState(obj) {
@@ -30,7 +38,7 @@ export async function setState(obj) {
   };
 
   await writeFile(
-    join(ROOT, '.freeCodeCamp/config/state.json'),
+    join(ROOT, freeCodeCampConfig.config['state.json']),
     JSON.stringify(updatedState, null, 2)
   );
 }
@@ -40,7 +48,10 @@ export async function setState(obj) {
  */
 export async function getProjectConfig(project) {
   const projects = JSON.parse(
-    await readFile(join(ROOT, '.freeCodeCamp/config/projects.json'), 'utf-8')
+    await readFile(
+      join(ROOT, freeCodeCampConfig.config['projects.json']),
+      'utf-8'
+    )
   );
 
   const proj = projects.find(p => p.dashedName === project);
@@ -66,7 +77,10 @@ export async function getProjectConfig(project) {
  */
 export async function setProjectConfig(project, config = {}) {
   const projects = JSON.parse(
-    await readFile(join(ROOT, '.freeCodeCamp/config/projects.json'), 'utf-8')
+    await readFile(
+      join(ROOT, freeCodeCampConfig.config['projects.json']),
+      'utf-8'
+    )
   );
 
   const updatedProject = {
@@ -79,7 +93,7 @@ export async function setProjectConfig(project, config = {}) {
   );
 
   await writeFile(
-    join(ROOT, '.freeCodeCamp/config/projects.json'),
+    join(ROOT, freeCodeCampConfig.config['projects.json']),
     JSON.stringify(updatedProjects, null, 2)
   );
 }

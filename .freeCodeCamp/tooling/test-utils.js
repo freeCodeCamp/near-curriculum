@@ -4,7 +4,6 @@ import { promisify } from 'util';
 import { join } from 'path';
 import fs from 'fs';
 import { ROOT } from './env.js';
-import { debug } from 'logover';
 
 // ---------------
 // GENERIC HELPERS
@@ -42,7 +41,7 @@ async function getTerminalOutput() {
  * Returns the output of a command called from a given path
  * @param {string} command
  * @param {string} path Path relative to root of working directory
- * @returns {Promise<{stdout, stderr}>}
+ * @returns {{stdout, stderr}}
  */
 async function getCommandOutput(command, path = '') {
   try {
@@ -82,27 +81,17 @@ async function getLastCommand(howManyBack = 0) {
 async function getCWD() {
   // TODO: Do not return whole file?
   const pathToCWD = join(ROOT, '.logs/.cwd.log');
-  const cwd = await readFile(pathToCWD, 'utf-8');
+  const cwd = await readFile(pathToCWD, 'utf8');
   return cwd;
-}
-
-/**
- * Get the `.logs/.temp.log` file contents
- * @returns {string}
- */
-async function getTemp() {
-  const pathToTemp = join(ROOT, '.logs/.temp.log');
-  const temp = await readFile(pathToTemp, 'utf-8');
-  return temp;
 }
 
 /**
  * Get a file from the given `path`
  * @param {string} path Path relative to root of working directory
- * @returns {Promise<string>}
+ * @returns {string}
  */
 async function getFile(path) {
-  const file = await readFile(join(ROOT, path), 'utf-8');
+  const file = await readFile(join(ROOT, path), 'utf8');
   return file;
 }
 
@@ -181,47 +170,18 @@ async function writeJsonFile(path, content) {
   fs.writeFileSync(join(ROOT, path), JSON.stringify(content, null, 2));
 }
 
-// ---------------------
-// TESTING RUST
-// ---------------------
-
-async function rustTest(path, filePath, test, cb) {
-  const PATH_TO_FILE = join(ROOT, filePath);
-  const T_ATTR = '#[test]';
-  const testString = `${T_ATTR}\n${test}`;
-
-  const fileContents = await getFile(filePath);
-
-  const fileWithTest = fileContents + '\n\n\n' + testString;
-
-  let std;
-
-  try {
-    fs.writeFileSync(PATH_TO_FILE, fileWithTest, 'utf-8');
-
-    std = await getCommandOutput('cargo test --lib', path);
-  } catch (e) {
-    debug(e);
-  } finally {
-    await cb(std.stdout, std.stderr);
-    fs.writeFileSync(PATH_TO_FILE, fileContents, 'utf-8');
-  }
-}
-
 const __helpers = {
-  fileExists,
-  copyDirectory,
-  copyProjectFiles,
-  getCommandOutput,
-  getCWD,
   getDirectory,
   getFile,
-  getJsonFile,
-  getLastCommand,
-  getTemp,
+  fileExists,
   getTerminalOutput,
+  getCommandOutput,
+  getLastCommand,
+  getCWD,
+  copyDirectory,
+  copyProjectFiles,
   runCommand,
-  rustTest,
+  getJsonFile,
   writeJsonFile
 };
 
