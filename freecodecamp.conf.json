@@ -1,8 +1,8 @@
 {
   "path": ".",
   "scripts": {
-    "develop-course": "nodemon --watch ./tooling/ --ignore ./config/ .freeCodeCamp/tooling/server.js",
-    "run-course": "node ./.freeCodeCamp/tooling/server.js",
+    "develop-course": "NODE_ENV=development node ./.freeCodeCamp/tooling/server.js",
+    "run-course": "NODE_ENV=production node ./.freeCodeCamp/tooling/server.js",
     "test": {
       "functionName": "handleMessage",
       "arguments": [
@@ -19,7 +19,7 @@
         "open": true,
         "url": "http://localhost:8080",
         "showLoader": true,
-        "timeout": 20000
+        "timeout": 12000
       }
     ]
   },
@@ -33,7 +33,7 @@
       "favicon": "./client/assets/fcc_primary_small.svg"
     },
     "landing": {
-      "description": "Placeholder description",
+      "description": "Learn the NEAR toolchain, and test your knowledge.",
       "faq-link": "#",
       "faq-text": "Link to FAQ related to course"
     }
