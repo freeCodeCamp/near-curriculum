@@ -10,6 +10,7 @@
     ".prettierignore": false,
     ".prettierrc": false,
     ".vscode": false,
+    ".git": false,
     "bash": false,
     "config": false,
     "curriculum": false,
