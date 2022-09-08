@@ -79,7 +79,7 @@ You should run `npm install --save typescript@4.7.4` in the terminal
 ```js
 await new Promise(res => setTimeout(res, 1000));
 const lastCommand = await __helpers.getLastCommand();
-assert.match(lastCommand, /npm\s+install\s+((--save|-s)\s+typescript@4\.7\.4|typescript@4\.7\.4\s+(--save|-s))/);
+assert.match(lastCommand, /npm\s+(install|i)\s+((--save|-s)\s+typescript@4\.7\.4|typescript@4\.7\.4\s+(--save|-s))/);
 ```
 
 Your `package.json` file should have `typescript@4.7.4` in its `dependencies` object
