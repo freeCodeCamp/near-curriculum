@@ -10,13 +10,18 @@
     ".prettierignore": false,
     ".prettierrc": false,
     ".vscode": false,
+    ".git": false,
+    "bash": false,
+    "config": false,
+    "curriculum": false,
+    "Dockerfile": false,
+    "freecodecamp.conf.json": false,
+    "LICENSE": false,
     "node_modules": false,
     "package.json": false,
     "package-lock.json": false,
-    "LICENSE": false,
     "README.md": false,
-    "renovate.json": false,
-    "build-x-using-y": false,
+    "tooling": false,
     "learn-how-to-set-up-near-by-building-hello-world": false
   },
   "terminal.integrated.profiles.linux": {
@@ -25,5 +30,6 @@
       "icon": "terminal-bash",
       "args": ["--init-file", "./bash/sourcerer.sh"]
     }
-  }
+  },
+  "workbench.colorTheme": "freeCodeCamp Dark Theme"
 }
