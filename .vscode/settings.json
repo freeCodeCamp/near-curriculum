@@ -22,7 +22,7 @@
     "package-lock.json": false,
     "README.md": false,
     "tooling": false,
-    "learn-how-to-set-up-near-by-building-hello-world": false
+    "learn-how-to-set-up-near-by-building-a-hello-world-smart-contract": false
   },
   "terminal.integrated.profiles.linux": {
     "bash": {
