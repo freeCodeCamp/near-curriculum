@@ -237,7 +237,7 @@ You should have `this.message = 'Hello';` in your constructor function
 ```js
 await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-a-hello-world-smart-contract/src/index.ts');
-assert.match(fileContents, /constructor\s*\(\s*\)\s*{[\s\S]*super[\s\S]*this\s*\.message\s*=\s*('|"|`)Hello\1\s*;?\s*}/);
+assert.match(fileContents, /constructor\s*\(\s*\)\s*{[\s\S]*super[\s\S]*this\s*\.message\s*=\s*('|"|`)Hello\1\s*;?\s*}\s*}/);
 ```
 
 ## 13
@@ -794,16 +794,6 @@ const re = new RegExp(`near\\s+call\\s+${id}\\s+setGreeting\\s+'\\s*{\\s*"messag
 assert.match(lastCommand, re);
 ```
 
-Your contract should currently have a `message` value of `Hello NEAR`
-
-```js
-await new Promise(res => setTimeout(res, 1000));
-const id = await __helpers.getFile('learn-how-to-set-up-near-by-building-a-hello-world-smart-contract/neardev/dev-account');
-const output = await __helpers.getCommandOutput(`near view ${id} getGreeting`, 'learn-how-to-set-up-near-by-building-a-hello-world-smart-contract');
-const { stdout } = output;
-assert.match(stdout, /'Hello NEAR'/);
-```
-
 ## 42
 
 ### --description--
@@ -838,16 +828,6 @@ const id = await __helpers.getFile('learn-how-to-set-up-near-by-building-a-hello
 const lastCommand = await __helpers.getLastCommand();
 const re = new RegExp(`near\\s+call\\s+${id}\\s+setGreeting\\s+'\\s*{\\s*"message"\\s*:\\s*"Hello NEAR!"\\s*}\\s*'`, 'g');
 assert.match(lastCommand, re);
-```
-
-Your contract should currently have a `message` value of `Hello NEAR`
-
-```js
-await new Promise(res => setTimeout(res, 1000));
-const id = await __helpers.getFile('learn-how-to-set-up-near-by-building-a-hello-world-smart-contract/neardev/dev-account');
-const output = await __helpers.getCommandOutput(`near view ${id} getGreeting`, 'learn-how-to-set-up-near-by-building-a-hello-world-smart-contract');
-const { stdout } = output;
-assert.match(stdout, /'Hello NEAR!'/);
 ```
 
 ## 44
