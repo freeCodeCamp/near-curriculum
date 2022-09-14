@@ -232,12 +232,12 @@ In your constructor, below the `super` function, set the default of the `message
 
 ### --tests--
 
-You should have `this.message = 'Hello';` in your constructor function
+You should have `this.message = 'Hello';` in your constructor function below the `super` call.
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-building-a-hello-world-smart-contract/src/index.ts');
-assert.match(fileContents, /constructor\s*\(\s*\)\s*{[\s\S]*super[\s\S]*this\s*\.message\s*=\s*('|"|`)Hello\1\s*;?\s*}\s*}/);
+assert.match(fileContents, /constructor\s*\(\s*\)\s*{\s*super\s*\(\s*\)\s*;?\s*this\s*\.message\s*=\s*('|"|`)Hello\1\s*;?\s*}\s*}/);
 ```
 
 ## 13
