@@ -3,6 +3,7 @@
     ".devcontainer": true,
     ".editorconfig": true,
     ".freeCodeCamp": true,
+    ".github": true,
     ".gitignore": true,
     ".gitpod.Dockerfile": true,
     ".gitpod.yml": true,
@@ -24,7 +25,7 @@
     "package-lock.json": true,
     "README.md": true,
     "tooling": true,
-    "learn-how-to-set-up-near-by-building-a-hello-world-smart-contract": false
+    "learn-how-to-set-up-near-by-building-a-hello-world-smart-contract": true
   },
   "terminal.integrated.profiles.linux": {
     "bash": {
