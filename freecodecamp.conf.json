@@ -36,7 +36,7 @@
     "landing": {
       "description": "Learn the NEAR toolchain, and test your knowledge.",
       "faq-link": "#",
-      "faq-text": "Link to FAQ related to course"
+      "faq-text": "https://github.com/freeCodeCamp/near-curriculum/issues"
     }
   },
   "config": {
