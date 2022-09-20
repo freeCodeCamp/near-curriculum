@@ -70,7 +70,7 @@ assert.include(packageJson, { type: 'module' });
 
 ### --description--
 
-You need a few dependencies for this project. First is typescript, run `npm install --save typescript@4.7.4` to install it. Wait for the command to finish, it will take a moment.
+You need a few dependencies for this project. First is TypeScript, run `npm install --save typescript@4.7.4` to install it. Wait for the command to finish, it will take a moment.
 
 ### --tests--
 
@@ -138,7 +138,7 @@ assert.match(fileContents, /^\s*import\s*{\s*NearContract\s*}\s*from\s*('|")near
 
 Below your import, create an empty class named `MyContract` that extends `NearContract`. Here's an example:
 
-```
+```js
 class <className> extends <extendedClass> { }
 ```
 
@@ -188,7 +188,7 @@ assert.match(fileContents, /@NearBindgen\s*class\s+MyContract/);
 
 ### --description--
 
-Your smart contract will store a single string on the blockchain that you will be able to look at or change. Since you are using typescript, add a `message` variable that is a `string` as the first part of your class.
+Your smart contract will store a single string on the blockchain that you will be able to look at or change. Since you are using TypeScript, add a `message` variable that is a `string` as the first part of your class.
 
 ### --tests--
 
@@ -204,11 +204,11 @@ assert.match(fileContents, /class\s*MyContract\s+extends\s*NearContract\s*{\s*me
 
 ### --description--
 
-Below your message type definition, add the `constructor` function and put the `super` function inside of it.
+Below your message type definition, add the `constructor` method and call the `super` function inside of it.
 
 ### --tests--
 
-You should have a `constructor() { }` function in your `MyContract` class
+You should have a `constructor() { }` method in your `MyContract` class
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -216,7 +216,7 @@ const fileContents = await __helpers.getFile('learn-how-to-set-up-near-by-buildi
 assert.match(fileContents, /MyContract[\s\S]*?{[\s\S]*constructor\s*\(\s*\)\s*{[\s\S]*?}\s*}/);
 ```
 
-You should have a `super();` function in your `constructor()` function
+You should have a `super();` function call in your `constructor()` method
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -228,11 +228,11 @@ assert.match(fileContents, /constructor\s*\(\s*\)\s*{\s*super\s*\(\s*\)\s*;?\s*}
 
 ### --description--
 
-In your constructor, below the `super` function, set the default of the `message` variable to `Hello`.
+In your constructor, below the `super()` call, set the intial value of the `message` variable to `Hello`.
 
 ### --tests--
 
-You should have `this.message = 'Hello';` in your constructor function below the `super` call.
+You should have `this.message = 'Hello';` in your constructor method below the `super` call.
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -244,11 +244,11 @@ assert.match(fileContents, /constructor\s*\(\s*\)\s*{\s*super\s*\(\s*\)\s*;?\s*t
 
 ### --description--
 
-Below your constructor, create an empty `default` function. This will run when you initialize your contract on the blockchain.
+Below your constructor method, create an empty `default` method. This will run when you initialize your contract on the blockchain.
 
 ### --tests--
 
-You should have a `default() { }` function in your `MyContract` class
+You should have a `default() { }` method in your `MyContract` class
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -260,11 +260,11 @@ assert.match(fileContents, /MyContract[\s\S]*default\s*\(\s*\)\s*{\s*}\s*}\s*$/)
 
 ### --description--
 
-Inside the `default` function, return a new instance of `MyContract` so when you initilize your contract on the blockchain, it stores this new instance for you.
+Inside the `default` method, return a new instance of `MyContract` so when you initialize your contract, it stores the new instance on the blockchain.
 
 ### --tests--
 
-You should have `return new MyContract();` in your `default` function
+You should have `return new MyContract();` in your `default` method
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -276,11 +276,11 @@ assert.match(fileContents, /default\s*\(\s*\)\s*{\s*return\s+new\s+MyContract\s*
 
 ### --description--
 
-Below your `default` function, create an empty `getGreeting` function and set its return type to `string`. This will be for reading the string stored on your contract.
+Below your `default` method, create an empty `getGreeting` method and set its return type to `string`. This will be for reading the string stored on your contract.
 
 ### --tests--
 
-You should have a `getGreeting(): string { }` function in your `MyContract` class
+You should have a `getGreeting(): string { }` method in your `MyContract` class
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -292,11 +292,11 @@ assert.match(fileContents, /default[\s\S]*?}\s*getGreeting\s*\(\s*\)\s*:\s*strin
 
 ### --description--
 
-In the `getGreeting` function, return the message.
+In the `getGreeting` method, return the message.
 
 ### --tests--
 
-You should have `return this.message;` in your `getGreeting` function
+You should have `return this.message;` in your `getGreeting` method
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -308,7 +308,7 @@ assert.match(fileContents, /getGreeting[\s\S]*{\s*return\s+this\s*\.\s*message\s
 
 ### --description--
 
-You need to tell the blockchain if your `getGreeting` function will modify anything. Include `view` in your import statement with the rest of your imports so you can use it as a decorator.
+You need to tell the blockchain if your `getGreeting` method will modify anything. Include `view` in your import statement with the rest of your imports so you can use it as a decorator.
 
 ### --tests--
 
@@ -324,11 +324,11 @@ assert.match(fileContents, /^\s*import\s*({\s*view\s*,[\s\S*]*}|{[\s\S]*,\s*view
 
 ### --description--
 
-The `view` decorator means that this function will only read data from the blockchain. Add `@view` right above your `getGreeting` function.
+The `view` decorator means that this method will only read data from the blockchain. Add `@view` right above your `getGreeting` method.
 
 ### --tests--
 
-You should have a `@view` decorator right above your `getGreeting` function
+You should have a `@view` decorator right above your `getGreeting` method
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -433,7 +433,7 @@ assert.match(lastCommand, /near\s+--help/);
 
 ### --description--
 
-There are commands in there for working directly with the blockchain. You're going to use that `dev-deploy` command to deploy your built contract to the testnet. Enter `near dev-deploy build/hello-near.wasm` to do that. Enter `y` or `n` when prompted.
+There are commands in there for working directly with the blockchain. You're going to use that `dev-deploy` command to deploy your built contract to the NEAR testnet. Enter `near dev-deploy build/hello-near.wasm` to do that. Enter `y` or `n` when prompted.
 
 ### --tests--
 
@@ -475,7 +475,7 @@ assert.match(lastCommand, /near\s+--help/);
 
 You need to use that `call` command to initialize your contract. Here's an example:
 
-```
+```bash
 near call <contract_id> init --accountId <account_id>
 ```
 
@@ -497,13 +497,13 @@ assert.match(lastCommand, re);
 
 ### --description--
 
-Now that your contract is initialized, you can call your `view` or other functions on it. Here's an example:
+Now that your contract is initialized, you can call your `view` or other methods on it. Here's an example:
 
 ```sh
-near view <contract_name> <function_name>
+near view <contract_name> <method_name>
 ```
 
-Call your `getGreeting` function. Remember that your contract name is in the `neardev` folder.
+Call your `getGreeting` method. Remember that your contract name is in the `neardev` folder.
 
 ### --tests--
 
@@ -521,7 +521,7 @@ assert.match(lastCommand, re);
 
 ### --description--
 
-Your contract works! It printed the message. Next, you are going to add a way to change the message. In your contract file below your `getGreeting` function, create an empty `setGreeting` function.
+Your contract works! It printed the message. Next, you are going to add a way to change the message. In your contract file below your `getGreeting` method, create an empty `setGreeting` method.
 
 ### --tests--
 
@@ -537,7 +537,7 @@ assert.match(fileContents, /MyContract\s+extends[\s\S]*?{[\s\S]*setGreeting\s*\(
 
 ### --description--
 
-Add a parameter to your `setGreeting` function that destructs `message` from an object passed to it. Set it as a type of `string`. It looks like this:
+Add a parameter to your `setGreeting` method that destructs `message` from an object passed to it. Set it as a type of `string`. It looks like this:
 
 ```js
 { message }: { message: string }
@@ -557,11 +557,11 @@ assert.match(fileContents, /setGreeting\s*\(\s*{\s*message\s*}\s*:\s*{\s*message
 
 ### --description--
 
-In the `setGreeting` function, set the `message` of the contract to the message passed into the function.
+In the `setGreeting` method, set the `message` of the contract to the message passed into the method.
 
 ### --tests--
 
-You should have `this.message = message` in your `setGreeting` function
+You should have `this.message = message` in your `setGreeting` method
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -573,7 +573,7 @@ assert.match(fileContents, /setGreeting[\s\S]*?\)\s*{\s*this\s*\.\s*message\s*=\
 
 ### --description--
 
-You used the `view` decorator for the `getGreeting` function because the function only reads data from the blockchain. At the top of the file, add `call` in your list of imports from `near-sdk-js`
+You used the `view` decorator for the `getGreeting` method because it only reads data from the blockchain. At the top of the file, add `call` in your list of imports from `near-sdk-js`
 
 ### --tests--
 
@@ -589,11 +589,11 @@ assert.match(fileContents, /^\s*import\s*({\s*call\s*,[\s\S*]*}|{[\s\S]*,\s*call
 
 ### --description--
 
-Add the `call` decorator right above your `setGreeting` function to tell the blockchain that this function will modify the state of the contract.
+Add the `call` decorator right above your `setGreeting` method to tell the blockchain that this method will modify the state of the contract.
 
 ### --tests--
 
-You should have `@call` right above your `setGreeting` function
+You should have `@call` right above your `setGreeting` method
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -621,13 +621,13 @@ assert.match(fileContents, /^\s*import\s*({\s*near\s*,[\s\S*]*}|{[\s\S]*,\s*near
 
 ### --description--
 
-`near` contains some methods for working with the blockchain. For example, if you wanted to send a transaction in a contract function, you would use one of its methods. You also can log things with `near.log()`.
+`near` contains some methods for working with the blockchain. For example, if you wanted to send a transaction in a contract method, you would use one of its methods. You also can log things with `near.log()`.
 
-In your `setGreeting` function, use `near` to log `Saving greeting to '<message>'`, where `<message>` is the new message. Use a template literal.
+In your `setGreeting` method, use `near` to log `Saving greeting to '<message>'`, where `<message>` is the new message. Use a template literal.
 
 ### --tests--
 
-You should have ``near.log(`Saving greeting to '${message}'`)`` in your `setGreeting` function
+You should have ``near.log(`Saving greeting to '${message}'`)`` in your `setGreeting` method
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -639,11 +639,11 @@ assert.match(fileContents, /setGreeting[\s\S]*?\)\s*{[\s\S]*near\s*\.\s*log\s*\(
 
 ### --description--
 
-You will re-deploy you contract in a minute. Change the initial message of your contract to `Hello world` so you can be sure you are looking at the new contract.
+You will re-deploy your contract in a minute. Change the initial message of your contract to `Hello world` first so you can be sure you are looking at the new contract.
 
 ### --tests--
 
-You should have `this.message = 'Hello world'` in your constructor function
+You should have `this.message = 'Hello world'` in your constructor method
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -682,7 +682,7 @@ assert.include(cwd, 'learn-how-to-set-up-near-by-building-a-hello-world-smart-co
 
 You have a new Wasm file in the `build` folder with your updated contract now.
 
-In the terminal, use the move command to change the name of your `neardev` folder to `oldneardev`. `mv <folder> <destination>` is the syntax. This is only so it creates a second account when you deploy, for you to work with.
+In the terminal, use the move command to change the name of your `neardev` folder to `oldneardev`. `mv <folder> <destination>` is the syntax. This is only so it creates a second account, when you deploy, for you to work with.
 
 ### --tests--
 
@@ -756,7 +756,7 @@ assert.match(lastCommand, re);
 
 ### --description--
 
-Call the `viewGreeting` function on your new contract to make sure it has the correct initial message.
+Call the `viewGreeting` method on your new contract to make sure it has the correct initial message.
 
 ### --tests--
 
@@ -774,13 +774,13 @@ assert.match(lastCommand, re);
 
 ### --description--
 
-It works. You used the `call` command to initialize your contract. You can use it to run your `setGreeting` function as well. Here's an example:
+It works. You used the `call` command to initialize your contract. You can use it to run your `setGreeting` method as well. Here's an example:
 
-```sh
+```bash
 near call <contract_name> setGreeting '{ "message": "Hello WORLD!" }' --accountId <account_id>
 ```
 
-Use the `call` command to run your `setGreeting` function and change the `message` value on your contract to `Hello NEAR`.
+Use the `call` command to run your `setGreeting` method and change the `message` value on your contract to `Hello NEAR`.
 
 ### --tests--
 
@@ -906,7 +906,7 @@ assert.match(lastCommand, re);
 
 ### --description--
 
-You've got a lot of coins. Check the state of your new account, the one in the `neardev` folder.
+You've got a lot of tokens. Check the state of your new account, the one in the `neardev` folder.
 
 ### --tests--
 
@@ -934,7 +934,7 @@ assert.match(lastCommand, re);
 
 ### --description--
 
-You can see the `formattedAmount` at the bottom. Both accounts should have about the same amounts. View the help menu again.
+You can see the `formattedAmount` at the bottom. Both accounts should have about the same amount. View the help menu again.
 
 ### --tests--
 
