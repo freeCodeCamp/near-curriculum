@@ -8,5 +8,14 @@
     "isPublic": true,
     "currentLesson": 1,
     "runTestsOnWatch": true
+  },
+  {
+    "id": 1,
+    "title": "More Coming Soon...",
+    "dashedName": "build-x-using-y",
+    "isIntegrated": true,
+    "description": "",
+    "isPublic": false,
+    "currentLesson": 1
   }
 ]
