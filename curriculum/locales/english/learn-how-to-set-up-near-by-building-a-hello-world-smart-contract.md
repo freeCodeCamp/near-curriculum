@@ -6,6 +6,8 @@
 
 Welcome to the NEAR curriculum! For the duration of this project, you will be working in the `learn-how-to-set-up-near-by-building-a-hello-world-smart-contract/` directory. Start by changing into that directory in the terminal.
 
+If the tests don't run automatically, trash the bash terminal and open a new bash terminal.
+
 ### --tests--
 
 You should use the change directory command (`cd`) in the terminal
