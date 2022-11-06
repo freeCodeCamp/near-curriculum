@@ -37,8 +37,8 @@ RUN sudo apt-get install -y nodejs
 
 # /usr/lib/node_modules is owned by root, so this creates a folder ${USERNAME} 
 # can use for npm install --global
-RUN npm install -g near-cli
-RUN npm install -g near-sdk-js
+RUN npm install -g near-cli@3.4.2
+RUN npm install -g near-sdk-js@0.4.0-5
 
 WORKDIR ${HOMEDIR}
 RUN mkdir ~/.npm-global
