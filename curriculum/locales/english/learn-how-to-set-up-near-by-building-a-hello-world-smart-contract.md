@@ -174,11 +174,11 @@ assert.match(fileContents, /^\s*import\s*{\s*(NearContract\s*,\s*NearBindgen|Nea
 
 ### --description--
 
-`NearBindgen` is a decorator that will compile JavaScript code to the format the NEAR blockchain uses. Right above your class keyword, add `@NearBingen`.
+`NearBindgen` is a decorator that will compile JavaScript code to the format the NEAR blockchain uses. Right above your class keyword, add `@NearBindgen`.
 
 ### --tests--
 
-You should have `@NearBingen` in your contract file, right above your class declaration
+You should have `@NearBindgen` in your contract file, right above your class declaration
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
