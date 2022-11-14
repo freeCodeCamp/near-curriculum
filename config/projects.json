@@ -11,6 +11,16 @@
   },
   {
     "id": 1,
+    "title": "Learn NEAR Smart Contracts by Building a Word Guessing Game",
+    "dashedName": "learn-near-smart-contracts-by-building-a-word-guessing-game",
+    "isIntegrated": false,
+    "description": "In this course, you will learn more features of NEAR smart contracts while building a word guessing game.",
+    "isPublic": true,
+    "currentLesson": 1,
+    "runTestsOnWatch": true
+  },
+  {
+    "id": 2,
     "title": "More Coming Soon...",
     "dashedName": "build-x-using-y",
     "isIntegrated": true,
