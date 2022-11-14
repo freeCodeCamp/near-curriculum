@@ -20,7 +20,7 @@ assert(false);
 
 ### --description--
 
-add export class WordGuess
+open your package.json. There's a few dependencies... npm install
 
 ### --tests--
 
@@ -34,7 +34,7 @@ assert(false);
 
 ### --description--
 
-import near bindgen
+add export class WordGuess
 
 ### --tests--
 
@@ -48,7 +48,7 @@ assert(false);
 
 ### --description--
 
-add @NearBindgen({})
+import near bindgen
 
 ### --tests--
 
@@ -62,7 +62,7 @@ assert(false);
 
 ### --description--
 
-add constructor() {}
+add @NearBindgen({})
 
 ### --tests--
 
@@ -76,7 +76,7 @@ assert(false);
 
 ### --description--
 
-add this.secretWord = '';
+add constructor() {}
 
 ### --tests--
 
@@ -90,7 +90,7 @@ assert(false);
 
 ### --description--
 
-import initialize
+add this.secretWord = '';
 
 ### --tests--
 
@@ -104,7 +104,7 @@ assert(false);
 
 ### --description--
 
-add @initialize({})
+import initialize
 
 ### --tests--
 
@@ -118,7 +118,7 @@ assert(false);
 
 ### --description--
 
-add init({ secretWord })
+add @initialize({})
 
 ### --tests--
 
@@ -132,7 +132,7 @@ assert(false);
 
 ### --description--
 
-add this.secretWord = secretWord;
+add init({ secretWord })
 
 ### --tests--
 
@@ -146,7 +146,7 @@ assert(false);
 
 ### --description--
 
-add return `The secret word has been set to '${secretWord}'`;
+add this.secretWord = secretWord;
 
 ### --tests--
 
@@ -160,7 +160,7 @@ assert(false);
 
 ### --description--
 
-add { requireInit: true }
+add return `The secret word has been set to '${secretWord}'`;
 
 ### --tests--
 
@@ -174,7 +174,7 @@ assert(false);
 
 ### --description--
 
-import @view
+add { requireInit: true }
 
 ### --tests--
 
@@ -188,7 +188,7 @@ assert(false);
 
 ### --description--
 
-add @view + viewSecretWord({}) {}
+import @view
 
 ### --tests--
 
@@ -202,7 +202,7 @@ assert(false);
 
 ### --description--
 
-add return this.secretWord;
+add @view + viewSecretWord({}) {}
 
 ### --tests--
 
@@ -216,7 +216,7 @@ assert(false);
 
 ### --description--
 
-npm run build:word-guess
+add return this.secretWord;
 
 ### --tests--
 
@@ -230,7 +230,7 @@ assert(false);
 
 ### --description--
 
-near dev-deploy build/.wasm
+npm run build:word-guess
 
 ### --tests--
 
@@ -244,7 +244,7 @@ assert(false);
 
 ### --description--
 
-near view viewSecretWord - not initialized
+near dev-deploy build/.wasm
 
 ### --tests--
 
@@ -258,7 +258,7 @@ assert(false);
 
 ### --description--
 
-near call init '{"secretWord":"test"}'
+near view viewSecretWord - not initialized
 
 ### --tests--
 
@@ -272,7 +272,7 @@ assert(false);
 
 ### --description--
 
-near view viewSecretWord - now it works
+near call init '{"secretWord":"test"}'
 
 ### --tests--
 
@@ -286,7 +286,7 @@ assert(false);
 
 ### --description--
 
-add import call
+near view viewSecretWord - now it works
 
 ### --tests--
 
@@ -300,7 +300,7 @@ assert(false);
 
 ### --description--
 
-add @call({}) + addHint({ hint }) {}
+add import call
 
 ### --tests--
 
@@ -314,7 +314,7 @@ assert(false);
 
 ### --description--
 
-add this.hints.push(hint)
+add @call({}) + addHint({ hint }) {}
 
 ### --tests--
 
@@ -328,7 +328,7 @@ assert(false);
 
 ### --description--
 
-add return 'Your hint was added'
+add this.hints.push(hint)
 
 ### --tests--
 
@@ -342,7 +342,7 @@ assert(false);
 
 ### --description--
 
-add @view + viewHints() {}
+add return 'Your hint was added'
 
 ### --tests--
 
@@ -356,7 +356,7 @@ assert(false);
 
 ### --description--
 
-add return this.hints
+add @view + viewHints() {}
 
 ### --tests--
 
@@ -370,7 +370,7 @@ assert(false);
 
 ### --description--
 
-npm run build:word-guess
+add return this.hints
 
 ### --tests--
 
@@ -384,7 +384,7 @@ assert(false);
 
 ### --description--
 
-near dev-deploy .wasm
+npm run build:word-guess
 
 ### --tests--
 
@@ -398,7 +398,7 @@ assert(false);
 
 ### --description--
 
-near view viewSecretWord - no panic cause it still has the state
+near dev-deploy .wasm
 
 ### --tests--
 
@@ -412,7 +412,7 @@ assert(false);
 
 ### --description--
 
-near call addHint - cannot push to undefined
+near view viewSecretWord - no panic cause it still has the state
 
 ### --tests--
 
@@ -426,7 +426,7 @@ assert(false);
 
 ### --description--
 
-near call init - cannot reinitialize
+near call addHint - cannot push to undefined
 
 ### --tests--
 
@@ -440,7 +440,7 @@ assert(false);
 
 ### --description--
 
-mv neardev-1
+near call init - cannot reinitialize
 
 ### --tests--
 
@@ -454,7 +454,7 @@ assert(false);
 
 ### --description--
 
-near dev-deploy .wasm - it created a new neardev
+mv neardev-1
 
 ### --tests--
 
@@ -468,7 +468,7 @@ assert(false);
 
 ### --description--
 
-near viewSecretWord - not initialized
+near dev-deploy .wasm - it created a new neardev
 
 ### --tests--
 
@@ -482,7 +482,7 @@ assert(false);
 
 ### --description--
 
-near call init '{ "secretWord": "freeCodeCamp" }' - use neardev-1
+near viewSecretWord - not initialized
 
 ### --tests--
 
@@ -496,7 +496,7 @@ assert(false);
 
 ### --description--
 
-near viewSecretWord
+near call init '{ "secretWord": "freeCodeCamp" }' - use neardev-1
 
 ### --tests--
 
@@ -510,7 +510,7 @@ assert(false);
 
 ### --description--
 
-near viewHints
+near viewSecretWord
 
 ### --tests--
 
@@ -524,7 +524,7 @@ assert(false);
 
 ### --description--
 
-near call addHint {"hint":"best coding site"}
+near viewHints
 
 ### --tests--
 
@@ -538,7 +538,7 @@ assert(false);
 
 ### --description--
 
-near viewHints - shows best coding site
+near call addHint {"hint":"best coding site"}
 
 ### --tests--
 
@@ -552,7 +552,7 @@ assert(false);
 
 ### --description--
 
-near call addHint {"hint":"it's free"} with neardev-1
+near viewHints - shows best coding site
 
 ### --tests--
 
@@ -566,7 +566,7 @@ assert(false);
 
 ### --description--
 
-near viewHints
+near call addHint {"hint":"it's free"} with neardev-1
 
 ### --tests--
 
@@ -580,7 +580,7 @@ assert(false);
 
 ### --description--
 
-add { privateFunction: true } to addHint
+near viewHints
 
 ### --tests--
 
@@ -594,7 +594,7 @@ assert(false);
 
 ### --description--
 
-npm run build:word-guess
+add { privateFunction: true } to addHint
 
 ### --tests--
 
@@ -608,7 +608,7 @@ assert(false);
 
 ### --description--
 
-near dev-deploy .wasm
+npm run build:word-guess
 
 ### --tests--
 
@@ -622,7 +622,7 @@ assert(false);
 
 ### --description--
 
-near view hints - they're still there
+near dev-deploy .wasm
 
 ### --tests--
 
@@ -636,7 +636,7 @@ assert(false);
 
 ### --description--
 
-near call addHint {"hint":"it has 12 letters"} with neardev-1 - panicked
+near view hints - they're still there
 
 ### --tests--
 
@@ -650,7 +650,7 @@ assert(false);
 
 ### --description--
 
-near call addHintnear call addHint {"hint":"it has 12 letters"} with neardev - it works
+near call addHint {"hint":"it has 12 letters"} with neardev-1 - panicked
 
 ### --tests--
 
@@ -664,7 +664,7 @@ assert(false);
 
 ### --description--
 
-near viewHints
+near call addHintnear call addHint {"hint":"it has 12 letters"} with neardev - it works
 
 ### --tests--
 
@@ -678,7 +678,7 @@ assert(false);
 
 ### --description--
 
-add { privateFunction: true } to init
+near viewHints
 
 ### --tests--
 
@@ -692,7 +692,7 @@ assert(false);
 
 ### --description--
 
-add { privateFunction: true } to viewSecretWord
+add { privateFunction: true } to init
 
 ### --tests--
 
@@ -706,7 +706,7 @@ assert(false);
 
 ### --description--
 
-add this.guesses = []
+add { privateFunction: true } to viewSecretWord
 
 ### --tests--
 
@@ -720,7 +720,7 @@ assert(false);
 
 ### --description--
 
-add @view({}) + viewGuesses
+add this.guesses = []
 
 ### --tests--
 
@@ -734,7 +734,7 @@ assert(false);
 
 ### --description--
 
-add return this.guesses
+add @view({}) + viewGuesses
 
 ### --tests--
 
@@ -748,7 +748,7 @@ assert(false);
 
 ### --description--
 
-add @call({}) + makeGuess({ guess })
+add return this.guesses
 
 ### --tests--
 
@@ -762,7 +762,7 @@ assert(false);
 
 ### --description--
 
-add const lastGuess
+add @call({}) + makeGuess({ guess })
 
 ### --tests--
 
@@ -776,7 +776,7 @@ assert(false);
 
 ### --description--
 
-add if (lastGuess === this.secretWord) {}
+add const lastGuess
 
 ### --tests--
 
@@ -790,7 +790,7 @@ assert(false);
 
 ### --description--
 
-add return `This game is finished. The secret word was '${this.secretWord}'`;
+add if (lastGuess === this.secretWord) {}
 
 ### --tests--
 
@@ -804,7 +804,7 @@ assert(false);
 
 ### --description--
 
-add else {}
+add return `This game is finished. The secret word was '${this.secretWord}'`;
 
 ### --tests--
 
@@ -818,7 +818,7 @@ assert(false);
 
 ### --description--
 
-add this.guesses.push(guess)
+add else {}
 
 ### --tests--
 
@@ -832,7 +832,7 @@ assert(false);
 
 ### --description--
 
-add if(guess === secretWord) {}
+add this.guesses.push(guess)
 
 ### --tests--
 
@@ -846,7 +846,7 @@ assert(false);
 
 ### --description--
 
-add return `You got it! The secret word was '${this.secretWord}'`;
+add if(guess === secretWord) {}
 
 ### --tests--
 
@@ -860,7 +860,7 @@ assert(false);
 
 ### --description--
 
-add else {}
+add return `You got it! The secret word was '${this.secretWord}'`;
 
 ### --tests--
 
@@ -874,7 +874,7 @@ assert(false);
 
 ### --description--
 
-add return `Sorry, '${guess}' is not the secret word`;
+add else {}
 
 ### --tests--
 
@@ -888,7 +888,7 @@ assert(false);
 
 ### --description--
 
-npm run build:word-guess
+add return `Sorry, '${guess}' is not the secret word`;
 
 ### --tests--
 
@@ -902,7 +902,7 @@ assert(false);
 
 ### --description--
 
-mv neardev -> neardev-2 - because you added a new state...
+npm run build:word-guess
 
 ### --tests--
 
@@ -916,7 +916,7 @@ assert(false);
 
 ### --description--
 
-near dev-deploy .wasm
+mv neardev -> neardev-2 - because you added a new state...
 
 ### --tests--
 
@@ -930,7 +930,7 @@ assert(false);
 
 ### --description--
 
-near call init '{  }' with neardev-2 - doesn't work
+near dev-deploy .wasm
 
 ### --tests--
 
@@ -944,7 +944,7 @@ assert(false);
 
 ### --description--
 
-near call init '{}' with neardev - works
+near call init '{  }' with neardev-2 - doesn't work
 
 ### --tests--
 
@@ -958,7 +958,7 @@ assert(false);
 
 ### --description--
 
-near view viewSecretWord with neardev-2 - doesn't work
+near call init '{}' with neardev - works
 
 ### --tests--
 
@@ -972,7 +972,7 @@ assert(false);
 
 ### --description--
 
-near viewSecretWord with neardev
+near view viewSecretWord with neardev-2 - doesn't work
 
 ### --tests--
 
@@ -986,7 +986,7 @@ assert(false);
 
 ### --description--
 
-near call addHint with neardev
+near viewSecretWord with neardev
 
 ### --tests--
 
@@ -997,6 +997,20 @@ assert(false);
 ```
 
 ## 72
+
+### --description--
+
+near call addHint with neardev
+
+### --tests--
+
+test text
+
+```js
+assert(false);
+```
+
+## 73
 
 ### --description--
 

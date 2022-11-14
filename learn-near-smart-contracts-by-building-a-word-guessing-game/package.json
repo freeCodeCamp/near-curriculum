@@ -1,0 +1,20 @@
+{
+  "name": "learn-near-smart-contracts-by-building-a-word-guessing-game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:word-guess": "near-sdk-js build src/word-guess.js build/word-guess.wasm",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "near-sdk-js": "0.6.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.8.4",
+    "ts-morph": "^16.0.0"
+  }
+}
