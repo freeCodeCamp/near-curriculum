@@ -1,3 +1,7 @@
-import { Babeliser as B } from 'babeliser';
+import { Babeliser } from 'babeliser';
 
-export const Babeliser = B;
+export async function babeliser(codeString) {
+  return new Babeliser(codeString, {
+    plugins: [ 'decorators' ]
+  });
+}

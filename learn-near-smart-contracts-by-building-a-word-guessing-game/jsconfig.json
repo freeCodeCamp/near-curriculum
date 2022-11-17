@@ -3,5 +3,5 @@
     "experimentalDecorators": true
   },
   "exclude": ["node_modules"],
-  "files": ["src/counter.js"]
+  "files": ["src/word-guess.js"]
 }
