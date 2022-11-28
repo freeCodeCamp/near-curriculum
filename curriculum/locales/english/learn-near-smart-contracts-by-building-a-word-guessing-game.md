@@ -155,7 +155,7 @@ assert.match(recreatedCode, /{\s*this\.secretWord\s*=\s*('|"|`)\1;\s*}/);
 
 ### --description--
 
-Below the constructor function, add an empty `init` function. Destruct a `secretWord` variable in the parameter. This will be so you can set the secret word to whatever you want after you deploy the contract.
+Below the constructor function, add an empty `init` function. Destruct a `secretWord` variable from an object in the parameter. This will be so you can set the secret word to whatever you want after you deploy the contract.
 
 ### --tests--
 
@@ -388,6 +388,7 @@ The terminal should print a version
 ```js
 await new Promise(res => setTimeout(res, 1000));
 const output = await __helpers.getTerminalOutput();
+assert.include(output, 'near --version');
 const splitOutput = output?.replaceAll(/\s+/g, ' ').split('near --version');
 const lastOutput = splitOutput[splitOutput.length - 1];
 assert.match(lastOutput, /\d+\.\d+\.\d+/);
@@ -437,7 +438,7 @@ assert.include(learnDir, 'neardev');
 
 ### --description--
 
-Your contract is deployed to the NEAR testnet. A `neardev` folder was created for the account. The contract name is in the `neardev/dev-account.env` file. Use the `view` command to run the contract's `viewSecretWord` function. Here's the syntax: `near view <contract_id> <function_to_run>`.
+Your contract is deployed to the NEAR testnet. A `neardev` folder was created for its account. The contract name is in the `neardev/dev-account.env` file. Use the `view` command to run the contract's `viewSecretWord` function. Here's the syntax: `near view <contract_id> <function_to_run>`.
 
 ### --tests--
 
@@ -511,7 +512,7 @@ const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewSecretWord\\s*$`, 'g');
 assert.match(lastCommand, re);
 ```
 
-The terminal should print `'test'`
+The terminal should print `"The secret word is 'test'"`
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -520,7 +521,7 @@ const output = await __helpers.getTerminalOutput();
 const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewSecretWord\\s*$`, 'g');
 const splitOutput = output?.replaceAll(/\s+/g, ' ').split(re);
 const lastOutput = splitOutput[splitOutput.length - 1];
-assert.match(lastOutput, /'test'\s*$/);
+assert.match(lastOutput, /"The secret word is 'test'"\s*$/);
 ```
 
 ## 24
@@ -539,7 +540,7 @@ const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-w
 const babelised = await __helpers.babeliser(code?.replace('export',''));
 const construct = babelised?.getType('ClassMethod').find(c => c.kind === 'constructor');
 const recreatedCode = babelised?.generateCode(construct);
-assert.match(recreatedCode, /this\.hints\s*=\s*\[\s*\];\s*}/);
+assert.match(recreatedCode, /this\.hints\s*=\s*\[\s*\]\s*;?\s*}/);
 ```
 
 ## 25
@@ -790,28 +791,56 @@ assert.match(lastOutput, /"The secret word is 'test'"\s*$/);
 
 ### --description--
 
-The contract is still initialized and has the secret word from earlier, even though you re-deployed it. Contracts can have their logic updated while retaining their state. So if you re-deploy a contract, the stored data will remain, but the logic will get updated. Call the `addHint` function with `'{ "hint": "test hint" }'` as the argument to add a hint. Don't forget to include the account ID with the command since you are trying to change the state.
+The contract is still initialized and has the secret word from before, even though you re-deployed it. Contracts can have their logic updated while retaining their state. So if you re-deploy a contract, the stored data will remain, but the logic will get updated. Call the `addHint` function with `'{ "hint": "test hint" }'` as the argument to add a hint. Don't forget to include the account ID with the command since you are trying to change the state.
 
 ### --tests--
 
 You should run `near call <contract_name> addHint '{ "hint": "test hint" }' --accountID <account_id>`, where `<contract_name>` and `<account_id>` match what's in the `neardev` folder
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const lastCommand = await __helpers.getLastCommand();
+const re = new RegExp(`^\\s*near\\s+call\\s+${id}\\s+addHint\\s+'\\s*{\\s*"hint"\\s*:\\s*"test hint"\\s*}\\s*'\\s+--accountId\\s+${id}`, 'g');
+assert.match(lastCommand, re);
+```
+
+The terminal should print `Smart contract panicked`
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const output = await __helpers.getTerminalOutput();
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split('Doing account.functionCall()');
+const lastOutput = splitOutput[splitOutput.length - 1];
+assert.match(lastOutput, /Smart contract panicked/);
 ```
 
 ## 35
 
 ### --description--
 
-The command panicked. The state of the contract you deployed the first time didn't include a `hints` array. So when the logic of the contract got updated to include your new `addHint` function, the state stayed the same and there was nowhere to store the data. Call the `init` function on the contract again with `{ "secretWord": "test" }` as the argument again.
+The command panicked. The state of the contract you deployed the first time didn't include a `hints` array. So the logic of the contract got updated, but it still doesn't include the memory allocation to store the hints. Call the `init` function on the contract again with `{ "secretWord": "test" }` as the argument again.
 
 ### --tests--
 
-test text
+You should run `near call <contract_name> init '{ "secretWord": "test" }' --accountId <account_id>`, where `<contract_name>` and `<account_id>` match what's in your `neardev` folder.
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const lastCommand = await __helpers.getLastCommand();
+const re = new RegExp(`^\\s*near\\s+call\\s+${id}\\s+init\\s+'\\s*{\\s*"secretWord"\\s*:\\s*"test"\\s*}\\s*'\\s+--accountId\\s+${id}`, 'g');
+assert.match(lastCommand, re);
+```
+
+The terminal should print `Contract already initialized`
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const output = await __helpers.getTerminalOutput();
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split('Doing account.functionCall()');
+const lastOutput = splitOutput[splitOutput.length - 1];
+assert.match(lastOutput, /Contract already initialized/);
 ```
 
 ## 36
@@ -825,25 +854,33 @@ It panicked again. It says the contract is already initialized. You can only ini
 You should have a `neardev-1` folder
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const learnDir = await __helpers.getDirectory('learn-near-smart-contracts-by-building-a-word-guessing-game')
+assert.include(learnDir, 'neardev-1');
 ```
 
 You should not have a `neardev` folder
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const learnDir = await __helpers.getDirectory('learn-near-smart-contracts-by-building-a-word-guessing-game')
+assert.notInclude(learnDir, 'neardev');
 ```
 
 Your `neardev-1` folder should have a `dev-account` file
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const learnDir = await __helpers.getDirectory('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev-1')
+assert.include(learnDir, 'dev-account');
 ```
 
 Your `neardev-1` folder should have a `dev-account.env` file
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const learnDir = await __helpers.getDirectory('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev-1')
+assert.include(learnDir, 'dev-account.env');
 ```
 
 ## 37
@@ -857,13 +894,29 @@ Use the `dev-deploy` command to deploy your contract again. It will create a new
 You should run `near dev-deploy build/word-guess.wasm` in the terminal
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const lastCommand = await __helpers.getLastCommand();
+assert.match(lastCommand, /near\s+dev-deploy\s+build\/word-guess\.wasm/);
 ```
 
-You should have a `neardev` folder as a result of deploying your contract
+You should have a `neardev` folder as a result of deploying the contract
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const learnDir = await __helpers.getDirectory('learn-near-smart-contracts-by-building-a-word-guessing-game')
+assert.include(learnDir, 'neardev');
+```
+
+The terminal output should include `Done deploying to <contract_name>`, where the contract name matches what's in the `neardev` folder
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const output = await __helpers.getTerminalOutput();
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split('near dev-deploy build/word-guess.wasm');
+const lastOutput = splitOutput[splitOutput.length - 1];
+const re = new RegExp(`Done deploying to ${id}\\s*$`);
+assert.match(lastOutput, re);
 ```
 
 ## 38
@@ -877,21 +930,54 @@ You have a new account and contract name in the `neardev` folder. Call the `view
 You should run `near view <contract_name> viewSecretWord`, where `<contract_name>` is the name from the `neardev/dev-account.env` file
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const lastCommand = await __helpers.getLastCommand();
+const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewSecretWord\\s*$`, 'g');
+assert.match(lastCommand, re);
+```
+
+The terminal should include "Contract must be initialized" in its output
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const output = await __helpers.getTerminalOutput();
+const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewSecretWord\\s*$`, 'g');
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split(re);
+const lastOutput = splitOutput[splitOutput.length - 1];
+assert.match(lastOutput, /Contract must be initialized/);
 ```
 
 ## 39
 
 ### --description--
 
-This new contract hasn't been initialized yet. Initialize this new contract using your old account in the `neardev-1` folder by calling its `init` function. Pass it `'{ "secretWord": "freeCodeCamp" }'` to set the secret word to `freeCodeCamp`.
+This new contract has a blank state and hasn't been initialized yet. Initialize this new contract using your **old account** in the `neardev-1` folder by calling its `init` function. Pass it `'{ "secretWord": "freeCodeCamp" }'` to set the secret word to `freeCodeCamp`. So call the new contract, but use the old account.
+
+If you get something wrong, delete the `neardev` folder, redeploy the contract, and try again.
 
 ### --tests--
 
 You should run `near call <neardev_contract_name> init '{ "secretWord": "freeCodeCamp" }' --accountId <neardev-1_account>`, with the correct contract name and account
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const id1 = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev-1/dev-account');
+const lastCommand = await __helpers.getLastCommand();
+const re = new RegExp(`^\\s*near\\s+call\\s+${id}\\s+init\\s+[\\s\\S]*--accountId\\s+${id1}`, 'g');
+assert.match(lastCommand, re);
+```
+
+The terminal should print `The secret word has been set to 'freeCodeCamp'`
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const output = await __helpers.getTerminalOutput();
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split('Doing account.functionCall()');
+const lastOutput = splitOutput[splitOutput.length - 1];
+assert.match(lastOutput, /"The secret word has been set to 'freeCodeCamp'"\s*$/i);
 ```
 
 ## 40
@@ -905,7 +991,23 @@ View the secret word again.
 You should run `near view <contract_name> viewSecretWord`, where the contract name matches what is in the `neardev` folder
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const lastCommand = await __helpers.getLastCommand();
+const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewSecretWord\\s*$`, 'g');
+assert.match(lastCommand, re);
+```
+
+The terminal should print `"The secret word is 'freeCodeCamp'"`
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const output = await __helpers.getTerminalOutput();
+const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewSecretWord\\s*$`, 'g');
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split(re);
+const lastOutput = splitOutput[splitOutput.length - 1];
+assert.match(lastOutput, /"The secret word is 'freeCodeCamp'"\s*$/i);
 ```
 
 ## 41
@@ -919,21 +1021,52 @@ The contract has been initialized. Run the `viewHints` function.
 You should run `near view <contract_name> viewHints`, where the contract name matches what's in the `neardev` folder
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const lastCommand = await __helpers.getLastCommand();
+const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewHints\\s*$`, 'g');
+assert.match(lastCommand, re);
+```
+
+The terminal should print `[]`
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const output = await __helpers.getTerminalOutput();
+const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewHints\\s*$`, 'g');
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split(re);
+const lastOutput = splitOutput[splitOutput.length - 1];
+assert.match(lastOutput, /\[\]\s*$/);
 ```
 
 ## 42
 
 ### --description--
 
-The hints are an empty array, just as you set it. Add a hint using your old account in the `neardev-1` folder. So use the contract in `neardev`, but the account from `neardev-1`. Pass it near call addHint {"hint":"best coding site"}
+The hints are an empty array. Add a hint using your **old account** in the `neardev-1` folder. So use the contract in `neardev`, but the account from `neardev-1`. Pass it `'{ "hint": "My favorite coding site" }` to add a hint.
 
 ### --tests--
 
-test text
+You should run `near call <neardev_contract_name> addHint '{ "hint": "My favorite coding site" }' --accountId <neardev-1_account>`, with the correct contract name and account
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const id1 = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev-1/dev-account');
+const lastCommand = await __helpers.getLastCommand();
+const re = new RegExp(`^\\s*near\\s+call\\s+${id}\\s+addHint\\s+[\\s\\S]*?--accountId\\s+${id1}`, 'g');
+assert.match(lastCommand, re);
+```
+
+The terminal should print `Your hint was added`
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const output = await __helpers.getTerminalOutput();
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split('Doing account.functionCall()');
+const lastOutput = splitOutput[splitOutput.length - 1];
+assert.match(lastOutput, /'Your hint was added'\s*$/);
 ```
 
 ## 43
@@ -944,25 +1077,56 @@ View the hints again.
 
 ### --tests--
 
-You should run `near view <contract_name> viewHints`, where the contract name matches what's in the neardev folder
+You should run `near view <contract_name> viewHints`, where the contract name matches what's in the `neardev` folder
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const lastCommand = await __helpers.getLastCommand();
+const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewHints\\s*$`, 'g');
+assert.match(lastCommand, re);
+```
+
+The terminal should print `[ 'My favorite coding site' ]`
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const output = await __helpers.getTerminalOutput();
+const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewHints\\s*$`, 'g');
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split(re);
+const lastOutput = splitOutput[splitOutput.length - 1];
+assert.match(lastOutput, /'My favorite coding site' \]\s*$/i);
 ```
 
 ## 44
 
 ### --description--
 
-Add another hint using the `neardev-1` account, make it `it is free`.
+Add another hint using the `neardev-1` account, make it `It is free`.
 near call addHint {"hint":"it's free"} with neardev-1
 
 ### --tests--
 
-You should run `near call <neardev_contract_name> '{ "hint": "it is free" }' --accountId <neardev-1_account>`
+You should run `near call <neardev_contract_name> addHint '{ "hint": "It is free" }' --accountId <neardev-1_account>`, with the correct contract name and account
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const id1 = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev-1/dev-account');
+const lastCommand = await __helpers.getLastCommand();
+const re = new RegExp(`^\\s*near\\s+call\\s+${id}\\s+addHint\\s+[\\s\\S]*?--accountId\\s+${id1}`, 'g');
+assert.match(lastCommand, re);
+```
+
+The terminal should print `Your hint was added`
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const output = await __helpers.getTerminalOutput();
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split('Doing account.functionCall()');
+const lastOutput = splitOutput[splitOutput.length - 1];
+assert.match(lastOutput, /'Your hint was added'\s*$/);
 ```
 
 ## 45
@@ -973,10 +1137,26 @@ View the hints one more time.
 
 ### --tests--
 
-test text
+You should run `near view <contract_name> viewHints`, where the contract name matches what's in the `neardev` folder
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const lastCommand = await __helpers.getLastCommand();
+const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewHints\\s*$`, 'g');
+assert.match(lastCommand, re);
+```
+
+The terminal should print `[ 'My favorite coding site', 'It is free' ]`
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const output = await __helpers.getTerminalOutput();
+const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewHints\\s*$`, 'g');
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split(re);
+const lastOutput = splitOutput[splitOutput.length - 1];
+assert.match(lastOutput, /'It is free' \]\s*$/i);
 ```
 
 ## 46
@@ -987,10 +1167,20 @@ add { privateFunction: true } to addHint
 
 ### --tests--
 
-test text
+You should have a `@call({ privateFunction: true })` as your `addHint` decorator
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const addHint = babelised?.getType('ClassMethod').find(c => c.key?.name === 'addHint' && c.key?.scope?.includes('WordGuess'));
+const exp = addHint?.decorators[0]?.expression;
+assert.equal(exp?.callee?.name, 'call', "You should have a '@call()' decorator");
+assert.lengthOf(exp?.arguments, 1, "The 'call' decorator should have one argument");
+assert.equal(exp?.arguments[0]?.type, 'ObjectExpression', "The 'call' decorator argument should be an object");
+assert.lengthOf(exp?.arguments[0]?.properties, 1, "The 'call' object argument should have one property");
+assert.equal(exp?.arguments[0]?.properties[0]?.key?.name, 'privateFunction', "The 'call' object argument should have a 'privateFunction' property");
+assert.equal(exp?.arguments[0]?.properties[0]?.value?.value, true, "The 'call' object argument 'privateFunction' value should be 'true' (boolean)");
 ```
 
 ## 47
@@ -1025,10 +1215,32 @@ Use `dev-deploy` to deploy it again.
 
 ### --tests--
 
-You should run `near dev-deploy build/word-guess.wasm` in the termainl
+You should run `near dev-deploy build/word-guess.wasm` in the terminal
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const lastCommand = await __helpers.getLastCommand();
+assert.match(lastCommand, /near\s+dev-deploy\s+build\/word-guess\.wasm/);
+```
+
+You should have a `neardev` folder as a result of deploying the contract
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const learnDir = await __helpers.getDirectory('learn-near-smart-contracts-by-building-a-word-guessing-game')
+assert.include(learnDir, 'neardev');
+```
+
+The terminal output should include `Done deploying to <contract_name>`, where the contract name matches what's in the `neardev` folder
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const output = await __helpers.getTerminalOutput();
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split('near dev-deploy build/word-guess.wasm');
+const lastOutput = splitOutput[splitOutput.length - 1];
+const re = new RegExp(`Done deploying to ${id}\\s*$`);
+assert.match(lastOutput, re);
 ```
 
 ## 49
@@ -1042,41 +1254,80 @@ View the hints in your contract.
 You should run `near view <contract_name> viewHints` in the terminal, where contract name matches what's in the `neardev` folder
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const lastCommand = await __helpers.getLastCommand();
+const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewHints\\s*$`, 'g');
+assert.match(lastCommand, re);
 ```
 
-The terminal should output an array with your two hints
+The terminal should output an array with your hints
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const output = await __helpers.getTerminalOutput();
+const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewHints\\s*$`, 'g');
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split(re);
+const lastOutput = splitOutput[splitOutput.length - 1];
+assert.match(lastOutput, /\[ '[\s\S]*?'[\s\S]*?\]\s*$/);
 ```
 
 ## 50
 
 ### --description--
 
-Try to add another hint using your `neardev-1` account. Make the hint, `it is 12 letters`.
+Try to add another hint using your `neardev-1` account. Make the hint, `It is 12 letters`.
 
 ### --tests--
 
-You should run `near call <contract_name> addHint '{ "hint": "it is 12 letters" }' --accountId <neardev-1_account>`
+You should run `near call <contract_name> addHint '{ "hint": "It is 12 letters" }' --accountId <neardev-1_account>`
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const id1 = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev-1/dev-account');
+const lastCommand = await __helpers.getLastCommand();
+const re = new RegExp(`^\\s*near\\s+call\\s+${id}\\s+addHint\\s+[\\s\\S]*?--accountId\\s+${id1}`, 'g');
+assert.match(lastCommand, re);
+```
+
+The terminal output should include "Function is private"
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const output = await __helpers.getTerminalOutput();
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split('Doing account.functionCall()');
+const lastOutput = splitOutput[splitOutput.length - 1];
+assert.match(lastOutput, /Function is private/);
 ```
 
 ## 51
 
 ### --description--
 
-Now, the `addHint` function can only be called by the contract account. So your hint was not added. Add the same `it is 12 letters` hint, but use the contract account to do it.
+Now, the `addHint` function can only be called by the contract account. So your hint was not added. Add the same `It is 12 letters` hint, but use the contract (`neardev`) account to do it.
 
 ### --tests--
 
-You should run `near call <contract_name> addHint '{ "hint": "it is 12 letters" }' --accountId <neardev_account>`, with the correct two accounts
+You should run `near call <contract_name> addHint '{ "hint": "It is 12 letters" }' --accountId <account>`, with the correct two accounts
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const lastCommand = await __helpers.getLastCommand();
+const re = new RegExp(`^\\s*near\\s+call\\s+${id}\\s+addHint\\s+[\\s\\S]*?--accountId\\s+${id}`, 'g');
+assert.match(lastCommand, re);
+```
+
+The terminal should print `Your hint was added`
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const output = await __helpers.getTerminalOutput();
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split('Doing account.functionCall()');
+const lastOutput = splitOutput[splitOutput.length - 1];
+assert.match(lastOutput, /'Your hint was added'\s*$/);
 ```
 
 ## 52
@@ -1087,10 +1338,26 @@ Now it works, view the hints again.
 
 ### --tests--
 
-You should run `near view <contract_name> viewHints` in the terminal
+You should run `near view <contract_name> viewHints` in the terminal, where contract name matches what's in the `neardev` folder
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const lastCommand = await __helpers.getLastCommand();
+const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewHints\\s*$`, 'g');
+assert.match(lastCommand, re);
+```
+
+The terminal should output an array with your hints
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const output = await __helpers.getTerminalOutput();
+const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewHints\\s*$`, 'g');
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split(re);
+const lastOutput = splitOutput[splitOutput.length - 1];
+assert.match(lastOutput, /\[ '[\s\S]*?'[\s\S]*?\]\s*$/);
 ```
 
 ## 53
@@ -1104,7 +1371,17 @@ So only you, the contract creator will be able to add hints. You also want to be
 You should have `@intialize({ privateFunction: true })` as your `init` function decorator
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const init = babelised?.getType('ClassMethod').find(c => c.key?.name === 'init' && c.key?.scope?.includes('WordGuess'));
+const exp = init?.decorators[0]?.expression;
+assert.equal(exp?.callee?.name, 'initialize', "You should have a '@initialize()' decorator on your 'init' function");
+assert.lengthOf(exp?.arguments, 1, "The 'initialize' decorator should have one argument");
+assert.equal(exp?.arguments[0]?.type, 'ObjectExpression', "The 'initialize' decorator argument should be an object");
+assert.lengthOf(exp?.arguments[0]?.properties, 1, "The 'initialize' object argument should have one property");
+assert.equal(exp?.arguments[0]?.properties[0]?.key?.name, 'privateFunction', "The 'initialize' object argument should have a 'privateFunction' property");
+assert.equal(exp?.arguments[0]?.properties[0]?.value?.value, true, "The 'initialize' object argument 'privateFunction' value should be 'true' (boolean)");
 ```
 
 ## 54
@@ -1118,7 +1395,17 @@ You also don't want anyone else to be able to view the secret word, so make that
 You should have `@view({ privateFunction: true })` as your `viewSecretWord` decorator
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const viewSecret = babelised?.getType('ClassMethod').find(c => c.key?.name === 'viewSecretWord' && c.key?.scope?.includes('WordGuess'));
+const exp = viewSecret?.decorators[0]?.expression;
+assert.equal(exp?.callee?.name, 'view', "You should have a '@view()' decorator on your 'viewSecretWord' function");
+assert.lengthOf(exp?.arguments, 1, "The 'view' decorator should have one argument");
+assert.equal(exp?.arguments[0]?.type, 'ObjectExpression', "The 'view' decorator argument should be an object");
+assert.lengthOf(exp?.arguments[0]?.properties, 1, "The 'view' object argument should have one property");
+assert.equal(exp?.arguments[0]?.properties[0]?.key?.name, 'privateFunction', "The 'view' object argument should have a 'privateFunction' property");
+assert.equal(exp?.arguments[0]?.properties[0]?.value?.value, true, "The 'view' object argument 'privateFunction' value should be 'true' (boolean)");
 ```
 
 ## 55
@@ -1132,7 +1419,12 @@ Next, you need a way for people to view and make guesses. Add a `guesses` array 
 You should have `this.guesses = []` at the bottom of your constructor
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const construct = babelised?.getType('ClassMethod').find(c => c.kind === 'constructor');
+const recreatedCode = babelised?.generateCode(construct);
+assert.match(recreatedCode, /this\.guesses\s*=\s*\[\s*\]\s*;?\s*}/);
 ```
 
 ## 56
@@ -1146,13 +1438,26 @@ Below your `viewHints` function, create an empty `viewGuesses` function. Be sure
 You should have a `viewGuesses() { }` function
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const viewGuesses = babelised?.getType('ClassMethod').find(c => c.key?.name === 'viewGuesses' && c.key?.scope?.includes('WordGuess'));
+assert.exists(viewGuesses, "You should have a 'viewGuesses' function");
+assert.lengthOf(viewGuesses?.body?.body, 0, "Your 'viewGuesses' function should be empty");
 ```
 
 You should have a `@view({})` decorator above the function
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const viewGuesses = babelised?.getType('ClassMethod').find(c => c.key?.name === 'viewGuesses' && c.key?.scope?.includes('WordGuess'));
+const exp = viewGuesses?.decorators[0]?.expression;
+assert.equal(exp?.callee?.name, 'view', "You should have a '@view()' decorator");
+assert.lengthOf(exp?.arguments, 1, "The 'view' decorator should have one argument");
+assert.equal(exp?.arguments[0]?.type, 'ObjectExpression', "The 'view' decorator argument should be an object");
+assert.lengthOf(exp?.arguments[0]?.properties, 0, "The 'view' object argument should not have an properties");
 ```
 
 ## 57
@@ -1381,10 +1686,32 @@ Deploy your contract using the `dev-deploy` command.
 
 ### --tests--
 
-test text
+You should run `near dev-deploy build/word-guess.wasm` in the terminal
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const lastCommand = await __helpers.getLastCommand();
+assert.match(lastCommand, /near\s+dev-deploy\s+build\/word-guess\.wasm/);
+```
+
+You should have a `neardev` folder as a result of deploying the contract
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const learnDir = await __helpers.getDirectory('learn-near-smart-contracts-by-building-a-word-guessing-game')
+assert.include(learnDir, 'neardev');
+```
+
+The terminal output should include `Done deploying to <contract_name>`, where the contract name matches what's in the `neardev` folder
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const output = await __helpers.getTerminalOutput();
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split('near dev-deploy build/word-guess.wasm');
+const lastOutput = splitOutput[splitOutput.length - 1];
+const re = new RegExp(`Done deploying to ${id}\\s*$`);
+assert.match(lastOutput, re);
 ```
 
 ## 71
@@ -1595,10 +1922,32 @@ assert(false);
 
 ### --tests--
 
-test text
+You should run `near dev-deploy build/word-guess.wasm` in the terminal
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const lastCommand = await __helpers.getLastCommand();
+assert.match(lastCommand, /near\s+dev-deploy\s+build\/word-guess\.wasm/);
+```
+
+You should have a `neardev` folder as a result of deploying the contract
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const learnDir = await __helpers.getDirectory('learn-near-smart-contracts-by-building-a-word-guessing-game')
+assert.include(learnDir, 'neardev');
+```
+
+The terminal output should include `Done deploying to <contract_name>`, where the contract name matches what's in the `neardev` folder
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const output = await __helpers.getTerminalOutput();
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split('near dev-deploy build/word-guess.wasm');
+const lastOutput = splitOutput[splitOutput.length - 1];
+const re = new RegExp(`Done deploying to ${id}\\s*$`);
+assert.match(lastOutput, re);
 ```
 
 ## 86
