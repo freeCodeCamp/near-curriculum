@@ -31,7 +31,7 @@ assert.include(cwd, 'learn-near-smart-contracts-by-building-a-word-guessing-game
 
 ### --description--
 
-For this project, you will be making a word guessing game with NEAR smart contract. Open your `package.json` file. There's a few dependencies in there you will need. Mainly, the `near-sdk-js` package. Run `npm install` to install them.
+For this project, you will be making a word guessing game in a NEAR smart contract. Open your `package.json` file. There's a few dependencies in there you will need. Mainly, the `near-sdk-js` package. Run `npm install` to install them.
 
 ### --tests--
 
@@ -63,7 +63,7 @@ assert.include(dir, 'ts-morph');
 
 ### --description--
 
-You will be using all JavaScript for your contract. It will be in the `src/word-guess.js` file. Open it and export a `WordGuess` class.
+You will be using only JavaScript for this contract. It will be in the `src/word-guess.js` file. Open it and export a `WordGuess` class.
 
 ### --tests--
 
@@ -79,7 +79,7 @@ assert.match(fileContents, /^\s*export\s+class\s+WordGuess\s*{\s*}\s*;?\s*$/);
 
 ### --description--
 
-A smart contract class needs a decorator. At the top of the file, import the `NearBindgen` decorator from the `near-sdk-js` module.
+The smart contract class needs a decorator. At the top of the file, import the `NearBindgen` decorator from the `near-sdk-js` module.
 
 ### --tests--
 
@@ -155,7 +155,7 @@ assert.match(recreatedCode, /{\s*this\.secretWord\s*=\s*('|"|`)\1;\s*}/);
 
 ### --description--
 
-Below the constructor function, add an empty `init` function. Destruct a `secretWord` variable in the parameter. This will be so you can set the secret word after you deploy the contract.
+Below the constructor function, add an empty `init` function. Destruct a `secretWord` variable in the parameter. This will be so you can set the secret word to whatever you want after you deploy the contract.
 
 ### --tests--
 
@@ -238,7 +238,7 @@ assert.match(initCode, /\)\s*{\s*this\.secretWord\s*=\s*secretWord;\s*}/);
 
 ### --description--
 
-Below that, use a template literal to return the string `The secret word has been set to '<secretWord>';`
+Below that, use a template literal to return the string `The secret word has been set to '<secret_word>';`
 
 ### --tests--
 
@@ -257,7 +257,7 @@ assert.match(initCode, /return\s*`The secret word has been set to '\${secretWord
 
 ### --description--
 
-Decorators have options to define characteristics of methods and classes. Where you added your `NearBindgen` class decorator, add a `requireInit: true` in the empty object as an option so your contract requires initialization.
+Decorators have options to define characteristics of methods and classes. Where you added your `NearBindgen` class decorator, add `requireInit: true` in the empty object as an option so your contract requires initialization.
 
 ### --tests--
 
@@ -276,7 +276,7 @@ assert.match(classCode, /^@NearBindgen\({\s*requireInit:\s*true\s*}\)/);
 
 ### --description--
 
-Now your contract will need to be initialized with a secret word. Next, you will want to add a way to view the secret word. In your imports, add the `view` decorator so you can create a method for reading your contracts state.
+Now your contract will need to be initialized with a secret word. Next, you will want to add a way to view the secret word. In your imports, add the `view` decorator so you can create a method for reading your contract state.
 
 ### --tests--
 
@@ -295,8 +295,7 @@ assert.exists(method);
 
 ### --description--
 
-Below your `init` function, add an empty `viewSecretWord` function. Give it the view decorator with an empty object as its options.
-add @view + viewSecretWord({}) {}
+Below your `init` function, add an empty `viewSecretWord` function. Give it the view decorator with an empty object for its options.
 
 ### --tests--
 
@@ -329,11 +328,11 @@ assert.lengthOf(exp?.arguments[0]?.properties, 0, "The 'view' object argument sh
 
 ### --description--
 
-In your function, return the secret word.
+In your function, use a template literal to return `The secret word is '<secret_word>'`.
 
 ### --tests--
 
-You should have `return this.secretWord;` in your `viewSecretWord` function
+You should have ``return `The secret word is '${this.secretWord}'`;`` in your `viewSecretWord` function
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -341,7 +340,7 @@ const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-w
 const babelised = await __helpers.babeliser(code?.replace('export',''));
 const secretFn = babelised?.getType('ClassMethod').find(c => c.key?.name === 'viewSecretWord' && c.key?.scope?.includes('WordGuess'));
 const secretCode = babelised?.generateCode(secretFn);
-assert.match(secretCode, /{\s*return\s+this\.secretWord;\s*}\s*$/);
+assert.match(secretCode, /{\s*return\s+`The secret word is '\${\s*this\s*\.\s*secretWord\s*}'`\s*;?\s*}\s*$/);
 ```
 
 ## 17
@@ -372,7 +371,7 @@ assert.isTrue(fileExists);
 
 ### --description--
 
-Your contract was created in the `build/word-guess.wasm` file. Check the version of the NEAR CLI tools quick to make sure they're installed.
+Your contract was created in the `build/word-guess.wasm` file. The NEAR CLI tools should be installed, check the version of them in the terminal to make sure.
 
 ### --tests--
 
@@ -414,7 +413,7 @@ assert.match(lastCommand?.trim(), /^near\s+--help$/);
 
 ### --description--
 
-Use the `dev-deploy` command to deploy your contract.
+Use the `near dev-deploy` command to deploy your contract. Pass it the path to your contract on the command line. Enter `y` or `n` if prompted.
 
 ### --tests--
 
@@ -438,7 +437,7 @@ assert.include(learnDir, 'neardev');
 
 ### --description--
 
-Your contract is deployed to the NEAR testnet. A `neardev` folder was created for some accounts. The contract name is in the `neardev/dev-account.env` file. Use the `view` command to run the contract's `viewSecretWord` function. Here's the syntax: `near view <contract_id> <function_to_run>`.
+Your contract is deployed to the NEAR testnet. A `neardev` folder was created for the account. The contract name is in the `neardev/dev-account.env` file. Use the `view` command to run the contract's `viewSecretWord` function. Here's the syntax: `near view <contract_id> <function_to_run>`.
 
 ### --tests--
 
@@ -498,7 +497,7 @@ assert.match(lastOutput, /"The secret word has been set to 'test'"\s*$/);
 
 ### --description--
 
-Run the `viewSecretWord` function again.
+It should say `The secret word has been set to 'test'`. Run the `viewSecretWord` function again.
 
 ### --tests--
 
@@ -528,7 +527,7 @@ assert.match(lastOutput, /'test'\s*$/);
 
 ### --description--
 
-Now it works. There's two more things you need to add to your game, a way to add hints to help guess the secret word, and a way for people to make guesses. In your class constructor, add a `hints` variable set to an empty array.
+Now it works. There's two more things you want to add to your game, a way to add hints to help guess the secret word, and a way for people to make guesses. In your class constructor, add a `hints` variable set to an empty array.
 
 ### --tests--
 
@@ -582,7 +581,7 @@ assert.lengthOf(addHint?.params, 1, "Your 'addHint' function should accept one p
 assert.equal(addHint?.params[0]?.type, 'ObjectPattern', "Your 'addHint' parameter should be an object");
 assert.lengthOf(addHint?.params[0]?.properties, 1, 'Your object parameter should destruct one variable')
 assert.equal(addHint?.params[0]?.properties[0]?.value?.name, 'hint', "You should only destruct 'hint' from the object parameter");
-assert.lengthOf(addHin?.body?.body, 0, "Your 'addHint' function should be empty");
+assert.lengthOf(addHint?.body?.body, 0, "Your 'addHint' function should be empty");
 ```
 
 You should have a `@call({})` decorator above the function
@@ -642,8 +641,6 @@ assert.match(recreatedCode, /return\s+('|"|`)Your hint was added\1;\s*}\s*$/);
 ### --description--
 
 If you are attempting to make a guess, you will want to know what the hints are. Add an empty `viewHints` function. It won't change the contract state so add the appropriate decorate, as well.
-
-add @view + viewHints() {}
 
 ### --tests--
 
@@ -777,7 +774,7 @@ const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewSecretWord\\s*$`, 'g');
 assert.match(lastCommand, re);
 ```
 
-The terminal should print `'test'`
+The terminal should print `"The secret word is 'test'"`
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -786,18 +783,18 @@ const output = await __helpers.getTerminalOutput();
 const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewSecretWord\\s*$`, 'g');
 const splitOutput = output?.replaceAll(/\s+/g, ' ').split(re);
 const lastOutput = splitOutput[splitOutput.length - 1];
-assert.match(lastOutput, /'test'\s*$/);
+assert.match(lastOutput, /"The secret word is 'test'"\s*$/);
 ```
 
 ## 34
 
 ### --description--
 
-The contract is still initialized and has the secret word from earlier, even though you re-deployed it. NEAR contracts can have their logic updated while retaining their state. So if you re-deploy a contract, the stored data will remain, but the logic will get updated. Call the `addHint` function with `'{ hint: 'test hint' }'` as the argument to add a hint. Don't forget to include the account ID with the command.
+The contract is still initialized and has the secret word from earlier, even though you re-deployed it. Contracts can have their logic updated while retaining their state. So if you re-deploy a contract, the stored data will remain, but the logic will get updated. Call the `addHint` function with `'{ "hint": "test hint" }'` as the argument to add a hint. Don't forget to include the account ID with the command since you are trying to change the state.
 
 ### --tests--
 
-You should run `near call <contract_name> addHint`
+You should run `near call <contract_name> addHint '{ "hint": "test hint" }' --accountID <account_id>`, where `<contract_name>` and `<account_id>` match what's in the `neardev` folder
 
 ```js
 assert(false);
@@ -807,7 +804,7 @@ assert(false);
 
 ### --description--
 
-The state of the contract you deployed the first time didn't include a `hints` array. So when the logic of the contract got updated to include your new `addHint` function, the state stayed the same and there was nowhere to store the data. Call the `init` on the contract again with `{ "secretWord": "test" }` as the argument again.
+The command panicked. The state of the contract you deployed the first time didn't include a `hints` array. So when the logic of the contract got updated to include your new `addHint` function, the state stayed the same and there was nowhere to store the data. Call the `init` function on the contract again with `{ "secretWord": "test" }` as the argument again.
 
 ### --tests--
 
@@ -821,11 +818,29 @@ assert(false);
 
 ### --description--
 
-mv neardev-1
+It panicked again. It says the contract is already initialized. You can only initialize a contract once. To create an entirely new contract, you will need to use a different account. Rename your `neardev` folder to `neardev-1`.
 
 ### --tests--
 
-test text
+You should have a `neardev-1` folder
+
+```js
+assert(false);
+```
+
+You should not have a `neardev` folder
+
+```js
+assert(false);
+```
+
+Your `neardev-1` folder should have a `dev-account` file
+
+```js
+assert(false);
+```
+
+Your `neardev-1` folder should have a `dev-account.env` file
 
 ```js
 assert(false);
@@ -835,11 +850,17 @@ assert(false);
 
 ### --description--
 
-near dev-deploy .wasm - it created a new neardev
+Use the `dev-deploy` command to deploy your contract again. It will create a new account and contract for you when deploying.
 
 ### --tests--
 
-test text
+You should run `near dev-deploy build/word-guess.wasm` in the terminal
+
+```js
+assert(false);
+```
+
+You should have a `neardev` folder as a result of deploying your contract
 
 ```js
 assert(false);
@@ -849,11 +870,11 @@ assert(false);
 
 ### --description--
 
-near viewSecretWord - not initialized
+You have a new account and contract name in the `neardev` folder. Call the `viewSecretWord` function on your new contract.
 
 ### --tests--
 
-test text
+You should run `near view <contract_name> viewSecretWord`, where `<contract_name>` is the name from the `neardev/dev-account.env` file
 
 ```js
 assert(false);
@@ -863,11 +884,11 @@ assert(false);
 
 ### --description--
 
-near call init '{ "secretWord": "freeCodeCamp" }' - use neardev-1
+This new contract hasn't been initialized yet. Initialize this new contract using your old account in the `neardev-1` folder by calling its `init` function. Pass it `'{ "secretWord": "freeCodeCamp" }'` to set the secret word to `freeCodeCamp`.
 
 ### --tests--
 
-test text
+You should run `near call <neardev_contract_name> init '{ "secretWord": "freeCodeCamp" }' --accountId <neardev-1_account>`, with the correct contract name and account
 
 ```js
 assert(false);
@@ -877,11 +898,11 @@ assert(false);
 
 ### --description--
 
-near viewSecretWord
+View the secret word again.
 
 ### --tests--
 
-test text
+You should run `near view <contract_name> viewSecretWord`, where the contract name matches what is in the `neardev` folder
 
 ```js
 assert(false);
@@ -891,11 +912,11 @@ assert(false);
 
 ### --description--
 
-near viewHints
+The contract has been initialized. Run the `viewHints` function.
 
 ### --tests--
 
-test text
+You should run `near view <contract_name> viewHints`, where the contract name matches what's in the `neardev` folder
 
 ```js
 assert(false);
@@ -905,7 +926,7 @@ assert(false);
 
 ### --description--
 
-near call addHint {"hint":"best coding site"}
+The hints are an empty array, just as you set it. Add a hint using your old account in the `neardev-1` folder. So use the contract in `neardev`, but the account from `neardev-1`. Pass it near call addHint {"hint":"best coding site"}
 
 ### --tests--
 
@@ -919,11 +940,11 @@ assert(false);
 
 ### --description--
 
-near viewHints - shows best coding site
+View the hints again.
 
 ### --tests--
 
-test text
+You should run `near view <contract_name> viewHints`, where the contract name matches what's in the neardev folder
 
 ```js
 assert(false);
@@ -933,11 +954,12 @@ assert(false);
 
 ### --description--
 
+Add another hint using the `neardev-1` account, make it `it is free`.
 near call addHint {"hint":"it's free"} with neardev-1
 
 ### --tests--
 
-test text
+You should run `near call <neardev_contract_name> '{ "hint": "it is free" }' --accountId <neardev-1_account>`
 
 ```js
 assert(false);
@@ -947,7 +969,7 @@ assert(false);
 
 ### --description--
 
-near viewHints
+View the hints one more time.
 
 ### --tests--
 
@@ -975,7 +997,7 @@ assert(false);
 
 ### --description--
 
-npm run build:word-guess
+Rebuild your contract.
 
 ### --tests--
 
@@ -999,11 +1021,11 @@ assert.isTrue(fileExists);
 
 ### --description--
 
-near dev-deploy .wasm
+Use `dev-deploy` to deploy it again.
 
 ### --tests--
 
-test text
+You should run `near dev-deploy build/word-guess.wasm` in the termainl
 
 ```js
 assert(false);
@@ -1013,11 +1035,17 @@ assert(false);
 
 ### --description--
 
-near view hints - they're still there
+View the hints in your contract.
 
 ### --tests--
 
-test text
+You should run `near view <contract_name> viewHints` in the terminal, where contract name matches what's in the `neardev` folder
+
+```js
+assert(false);
+```
+
+The terminal should output an array with your two hints
 
 ```js
 assert(false);
@@ -1027,11 +1055,11 @@ assert(false);
 
 ### --description--
 
-near call addHint {"hint":"it has 12 letters"} with neardev-1 - panicked
+Try to add another hint using your `neardev-1` account. Make the hint, `it is 12 letters`.
 
 ### --tests--
 
-test text
+You should run `near call <contract_name> addHint '{ "hint": "it is 12 letters" }' --accountId <neardev-1_account>`
 
 ```js
 assert(false);
@@ -1041,11 +1069,11 @@ assert(false);
 
 ### --description--
 
-near call addHintnear call addHint {"hint":"it has 12 letters"} with neardev - it works
+Now, the `addHint` function can only be called by the contract account. So your hint was not added. Add the same `it is 12 letters` hint, but use the contract account to do it.
 
 ### --tests--
 
-test text
+You should run `near call <contract_name> addHint '{ "hint": "it is 12 letters" }' --accountId <neardev_account>`, with the correct two accounts
 
 ```js
 assert(false);
@@ -1055,11 +1083,11 @@ assert(false);
 
 ### --description--
 
-near viewHints
+Now it works, view the hints again.
 
 ### --tests--
 
-test text
+You should run `near view <contract_name> viewHints` in the terminal
 
 ```js
 assert(false);
@@ -1069,11 +1097,11 @@ assert(false);
 
 ### --description--
 
-add { privateFunction: true } to init
+So only you, the contract creator will be able to add hints. You also want to be the only one who can initialize the contract, so make that a private function as well.
 
 ### --tests--
 
-test text
+You should have `@intialize({ privateFunction: true })` as your `init` function decorator
 
 ```js
 assert(false);
@@ -1083,11 +1111,11 @@ assert(false);
 
 ### --description--
 
-add { privateFunction: true } to viewSecretWord
+You also don't want anyone else to be able to view the secret word, so make that one private, too.
 
 ### --tests--
 
-test text
+You should have `@view({ privateFunction: true })` as your `viewSecretWord` decorator
 
 ```js
 assert(false);
@@ -1097,11 +1125,11 @@ assert(false);
 
 ### --description--
 
-add this.guesses = []
+Next, you need a way for people to view and make guesses. Add a `guesses` array in your constructor to store the guesses.
 
 ### --tests--
 
-test text
+You should have `this.guesses = []` at the bottom of your constructor
 
 ```js
 assert(false);
@@ -1111,11 +1139,17 @@ assert(false);
 
 ### --description--
 
-add @view({}) + viewGuesses
+Below your `viewHints` function, create an empty `viewGuesses` function. Be sure to add the correct decorator for reading from the contract.
 
 ### --tests--
 
-test text
+You should have a `viewGuesses() { }` function
+
+```js
+assert(false);
+```
+
+You should have a `@view({})` decorator above the function
 
 ```js
 assert(false);
@@ -1125,11 +1159,11 @@ assert(false);
 
 ### --description--
 
-add return this.guesses
+In the function, return the guesses array.
 
 ### --tests--
 
-test text
+You should have `return this.guesses;` in your `viewGuesses` function
 
 ```js
 assert(false);
@@ -1139,11 +1173,17 @@ assert(false);
 
 ### --description--
 
-add @call({}) + makeGuess({ guess })
+Lastly, create an empty `makeGuess` function that destructs `guess` from an object parameter. Be sure to give it the decorator that allows writing to the contract state.
 
 ### --tests--
 
-test text
+You should have a `makeGuess({ guess }) { }` function
+
+```js
+assert(false);
+```
+
+You should have a `@call({})` decorator above the function
 
 ```js
 assert(false);
@@ -1153,11 +1193,11 @@ assert(false);
 
 ### --description--
 
-add const lastGuess
+In the `makeGuess` function, add a `const lastGuess` variable. Set it to the last item in the `guesses` array with `this.guesses[this.guesses.length-1]`.
 
 ### --tests--
 
-test text
+You should have `const lastGuess = this.guesses[this.guesses.length - 1];` in your `makeGuess` function
 
 ```js
 assert(false);
@@ -1167,11 +1207,11 @@ assert(false);
 
 ### --description--
 
-add if (lastGuess === this.secretWord) {}
+Below that, add an `if` condition that checks if the last guess is equal to the secret word. This will be for if the word has been guessed and the game is over.
 
 ### --tests--
 
-test text
+You should have `if (lastGuess === this.secretWord) { }` in your `makeGuess` function
 
 ```js
 assert(false);
@@ -1181,11 +1221,11 @@ assert(false);
 
 ### --description--
 
-add return `This game is finished. The secret word was '${this.secretWord}'`;
+At the top of the if condition, use a template literal to return `This game is finished. The secret word was '<secret_word>'`;
 
 ### --tests--
 
-test text
+You should have ``return `This game is finished. The secret word was '<secret_word>'`;`` in your `if` condition
 
 ```js
 assert(false);
@@ -1195,11 +1235,11 @@ assert(false);
 
 ### --description--
 
-add else {}
+Add an empty `else` area to your `if` condition for when the game is still not finished.
 
 ### --tests--
 
-test text
+You should have `else { }` at the bottom of your `if` condition
 
 ```js
 assert(false);
@@ -1209,11 +1249,11 @@ assert(false);
 
 ### --description--
 
-add this.guesses.push(guess)
+At the top of the `else` area, push the `guess` to the `guesses` array.
 
 ### --tests--
 
-test text
+You should have `this.guesses.push(guess);` in the `else` area
 
 ```js
 assert(false);
@@ -1223,11 +1263,13 @@ assert(false);
 
 ### --description--
 
+Add another `if` condition at the bottom of your `else` area. Make it check if `guess` is equal to the secret word for when the guess is correct.
+
 add if(guess === secretWord) {}
 
 ### --tests--
 
-test text
+You should have `if (guess === secretWord) { }` in your `else` area
 
 ```js
 assert(false);
@@ -1237,11 +1279,11 @@ assert(false);
 
 ### --description--
 
-add return `You got it! The secret word was '${this.secretWord}'`;
+If the guess is the secret word, use a template literal to return `You got it! The secret word is '<secret_word>'`;
 
 ### --tests--
 
-test text
+You should have ``return `You got it! The secret word is '${this.secretWord}'`;``
 
 ```js
 assert(false);
@@ -1251,11 +1293,11 @@ assert(false);
 
 ### --description--
 
-add else {}
+Add an empty `else` statement for when the guess isn't the secret word.
 
 ### --tests--
 
-test text
+You should have an `else { }` area of your second `if` statement
 
 ```js
 assert(false);
@@ -1265,11 +1307,11 @@ assert(false);
 
 ### --description--
 
-add return `Sorry, '${guess}' is not the secret word`;
+In the `else` area, use a template literal to return `Sorry, '<guess>' is not the secret word;`
 
 ### --tests--
 
-test text
+You should have ``return `Sorry, '${guess}' is not the secret word`;`` in your second `else` area
 
 ```js
 assert(false);
@@ -1279,7 +1321,7 @@ assert(false);
 
 ### --description--
 
-npm run build:word-guess
+Time to test it. Run the command to rebuild your contract.
 
 ### --tests--
 
@@ -1303,11 +1345,29 @@ assert.isTrue(fileExists);
 
 ### --description--
 
-mv neardev -> neardev-2 - because you added a new state...
+You added some new things your contract will store so you need to use a new account. Rename your `neardev` folder to `neardev-2`.
 
 ### --tests--
 
-test text
+You should have a `neardev-2` folder
+
+```js
+assert(false);
+```
+
+You should not have a `neardev` folder
+
+```js
+assert(false);
+```
+
+Your `neardev-2` folder should have a `dev-account` file
+
+```js
+assert(false);
+```
+
+Your `neardev-2` folder should have a `dev-account.env` file
 
 ```js
 assert(false);
@@ -1317,7 +1377,7 @@ assert(false);
 
 ### --description--
 
-near dev-deploy .wasm
+Deploy your contract using the `dev-deploy` command.
 
 ### --tests--
 
@@ -1331,7 +1391,8 @@ assert(false);
 
 ### --description--
 
-near call init '{  }' with neardev-2 - doesn't work
+You now have three accounts to work with, but only one of them can call any of the private functions. Your 
+call init with neardev
 
 ### --tests--
 
@@ -1345,7 +1406,8 @@ assert(false);
 
 ### --description--
 
-near call init '{}' with neardev - works
+near viewSecretWord with neardev
+
 
 ### --tests--
 
@@ -1359,7 +1421,8 @@ assert(false);
 
 ### --description--
 
-near view viewSecretWord with neardev-2 - doesn't work
+near addHint with neardev
+
 
 ### --tests--
 
@@ -1373,7 +1436,7 @@ assert(false);
 
 ### --description--
 
-near viewSecretWord with neardev
+near viewSecretWord with neardev-2
 
 ### --tests--
 
@@ -1387,7 +1450,8 @@ assert(false);
 
 ### --description--
 
-near call addHint with neardev
+near viewHints with neardev-2
+
 
 ### --tests--
 
@@ -1401,7 +1465,196 @@ assert(false);
 
 ### --description--
 
-near call addGuess 
+near addwrongGuess with neardev-2
+
+### --tests--
+
+test text
+
+```js
+assert(false);
+```
+
+## 76
+
+### --description--
+
+near viewGuesses with neardev-2
+
+### --tests--
+
+test text
+
+```js
+assert(false);
+```
+
+## 76
+
+### --description--
+
+near addRightGuess with neardev-2
+
+### --tests--
+
+test text
+
+```js
+assert(false);
+```
+
+## 76
+
+### --description--
+
+near addAnotherGuess with neardev-2
+
+### --tests--
+
+test text
+
+```js
+assert(false);
+```
+
+## 76
+
+### --description--
+
+import vector
+
+### --tests--
+
+test text
+
+```js
+assert(false);
+```
+
+## 76
+
+### --description--
+
+change  this.hints to vector
+
+### --tests--
+
+test text
+
+```js
+assert(false);
+```
+
+## 76
+
+### --description--
+
+change this.guesses to vector
+
+### --tests--
+
+test text
+
+```js
+assert(false);
+```
+
+## 76
+
+### --description--
+
+-rebuild
+
+### --tests--
+
+test text
+
+```js
+assert(false);
+```
+
+## 76
+
+### --description--
+
+-delete neardev
+
+### --tests--
+
+test text
+
+```js
+assert(false);
+```
+
+## 76
+
+### --description--
+
+-redeploy
+
+### --tests--
+
+test text
+
+```js
+assert(false);
+```
+
+## 76
+
+### --description--
+
+-set the secret word to something
+
+### --tests--
+
+test text
+
+```js
+assert(false);
+```
+
+## 76
+
+### --description--
+
+-add a hint
+
+### --tests--
+
+test text
+
+```js
+assert(false);
+```
+
+## 76
+
+### --description--
+
+-guess the secret word
+
+### --tests--
+
+test text
+
+```js
+assert(false);
+```
+
+## 76
+
+### --description--
+
+This is the last step. If you want to play the game, you can run these commands manipulate the contract. Note that you need all the accounts (`neardev` folders) you created throughout the tutorial for these to work.
+
+1. Run node deploy to make me deploy the contract, initialize it, and add the first hint
+2. Then, use your `neardev` account to make view the hints and make a guess
+3. Run node hint to make me add the next hint
+4. Repeat steps 2 and 3
+
+When you are ready to be done, enter `goodbye` in the terminal.
 
 ### --tests--
 
