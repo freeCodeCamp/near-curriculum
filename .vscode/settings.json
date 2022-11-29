@@ -28,6 +28,8 @@
     "build-x-using-y": true,
     "learn-how-to-set-up-near-by-building-a-hello-world-smart-contract": true,
     "learn-near-smart-contracts-by-building-a-word-guessing-game": true,
+    "learn-near-smart-contracts-by-building-a-word-guessing-game/init.js": true,
+    "learn-near-smart-contracts-by-building-a-word-guessing-game/add-hint.js": true,
     "js/ts.implicitProjectConfig.experimentalDecorators": true
   },
   "terminal.integrated.profiles.linux": {
