@@ -953,7 +953,7 @@ assert.match(lastOutput, /Contract must be initialized/);
 
 ### --description--
 
-This new contract has a blank state and hasn't been initialized yet. Initialize it with your `neardev-1` account by calling its `init` function. Pass it `'{ "secretWord": "freeCodeCamp" }'` to set the secret word. So call the new contract (`neardev`), but use the old account (`neardev-1`).
+This new contract has a blank state and hasn't been initialized yet. Initialize the new contract (`neardev`), but use the old account (`neardev-1`) account as the `--accountId`. Pass `'{ "secretWord": "freeCodeCamp" }'` to the `init` call to set the secret word.
 
 If you get something wrong, delete the `neardev` folder, redeploy the contract, and try again.
 
@@ -1044,7 +1044,7 @@ assert.match(lastOutput, /\[\]\s*$/);
 
 ### --description--
 
-The hints are an empty array. Add a hint using the contract in `neardev`, but the account from `neardev-1`. Pass it `'{ "hint": "My favorite coding site" }` to add a hint.
+The hints are an empty array. Add a hint using the contract in `neardev`, but the account from `neardev-1` again. Pass it `'{ "hint": "My favorite coding site" }` to add a hint.
 
 ### --tests--
 
@@ -1538,11 +1538,11 @@ assert.match(recreatedCode, /{\s*const lastGuess = this\.guesses\[this\.guesses\
 
 ### --description--
 
-The guesses array will keep track of the `guess` and who made it. Add an `if` condition that checks if `lastGuess.guess` is equal to the secret word. This will be for if the word has been guessed and the game is over.
+The guesses array will keep track of the `guess` and who made it. Add an `if` condition that checks if `lastGuess?.guess` is equal to the secret word. This will be for if the word has been guessed and the game is over.
 
 ### --tests--
 
-You should have `if (lastGuess.guess === this.secretWord) { }` in your `makeGuess` function
+You should have `if (lastGuess?.guess === this.secretWord) { }` in your `makeGuess` function
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -1550,7 +1550,7 @@ const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-w
 const babelised = await __helpers.babeliser(code?.replace('export',''));
 const makeGuess = babelised?.getType('ClassMethod').find(c => c.key?.name === 'makeGuess' && c.key?.scope?.includes('WordGuess'));
 const recreatedCode = babelised?.generateCode(makeGuess);
-assert.match(recreatedCode, /if \(lastGuess\.guess === this\.secretWord\) {}\s*}\s*$/);
+assert.match(recreatedCode, /if \(lastGuess\?\.guess === this\.secretWord\) {}\s*}\s*$/);
 ```
 
 ## 61
@@ -1570,7 +1570,7 @@ const babelised = await __helpers.babeliser(code?.replace('export',''));
 const makeGuess = babelised?.getType('ClassMethod').find(c => c.key?.name === 'makeGuess' && c.key?.scope?.includes('WordGuess'));
 const ifCond = makeGuess?.body?.body[1]?.consequent?.body[0];
 const recreatedCode = babelised?.generateCode(ifCond);
-assert.match(recreatedCode, /^\s*return `This game is finished\. The secret word was '\${this\.secretWord}'\. The winning guess was made by \${lastGuess\.guesser}`;\s*$/);
+assert.match(recreatedCode, /^\s*return `This game is finished\. The secret word, '\${this\.secretWord}', was guessed by \${lastGuess\.guesser}`;\s*$/);
 ```
 
 ## 62
@@ -1596,86 +1596,124 @@ assert.isEmpty(ifCond?.alternate?.body, "Your 'else' area should be empty");
 
 ### --description--
 
-add import near
+In this area, you will find the account that made the guess, and push the guess to the guesses array. Then, figure out if the guess is correct or not. First, import `near` with the rest of the imports so you can find the calling account.
 
 ### --tests--
 
-test
+You should import `near` from the `near-sdk-js` module
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const imports = babelised?.getImportDeclarations().find(i => i.source?.value === 'near-sdk-js');
+const method = imports?.specifiers?.find(s => s.local?.name === 'near');
+assert.exists(method);
 ```
 
 ## 64
 
 ### --description--
 
-add const guesser = near.currentAccountIf()
+Back in the empty `else` area, create a `const guesser` variable and set it to `near.predecessorAccountId()` to get the account making the guess.
 
 ### --tests--
 
-test
+You should have `const guesser = near.predecessorAccountId();` as the only thing in your `else` area
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const ifCond = babelised?.getType('IfStatement').find(i => i.scope.includes('makeGuess') && i.scope.includes('WordGuess'));
+const elseArea = ifCond?.alternate?.body[0];
+assert.equal(elseArea?.kind, 'const');
+assert.equal(elseArea?.declarations[0]?.id?.name, 'guesser');
+const callee = elseArea?.declarations[0]?.init?.callee;
+assert.equal(callee?.type, 'MemberExpression');
+assert.equal(callee?.object?.name, 'near');
+assert.equal(callee?.property?.name, 'predecessorAccountId');
 ```
 
 ## 65
 
 ### --description--
 
-add near.log(`\nguesser = ${guesser}`)
+Below that, add a `near.log` that uses a template literal to print `\nguesser = ${guesser}`.
 
 ### --tests--
 
-test
+You should have ``near.log(`\nguesser = ${guesser}`);`` at the bottom of your `else` area
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const ifCond = babelised?.getType('IfStatement').find(i => i.scope.includes('makeGuess') && i.scope.includes('WordGuess'));
+const nearLog = ifCond?.alternate?.body[1];
+const recreatedCode = babelised?.generateCode(nearLog);
+assert.match(recreatedCode, /^\s*near\.log\(`\\nguesser = \${guesser}`\);\s*$/);
 ```
 
 ## 66
 
 ### --description--
 
-add near.log(`\nguess = ${guess}`)
+Add another log below that to log the `guess` in the same format.
 
 ### --tests--
 
-test
+You should have ``near.log(`\nguess = ${guess}`);`` at the bottom of your `else` area
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const ifCond = babelised?.getType('IfStatement').find(i => i.scope.includes('makeGuess') && i.scope.includes('WordGuess'));
+const nearLog = ifCond?.alternate?.body[2];
+const recreatedCode = babelised?.generateCode(nearLog);
+assert.match(recreatedCode, /^\s*near\.log\(`\\nguess = \${guess}`\);\s*$/);
 ```
 
 ## 67
 
 ### --description--
 
-push the { guesser, guess } to the `guesses` array.
+Now you have the guess and who it's from. Push `{ guesser, guess }` to your `guesses` array below your logs.
 
 ### --tests--
 
 You should have `this.guesses.push({ guesser, guess });` in the `else` area
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const ifCond = babelised?.getType('IfStatement').find(i => i.scope.includes('makeGuess') && i.scope.includes('WordGuess'));
+const newGuess = ifCond?.alternate?.body[3];
+const recreatedCode = babelised?.generateCode(newGuess);
+assert.match(recreatedCode, /^\s*this\.guesses\.push\({\s*guesser,\s*guess\s*}\);\s*$/);
 ```
 
 ## 68
 
 ### --description--
 
-Add another `if` condition at the bottom of your `else` area. Make it check if `guess` is equal to the secret word for when the guess is correct.
-
-add if(guess === secretWord) {}
+Add another empty `if` condition at the bottom of your `else` area. Make it check if `guess` is equal to the secret word for when the guess is correct.
 
 ### --tests--
 
-You should have `if (guess === secretWord) { }` in your `else` area
+You should have `if (guess === this.secretWord) { }` at the bottom of your `else` area
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const ifCond1 = babelised?.getType('IfStatement').find(i => i.scope.includes('makeGuess') && i.scope.includes('WordGuess'));
+const ifCond2 = ifCond1?.alternate?.body[4];
+const recreatedCode = babelised?.generateCode(ifCond2);
+console.log(recreatedCode)
+assert.match(recreatedCode, /^\s*if \(guess === this\.secretWord\) {}\s*$/);
 ```
 
 ## 69
@@ -1689,35 +1727,53 @@ If the guess is the secret word, use a template literal to return `You got it! T
 You should have ``return `You got it! The secret word is '${this.secretWord}'`;``
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const ifCond1 = babelised?.getType('IfStatement').find(i => i.scope.includes('makeGuess') && i.scope.includes('WordGuess'));
+const ifCond2 = ifCond1?.alternate?.body[4];
+const recreatedCode = babelised?.generateCode(ifCond2);
+assert.match(recreatedCode, /{\s*return `You got it! The secret word is '\${this\.secretWord}'`;\s*}/);
 ```
 
 ## 70
 
 ### --description--
 
-Add an empty `else` statement for when the guess isn't the secret word.
+Add an empty `else` area for when the guess isn't the secret word.
 
 ### --tests--
 
-You should have an `else { }` area of your second `if` statement
+You should have an `else { }` area with your second `if` statement
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const ifCond1 = babelised?.getType('IfStatement').find(i => i.scope.includes('makeGuess') && i.scope.includes('WordGuess'));
+const ifCond2 = ifCond1?.alternate?.body[4];
+assert.isNotNull(ifCond2?.alternate, "Your second 'if' condition should have an 'else' area");
+assert.isEmpty(ifCond2?.alternate?.body, "Your 'else' area should be empty");
 ```
 
 ## 71
 
 ### --description--
 
-In the `else` area, use a template literal to return `Sorry, '<guess>' is not the secret word;`
+In the `else` area, use a template literal to return `Sorry, '<guess>' is not the secret word`.
 
 ### --tests--
 
 You should have ``return `Sorry, '${guess}' is not the secret word`;`` in your second `else` area
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const ifCond1 = babelised?.getType('IfStatement').find(i => i.scope.includes('makeGuess') && i.scope.includes('WordGuess'));
+const ifCond2 = ifCond1?.alternate?.body[4];
+const recreatedCode = babelised?.generateCode(ifCond2);
+assert.match(recreatedCode, /{\s*return `Sorry, '\${guess}' is not the secret word`;\s*}\s*$/);
 ```
 
 ## 72
@@ -1748,20 +1804,24 @@ assert.isTrue(fileExists);
 
 ### --description--
 
-You added some new things your contract will store so you need to use a new account. Delete your `neardev` folder.
+You added some new things your contract will store so you need to use a new account. Delete your `neardev` folder so it will make a new one. Be sure to leave the `neardev-1` folder.
 
 ### --tests--
 
 You should not have a `neardev` folder
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const learnDir = await __helpers.getDirectory('learn-near-smart-contracts-by-building-a-word-guessing-game')
+assert.notInclude(learnDir, 'neardev');
 ```
 
 You should still have a `neardev-1` folder
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const learnDir = await __helpers.getDirectory('learn-near-smart-contracts-by-building-a-word-guessing-game')
+assert.include(learnDir, 'neardev-1');
 ```
 
 ## 74
@@ -1804,85 +1864,175 @@ assert.match(lastOutput, re);
 
 ### --description--
 
-You now have three accounts to work with, but only one of them can call any of the private functions. Your 
-call init with neardev
+Call the `init` function on your contract. Set the secret word to `HTML`.
 
 ### --tests--
 
-test text
+You should run `near call <contract_name> init '{ "secretWord": "HTML" }' --accountId <account>`, with the correct contract name and account
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const lastCommand = await __helpers.getLastCommand();
+const re = new RegExp(`^\\s*near\\s+call\\s+${id}\\s+init\\s+[\\s\\S]*--accountId\\s+${id}`, 'g');
+assert.match(lastCommand, re);
+```
+
+The terminal should print `The secret word has been set to 'HTML'`
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const output = await __helpers.getTerminalOutput();
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split('Doing account.functionCall()');
+const lastOutput = splitOutput[splitOutput.length - 1];
+assert.match(lastOutput, /"The secret word has been set to 'HTML'"\s*$/i);
 ```
 
 ## 76
 
 ### --description--
 
-near viewSecretWord with neardev
+Run the function to view the secret word.
 
 ### --tests--
 
-test text
+You should run `near call <contract_name> viewSecretWord --accountId <account>`, where the contract name and account match what's in the `neardev` folder
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const lastCommand = await __helpers.getLastCommand();
+const re = new RegExp(`^\\s*near\\s+call\\s+${id}\\s+viewSecretWord\\s+--accountId\\s+${id}\\s*$`, 'g');
+assert.match(lastCommand, re);
+```
+
+The terminal should print `"The secret word is 'HTML'"`
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const output = await __helpers.getTerminalOutput();
+const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewSecretWord\\s*$`, 'g');
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split(re);
+const lastOutput = splitOutput[splitOutput.length - 1];
+assert.match(lastOutput, /"The secret word is 'HTML'"\s*$/i);
 ```
 
 ## 77
 
 ### --description--
 
-near addHint with neardev
+Add a hint of `Language for coding websites`.
 
 ### --tests--
 
-test text
+You should run `near call <contract_name> addHint '{ "hint": "Language for coding websites" }' --accountId <account>`, with the correct contract name and account
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const lastCommand = await __helpers.getLastCommand();
+const re = new RegExp(`^\\s*near\\s+call\\s+${id}\\s+addHint\\s+[\\s\\S]*?Language for coding websites[\\s\\S]*?--accountId\\s+${id}`, 'g');
+assert.match(lastCommand, re);
+```
+
+The terminal should print `Your hint was added`
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const output = await __helpers.getTerminalOutput();
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split('Doing account.functionCall()');
+const lastOutput = splitOutput[splitOutput.length - 1];
+assert.match(lastOutput, /'Your hint was added'\s*$/);
 ```
 
 ## 78
 
 ### --description--
 
-near viewHints with neardev-1
+Your contract account set up the game. Now use your `neardev-1` account to play the game. First, view the hints.
 
 ### --tests--
 
-test text
+You should run `near view <contract_name> viewHints` in the terminal, where contract name matches what's in the `neardev` folder
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const lastCommand = await __helpers.getLastCommand();
+const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewHints\\s*$`, 'g');
+assert.match(lastCommand, re);
+```
+
+The terminal should output an array with your hints
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const output = await __helpers.getTerminalOutput();
+const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewHints\\s*$`, 'g');
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split(re);
+const lastOutput = splitOutput[splitOutput.length - 1];
+assert.match(lastOutput, /\[ '[\s\S]*?'[\s\S]*?\]\s*$/);
 ```
 
 ## 79
 
 ### --description--
 
-near addwrongGuess with neardev-1
+Use the `neardev-1` account to make a guess of `JavaScript`.
 
 ### --tests--
 
-test text
+You should run `near call <neardev_contract_name> makeGuess '{ "guess": "JavaScript" }' --accountId <neardev-1_account>`, with the correct contract name and account
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const id1 = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev-1/dev-account');
+const lastCommand = await __helpers.getLastCommand();
+const re = new RegExp(`^\\s*near\\s+call\\s+${id}\\s+makeGuess\\s+[\\s\\S]*?JavaScript[\\s\\S]*?--accountId\\s+${id1}`, 'g');
+assert.match(lastCommand, re);
+```
+
+The terminal should print `Sorry, 'JavaScript' is not the secret word`
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const output = await __helpers.getTerminalOutput();
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split('Doing account.functionCall()');
+const lastOutput = splitOutput[splitOutput.length - 1];
+assert.match(lastOutput, /"Sorry, 'JavaScript' is not the secret word"\s*$/);
 ```
 
 ## 80
 
 ### --description--
 
-near viewGuesses with neardev-1
+You can see your logs there for the guess and who made the guess. The guesser matches your `neardev-1` account. Run the method to view the guesses.
 
 ### --tests--
 
-test text
+You should run `near view <contract_name> viewGuesses` in the terminal, where contract name matches what's in the `neardev` folder
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const lastCommand = await __helpers.getLastCommand();
+const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewGuesses\\s*$`, 'g');
+assert.match(lastCommand, re);
+```
+
+The terminal should output an array with your guesses
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
+const output = await __helpers.getTerminalOutput();
+const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewHints\\s*$`, 'g');
+const splitOutput = output?.replaceAll(/\s+/g, ' ').split(re);
+const lastOutput = splitOutput[splitOutput.length - 1];
+assert.match(lastOutput, /\[\s*{\s*guesser[\s\S]*?guess[\s\S]*?}\s*\]\s*$/);
 ```
 
 ## 81
@@ -1917,6 +2067,10 @@ assert(false);
 
 ### --description--
 
+There's one last thing you will do here. To optimize the way your contract data is stored, you should prefer to use collections from the `nead-sdk-js` package. 
+
+There are collections for vectors, sets, and maps. You will use the `Vector` collection, which is basically an array. At the top, import `Vector` with the rest of the imports.
+
 import vector
 
 ### --tests--
@@ -1932,6 +2086,7 @@ assert(false);
 ### --description--
 
 change this.hints to vector
+add new Vector('hints')
 
 ### --tests--
 
@@ -1946,6 +2101,7 @@ assert(false);
 ### --description--
 
 change this.guesses to vector
+add new Vector('guesses')
 
 ### --tests--
 
@@ -1959,7 +2115,7 @@ assert(false);
 
 ### --description--
 
-change this.hints.toArray
+change this.hints.toArray();
 
 ### --tests--
 
@@ -1973,7 +2129,7 @@ assert(false);
 
 ### --description--
 
-change this.guesses.toArray
+change this.guesses.toArray();
 
 ### --tests--
 
@@ -1987,7 +2143,7 @@ assert(false);
 
 ### --description--
 
--rebuild
+-rebuild your contract
 
 ### --tests--
 
@@ -2051,12 +2207,35 @@ assert.match(lastOutput, re);
 
 ### --description--
 
-This is the last step. If you want to play the game, you can run these commands manipulate the contract. Note that you need all the accounts (`neardev` folders) you created throughout the tutorial for these to work.
+node init-contract.js
 
-1. Run node deploy to make me deploy the contract, initialize it, and add the first hint
-2. Then, use your `neardev` account to make view the hints and make a guess
-3. Run node hint to make me add the next hint
-4. Repeat steps 2 and 3
+### --tests--
+
+test text
+
+```js
+assert(false);
+```
+
+## 92
+
+### --description--
+
+near viewhints
+
+### --tests--
+
+test text
+
+```js
+assert(false);
+```
+
+## 93
+
+### --description--
+
+This is the last step. If you want to finish playing the game, make a guess using your `neardev-1` account. If you need another hint, run `node game/gimme-a-hint.js`. There's a few hints, so repeat those two things to make more guesses and get more hints.
 
 When you are ready to be done, enter `goodbye` in the terminal.
 
