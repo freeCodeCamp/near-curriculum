@@ -468,9 +468,9 @@ assert.match(lastOutput, /Contract must be initialized/);
 
 ### --description--
 
-The contract panicked and cannot run the function because you required it to be initialized. Use the `near call` command to run the `init` function. The syntax looks like this: `near call <contract_name> <function> <arguments> --accountId <account_id>`. The account ID can be found in the `neardev/dev-account` file. Note that the contract name and account ID are the same. For the arguments, use `'{ "secretWord": "test" }'` to set the secret word.
+The contract panicked and cannot run the function because it has not been initialized. Use the `near call` command to run the `init` function and set the secret word to `test`. The syntax looks like this: `near call <contract_name> init '{ "secretWord": "test" }' --accountId <account_id>`. The account ID can be found in the `neardev/dev-account` file. Note that the contract name and account ID are the same.
 
-You can only initialize the contract once, so try not to set the wrong word. If you do, delete your `neardev` folder, redeploy the contract with `near dev-deploy build/word-guess.wasm`, and initilize it again.
+You can only initialize the contract once. If you set the wrong word, delete your `neardev` folder, redeploy the contract with `near dev-deploy build/word-guess.wasm`, and try again.
 
 ### --tests--
 
@@ -528,7 +528,7 @@ assert.match(lastOutput, /"The secret word is 'test'"\s*$/);
 
 ### --description--
 
-Now it works. There's two more things you want to add to your game, a way to add hints to help guess the secret word, and a way for people to make guesses. In your class constructor, add a `hints` variable set to an empty array.
+Now, the contract has been initialized and doesn't panic. There's two more things you want to add to your game, a way to add hints to help guess the secret word, and a way for people to make guesses. In your class constructor, add a `hints` variable set to an empty array.
 
 ### --tests--
 
@@ -540,7 +540,7 @@ const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-w
 const babelised = await __helpers.babeliser(code?.replace('export',''));
 const construct = babelised?.getType('ClassMethod').find(c => c.kind === 'constructor');
 const recreatedCode = babelised?.generateCode(construct);
-assert.match(recreatedCode, /this\.hints\s*=\s*\[\s*\]\s*;?\s*}/);
+assert.match(recreatedCode, /this\.hints\s*=\s*\[\s*\];\s*}/);
 ```
 
 ## 25
@@ -819,7 +819,7 @@ assert.match(lastOutput, /Smart contract panicked/);
 
 ### --description--
 
-The command panicked. The state of the contract you deployed the first time didn't include a `hints` array. So the logic of the contract got updated, but it still doesn't include the memory allocation to store the hints. Call the `init` function on the contract again with `{ "secretWord": "test" }` as the argument again.
+The command panicked. The state of the contract you deployed the first time didn't include a `hints` array. So the logic of the contract got updated, but it still doesn't include the memory allocation to store the hints. Call the `init` function on the contract again with `{ "secretWord": "test" }` as the argument.
 
 ### --tests--
 
@@ -953,7 +953,7 @@ assert.match(lastOutput, /Contract must be initialized/);
 
 ### --description--
 
-This new contract has a blank state and hasn't been initialized yet. Initialize this new contract using your **old account** in the `neardev-1` folder by calling its `init` function. Pass it `'{ "secretWord": "freeCodeCamp" }'` to set the secret word to `freeCodeCamp`. So call the new contract, but use the old account.
+This new contract has a blank state and hasn't been initialized yet. Initialize it with your `neardev-1` account by calling its `init` function. Pass it `'{ "secretWord": "freeCodeCamp" }'` to set the secret word. So call the new contract (`neardev`), but use the old account (`neardev-1`).
 
 If you get something wrong, delete the `neardev` folder, redeploy the contract, and try again.
 
@@ -1014,7 +1014,7 @@ assert.match(lastOutput, /"The secret word is 'freeCodeCamp'"\s*$/i);
 
 ### --description--
 
-The contract has been initialized. Run the `viewHints` function.
+The contract has been initialized with a secret word. Run the `viewHints` function.
 
 ### --tests--
 
@@ -1044,7 +1044,7 @@ assert.match(lastOutput, /\[\]\s*$/);
 
 ### --description--
 
-The hints are an empty array. Add a hint using your **old account** in the `neardev-1` folder. So use the contract in `neardev`, but the account from `neardev-1`. Pass it `'{ "hint": "My favorite coding site" }` to add a hint.
+The hints are an empty array. Add a hint using the contract in `neardev`, but the account from `neardev-1`. Pass it `'{ "hint": "My favorite coding site" }` to add a hint.
 
 ### --tests--
 
@@ -1103,8 +1103,7 @@ assert.match(lastOutput, /'My favorite coding site' \]\s*$/i);
 
 ### --description--
 
-Add another hint using the `neardev-1` account, make it `It is free`.
-near call addHint {"hint":"it's free"} with neardev-1
+Add another hint using the `neardev-1` account again, Make the hint, `It is free`.
 
 ### --tests--
 
@@ -1163,7 +1162,7 @@ assert.match(lastOutput, /'It is free' \]\s*$/i);
 
 ### --description--
 
-add { privateFunction: true } to addHint
+You don't want random people to be able to add hints to your contract. In the `addHint` decorator, add `privateFunction: true` in the object parameter to make it so only the contract account can run that method.
 
 ### --tests--
 
@@ -1277,7 +1276,7 @@ assert.match(lastOutput, /\[ '[\s\S]*?'[\s\S]*?\]\s*$/);
 
 ### --description--
 
-Try to add another hint using your `neardev-1` account. Make the hint, `It is 12 letters`.
+The hints are still there. Try to add another hint using your `neardev-1` account again. Make the hint, `It is 12 letters`.
 
 ### --tests--
 
@@ -1292,7 +1291,7 @@ const re = new RegExp(`^\\s*near\\s+call\\s+${id}\\s+addHint\\s+[\\s\\S]*?--acco
 assert.match(lastCommand, re);
 ```
 
-The terminal output should include "Function is private"
+The terminal output should include `Function is private`
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -1306,7 +1305,7 @@ assert.match(lastOutput, /Function is private/);
 
 ### --description--
 
-Now, the `addHint` function can only be called by the contract account. So your hint was not added. Add the same `It is 12 letters` hint, but use the contract (`neardev`) account to do it.
+It didn't work. The `addHint` function can only be called by the contract account. Add the same `It is 12 letters` hint, but use the contract (`neardev`) account to do it.
 
 ### --tests--
 
@@ -1334,7 +1333,7 @@ assert.match(lastOutput, /'Your hint was added'\s*$/);
 
 ### --description--
 
-Now it works, view the hints again.
+It worked that time. View the hints again.
 
 ### --tests--
 
@@ -1364,7 +1363,7 @@ assert.match(lastOutput, /\[ '[\s\S]*?'[\s\S]*?\]\s*$/);
 
 ### --description--
 
-So only you, the contract creator will be able to add hints. You also want to be the only one who can initialize the contract, so make that a private function as well.
+So only someone with the contract account credentials will be able to add hints. You also don't want others to be able to initialize the contract, so make that a private function as well.
 
 ### --tests--
 
@@ -1388,11 +1387,11 @@ assert.equal(exp?.arguments[0]?.properties[0]?.value?.value, true, "The 'initial
 
 ### --description--
 
-You also don't want anyone else to be able to view the secret word, so make that one private, too.
+Same for viewing the secret word, except `view` methods are public for everyone and cannot be made private. So turn it into a `call` method and make it private.
 
 ### --tests--
 
-You should have `@view({ privateFunction: true })` as your `viewSecretWord` decorator
+You should have `@call({ privateFunction: true })` as your `viewSecretWord` decorator
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -1400,12 +1399,12 @@ const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-w
 const babelised = await __helpers.babeliser(code?.replace('export',''));
 const viewSecret = babelised?.getType('ClassMethod').find(c => c.key?.name === 'viewSecretWord' && c.key?.scope?.includes('WordGuess'));
 const exp = viewSecret?.decorators[0]?.expression;
-assert.equal(exp?.callee?.name, 'view', "You should have a '@view()' decorator on your 'viewSecretWord' function");
-assert.lengthOf(exp?.arguments, 1, "The 'view' decorator should have one argument");
-assert.equal(exp?.arguments[0]?.type, 'ObjectExpression', "The 'view' decorator argument should be an object");
-assert.lengthOf(exp?.arguments[0]?.properties, 1, "The 'view' object argument should have one property");
-assert.equal(exp?.arguments[0]?.properties[0]?.key?.name, 'privateFunction', "The 'view' object argument should have a 'privateFunction' property");
-assert.equal(exp?.arguments[0]?.properties[0]?.value?.value, true, "The 'view' object argument 'privateFunction' value should be 'true' (boolean)");
+assert.equal(exp?.callee?.name, 'call', "You should have a '@call()' decorator on your 'viewSecretWord' function");
+assert.lengthOf(exp?.arguments, 1, "The 'call' decorator should have one argument");
+assert.equal(exp?.arguments[0]?.type, 'ObjectExpression', "The 'call' decorator argument should be an object");
+assert.lengthOf(exp?.arguments[0]?.properties, 1, "The 'call' object argument should have one property");
+assert.equal(exp?.arguments[0]?.properties[0]?.key?.name, 'privateFunction', "The 'call' object argument should have a 'privateFunction' property");
+assert.equal(exp?.arguments[0]?.properties[0]?.value?.value, true, "The 'call' object argument 'privateFunction' value should be 'true' (boolean)");
 ```
 
 ## 55
@@ -1424,7 +1423,7 @@ const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-w
 const babelised = await __helpers.babeliser(code?.replace('export',''));
 const construct = babelised?.getType('ClassMethod').find(c => c.kind === 'constructor');
 const recreatedCode = babelised?.generateCode(construct);
-assert.match(recreatedCode, /this\.guesses\s*=\s*\[\s*\]\s*;?\s*}/);
+assert.match(recreatedCode, /this\.guesses\s*=\s*\[\s*\];\s*}/);
 ```
 
 ## 56
@@ -1471,7 +1470,12 @@ In the function, return the guesses array.
 You should have `return this.guesses;` in your `viewGuesses` function
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const viewGuesses = babelised?.getType('ClassMethod').find(c => c.key?.name === 'viewGuesses' && c.key?.scope?.includes('WordGuess'));
+const recreatedCode = babelised?.generateCode(viewGuesses);
+assert.match(recreatedCode, /{\s*return\s+this\.guesses;\s*}\s*$/);
 ```
 
 ## 58
@@ -1485,55 +1489,88 @@ Lastly, create an empty `makeGuess` function that destructs `guess` from an obje
 You should have a `makeGuess({ guess }) { }` function
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const makeGuess = babelised?.getType('ClassMethod').find(c => c.key?.name === 'makeGuess' && c.key?.scope?.includes('WordGuess'));
+assert.exists(makeGuess, "You should have a 'makeGuess' function");
+assert.lengthOf(makeGuess?.params, 1, "Your 'makeGuess' function should accept one parameter");
+assert.equal(makeGuess?.params[0]?.type, 'ObjectPattern', "Your 'makeGuess' parameter should be an object");
+assert.lengthOf(makeGuess?.params[0]?.properties, 1, 'Your object parameter should destruct one variable')
+assert.equal(makeGuess?.params[0]?.properties[0]?.value?.name, 'guess', "You should only destruct 'guess' from the object parameter");
+assert.lengthOf(makeGuess?.body?.body, 0, "Your 'makeGuess' function should be empty");
 ```
 
 You should have a `@call({})` decorator above the function
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const makeGuess = babelised?.getType('ClassMethod').find(c => c.key?.name === 'makeGuess' && c.key?.scope?.includes('WordGuess'));
+const exp = makeGuess?.decorators[0]?.expression;
+assert.equal(exp?.callee?.name, 'call', "You should have a '@call()' decorator");
+assert.lengthOf(exp?.arguments, 1, "The 'call' decorator should have one argument");
+assert.equal(exp?.arguments[0]?.type, 'ObjectExpression', "The 'call' decorator argument should be an object");
+assert.lengthOf(exp?.arguments[0]?.properties, 0, "The 'call' object argument should not have any properties");
 ```
 
 ## 59
 
 ### --description--
 
-In the `makeGuess` function, add a `const lastGuess` variable. Set it to the last item in the `guesses` array with `this.guesses[this.guesses.length-1]`.
+In the `makeGuess` function, add a `const lastGuess` variable. Set it to the last item in the `guesses` array with `this.guesses[this.guesses.length - 1]`.
 
 ### --tests--
 
-You should have `const lastGuess = this.guesses[this.guesses.length - 1];` in your `makeGuess` function
+You should only have `const lastGuess = this.guesses[this.guesses.length - 1];` in your `makeGuess` function
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const makeGuess = babelised?.getType('ClassMethod').find(c => c.key?.name === 'makeGuess' && c.key?.scope?.includes('WordGuess'));
+const recreatedCode = babelised?.generateCode(makeGuess);
+assert.match(recreatedCode, /{\s*const lastGuess = this\.guesses\[this\.guesses\.length - 1\];\s*}\s*$/);
 ```
 
 ## 60
 
 ### --description--
 
-Below that, add an `if` condition that checks if the last guess is equal to the secret word. This will be for if the word has been guessed and the game is over.
+The guesses array will keep track of the `guess` and who made it. Add an `if` condition that checks if `lastGuess.guess` is equal to the secret word. This will be for if the word has been guessed and the game is over.
 
 ### --tests--
 
-You should have `if (lastGuess === this.secretWord) { }` in your `makeGuess` function
+You should have `if (lastGuess.guess === this.secretWord) { }` in your `makeGuess` function
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const makeGuess = babelised?.getType('ClassMethod').find(c => c.key?.name === 'makeGuess' && c.key?.scope?.includes('WordGuess'));
+const recreatedCode = babelised?.generateCode(makeGuess);
+assert.match(recreatedCode, /if \(lastGuess\.guess === this\.secretWord\) {}\s*}\s*$/);
 ```
 
 ## 61
 
 ### --description--
 
-At the top of the if condition, use a template literal to return `This game is finished. The secret word was '<secret_word>'`;
+In the `if` condition, use a template literal to return `This game is finished. The secret word, '<secret_word>', was guessed by ${lastGuess.guesser}`.
 
 ### --tests--
 
-You should have ``return `This game is finished. The secret word was '<secret_word>'`;`` in your `if` condition
+You should have ``return `This game is finished. The secret word, '<secret_word>', was guessed by ${lastGuess.guesser}`;`` in your `if` condition
 
 ```js
-assert(false);
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const makeGuess = babelised?.getType('ClassMethod').find(c => c.key?.name === 'makeGuess' && c.key?.scope?.includes('WordGuess'));
+const ifCond = makeGuess?.body?.body[1]?.consequent?.body[0];
+const recreatedCode = babelised?.generateCode(ifCond);
+assert.match(recreatedCode, /^\s*return `This game is finished\. The secret word was '\${this\.secretWord}'\. The winning guess was made by \${lastGuess\.guesser}`;\s*$/);
 ```
 
 ## 62
@@ -1547,6 +1584,67 @@ Add an empty `else` area to your `if` condition for when the game is still not f
 You should have `else { }` at the bottom of your `if` condition
 
 ```js
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const ifCond = babelised?.getType('IfStatement').find(i => i.scope.includes('makeGuess') && i.scope.includes('WordGuess'));
+assert.isNotNull(ifCond?.alternate, "Your 'if' condition should have an 'else' area");
+assert.isEmpty(ifCond?.alternate?.body, "Your 'else' area should be empty");
+```
+
+## 67
+
+### --description--
+
+add import near
+
+### --tests--
+
+test
+
+```js
+assert(false);
+```
+
+## 67
+
+### --description--
+
+add const guesser = near.currentAccountIf()
+
+### --tests--
+
+test
+
+```js
+assert(false);
+```
+
+## 67
+
+### --description--
+
+add near.log(`\nguesser = ${guesser}`)
+
+### --tests--
+
+test
+
+```js
+assert(false);
+```
+
+## 67
+
+### --description--
+
+add near.log(`\nguess = ${guess}`)
+
+### --tests--
+
+test
+
+```js
 assert(false);
 ```
 
@@ -1554,11 +1652,11 @@ assert(false);
 
 ### --description--
 
-At the top of the `else` area, push the `guess` to the `guesses` array.
+push the { guesser, guess } to the `guesses` array.
 
 ### --tests--
 
-You should have `this.guesses.push(guess);` in the `else` area
+You should have `this.guesses.push({ guesser, guess });` in the `else` area
 
 ```js
 assert(false);
