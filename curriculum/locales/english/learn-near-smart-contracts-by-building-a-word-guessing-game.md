@@ -1748,15 +1748,9 @@ assert.isTrue(fileExists);
 
 ### --description--
 
-You added some new things your contract will store so you need to use a new account. Rename your `neardev` folder to `neardev-2`.
+You added some new things your contract will store so you need to use a new account. Delete your `neardev` folder.
 
 ### --tests--
-
-You should have a `neardev-2` folder
-
-```js
-assert(false);
-```
 
 You should not have a `neardev` folder
 
@@ -1764,13 +1758,7 @@ You should not have a `neardev` folder
 assert(false);
 ```
 
-Your `neardev-2` folder should have a `dev-account` file
-
-```js
-assert(false);
-```
-
-Your `neardev-2` folder should have a `dev-account.env` file
+You should still have a `neardev-1` folder
 
 ```js
 assert(false);
@@ -1833,7 +1821,6 @@ assert(false);
 
 near viewSecretWord with neardev
 
-
 ### --tests--
 
 test text
@@ -1848,21 +1835,6 @@ assert(false);
 
 near addHint with neardev
 
-
-### --tests--
-
-test text
-
-```js
-assert(false);
-```
-
-## 78
-
-### --description--
-
-near viewSecretWord with neardev-2
-
 ### --tests--
 
 test text
@@ -1875,8 +1847,7 @@ assert(false);
 
 ### --description--
 
-near viewHints with neardev-2
-
+near viewHints with neardev-1
 
 ### --tests--
 
@@ -1890,7 +1861,7 @@ assert(false);
 
 ### --description--
 
-near addwrongGuess with neardev-2
+near addwrongGuess with neardev-1
 
 ### --tests--
 
@@ -1904,7 +1875,7 @@ assert(false);
 
 ### --description--
 
-near viewGuesses with neardev-2
+near viewGuesses with neardev-1
 
 ### --tests--
 
@@ -1918,7 +1889,7 @@ assert(false);
 
 ### --description--
 
-near addRightGuess with neardev-2
+near addRightGuess with neardev-1
 
 ### --tests--
 
@@ -1960,7 +1931,7 @@ assert(false);
 
 ### --description--
 
-change  this.hints to vector
+change this.hints to vector
 
 ### --tests--
 
@@ -1975,6 +1946,34 @@ assert(false);
 ### --description--
 
 change this.guesses to vector
+
+### --tests--
+
+test text
+
+```js
+assert(false);
+```
+
+## 86
+
+### --description--
+
+change this.hints.toArray
+
+### --tests--
+
+test text
+
+```js
+assert(false);
+```
+
+## 86
+
+### --description--
+
+change this.guesses.toArray
 
 ### --tests--
 
@@ -2046,48 +2045,6 @@ const splitOutput = output?.replaceAll(/\s+/g, ' ').split('near dev-deploy build
 const lastOutput = splitOutput[splitOutput.length - 1];
 const re = new RegExp(`Done deploying to ${id}\\s*$`);
 assert.match(lastOutput, re);
-```
-
-## 90
-
-### --description--
-
--set the secret word to something
-
-### --tests--
-
-test text
-
-```js
-assert(false);
-```
-
-## 91
-
-### --description--
-
--add a hint
-
-### --tests--
-
-test text
-
-```js
-assert(false);
-```
-
-## 92
-
-### --description--
-
--guess the secret word
-
-### --tests--
-
-test text
-
-```js
-assert(false);
 ```
 
 ## 93
