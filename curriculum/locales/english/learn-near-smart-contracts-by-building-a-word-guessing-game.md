@@ -1592,7 +1592,7 @@ assert.isNotNull(ifCond?.alternate, "Your 'if' condition should have an 'else' a
 assert.isEmpty(ifCond?.alternate?.body, "Your 'else' area should be empty");
 ```
 
-## 67
+## 63
 
 ### --description--
 
@@ -1606,7 +1606,7 @@ test
 assert(false);
 ```
 
-## 67
+## 64
 
 ### --description--
 
@@ -1620,7 +1620,7 @@ test
 assert(false);
 ```
 
-## 67
+## 65
 
 ### --description--
 
@@ -1634,7 +1634,7 @@ test
 assert(false);
 ```
 
-## 67
+## 66
 
 ### --description--
 
@@ -1648,7 +1648,7 @@ test
 assert(false);
 ```
 
-## 63
+## 67
 
 ### --description--
 
@@ -1662,7 +1662,7 @@ You should have `this.guesses.push({ guesser, guess });` in the `else` area
 assert(false);
 ```
 
-## 64
+## 68
 
 ### --description--
 
@@ -1678,7 +1678,7 @@ You should have `if (guess === secretWord) { }` in your `else` area
 assert(false);
 ```
 
-## 65
+## 69
 
 ### --description--
 
@@ -1692,7 +1692,7 @@ You should have ``return `You got it! The secret word is '${this.secretWord}'`;`
 assert(false);
 ```
 
-## 66
+## 70
 
 ### --description--
 
@@ -1706,7 +1706,7 @@ You should have an `else { }` area of your second `if` statement
 assert(false);
 ```
 
-## 67
+## 71
 
 ### --description--
 
@@ -1720,7 +1720,7 @@ You should have ``return `Sorry, '${guess}' is not the secret word`;`` in your s
 assert(false);
 ```
 
-## 68
+## 72
 
 ### --description--
 
@@ -1744,7 +1744,7 @@ const fileExists = await __helpers.fileExists('learn-near-smart-contracts-by-bui
 assert.isTrue(fileExists);
 ```
 
-## 69
+## 73
 
 ### --description--
 
@@ -1776,7 +1776,7 @@ Your `neardev-2` folder should have a `dev-account.env` file
 assert(false);
 ```
 
-## 70
+## 74
 
 ### --description--
 
@@ -1812,7 +1812,7 @@ const re = new RegExp(`Done deploying to ${id}\\s*$`);
 assert.match(lastOutput, re);
 ```
 
-## 71
+## 75
 
 ### --description--
 
@@ -1827,7 +1827,7 @@ test text
 assert(false);
 ```
 
-## 72
+## 76
 
 ### --description--
 
@@ -1842,7 +1842,7 @@ test text
 assert(false);
 ```
 
-## 73
+## 77
 
 ### --description--
 
@@ -1857,7 +1857,7 @@ test text
 assert(false);
 ```
 
-## 74
+## 78
 
 ### --description--
 
@@ -1871,7 +1871,7 @@ test text
 assert(false);
 ```
 
-## 75
+## 79
 
 ### --description--
 
@@ -1886,7 +1886,7 @@ test text
 assert(false);
 ```
 
-## 76
+## 80
 
 ### --description--
 
@@ -1900,7 +1900,7 @@ test text
 assert(false);
 ```
 
-## 77
+## 81
 
 ### --description--
 
@@ -1914,7 +1914,7 @@ test text
 assert(false);
 ```
 
-## 78
+## 82
 
 ### --description--
 
@@ -1928,7 +1928,7 @@ test text
 assert(false);
 ```
 
-## 79
+## 83
 
 ### --description--
 
@@ -1942,7 +1942,7 @@ test text
 assert(false);
 ```
 
-## 80
+## 84
 
 ### --description--
 
@@ -1956,7 +1956,7 @@ test text
 assert(false);
 ```
 
-## 81
+## 85
 
 ### --description--
 
@@ -1970,7 +1970,7 @@ test text
 assert(false);
 ```
 
-## 82
+## 86
 
 ### --description--
 
@@ -1984,7 +1984,7 @@ test text
 assert(false);
 ```
 
-## 83
+## 87
 
 ### --description--
 
@@ -1998,7 +1998,7 @@ test text
 assert(false);
 ```
 
-## 84
+## 88
 
 ### --description--
 
@@ -2012,7 +2012,7 @@ test text
 assert(false);
 ```
 
-## 85
+## 89
 
 ### --description--
 
@@ -2048,7 +2048,7 @@ const re = new RegExp(`Done deploying to ${id}\\s*$`);
 assert.match(lastOutput, re);
 ```
 
-## 86
+## 90
 
 ### --description--
 
@@ -2062,7 +2062,7 @@ test text
 assert(false);
 ```
 
-## 87
+## 91
 
 ### --description--
 
@@ -2076,7 +2076,7 @@ test text
 assert(false);
 ```
 
-## 88
+## 92
 
 ### --description--
 
@@ -2090,7 +2090,7 @@ test text
 assert(false);
 ```
 
-## 89
+## 93
 
 ### --description--
 
