@@ -17,7 +17,8 @@
     "description": "In this course, you will learn more features of NEAR smart contracts while building a word guessing game.",
     "isPublic": true,
     "currentLesson": 1,
-    "runTestsOnWatch": true
+    "runTestsOnWatch": true,
+    "isResetEnabled": true
   },
   {
     "id": 2,
