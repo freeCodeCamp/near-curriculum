@@ -123,7 +123,7 @@ const exp = wordGuess?.decorators[0]?.expression;
 assert.equal(exp?.callee?.name, 'NearBindgen', "You should have a '@NearBindgen()' decorator");
 assert.lengthOf(exp?.arguments, 1, "The 'NearBindgen' expression should have one argument");
 assert.equal(exp?.arguments[0]?.type, 'ObjectExpression', "The 'NearBindgen' expression argument should be an object");
-assert.lengthOf(exp?.arguments[0]?.properties, 0, "The 'NearBindgen' object argument should not have an properties");
+assert.lengthOf(exp?.arguments[0]?.properties, 0, "The 'NearBindgen' object argument should not have any properties");
 ```
 
 ### --seed--
@@ -209,7 +209,7 @@ Below the constructor function, add an empty `init` function. Destruct a `secret
 
 ### --tests--
 
-You should have `init({ secretWord }) { }` below your contructor function
+You should have `init({ secretWord }) { }` below your constructor function
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -506,7 +506,7 @@ const exp = viewSecret?.decorators[0]?.expression;
 assert.equal(exp?.callee?.name, 'view', "You should have a '@view()' decorator");
 assert.lengthOf(exp?.arguments, 1, "The 'view' decorator should have one argument");
 assert.equal(exp?.arguments[0]?.type, 'ObjectExpression', "The 'view' decorator argument should be an object");
-assert.lengthOf(exp?.arguments[0]?.properties, 0, "The 'view' object argument should not have an properties");
+assert.lengthOf(exp?.arguments[0]?.properties, 0, "The 'view' object argument should not have any properties");
 ```
 
 ### --seed--
@@ -1043,7 +1043,7 @@ const exp = viewHints?.decorators[0]?.expression;
 assert.equal(exp?.callee?.name, 'view', "You should have a '@view()' decorator");
 assert.lengthOf(exp?.arguments, 1, "The 'view' decorator should have one argument");
 assert.equal(exp?.arguments[0]?.type, 'ObjectExpression', "The 'view' decorator argument should be an object");
-assert.lengthOf(exp?.arguments[0]?.properties, 0, "The 'view' object argument should not have an properties");
+assert.lengthOf(exp?.arguments[0]?.properties, 0, "The 'view' object argument should not have any properties");
 ```
 
 ### --seed--
@@ -1900,7 +1900,7 @@ So only someone with the contract account credentials will be able to add hints.
 
 ### --tests--
 
-You should have `@intialize({ privateFunction: true })` as your `init` function decorator
+You should have `@initialize({ privateFunction: true })` as your `init` function decorator
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -2065,7 +2065,7 @@ const exp = viewGuesses?.decorators[0]?.expression;
 assert.equal(exp?.callee?.name, 'view', "You should have a '@view()' decorator");
 assert.lengthOf(exp?.arguments, 1, "The 'view' decorator should have one argument");
 assert.equal(exp?.arguments[0]?.type, 'ObjectExpression', "The 'view' decorator argument should be an object");
-assert.lengthOf(exp?.arguments[0]?.properties, 0, "The 'view' object argument should not have an properties");
+assert.lengthOf(exp?.arguments[0]?.properties, 0, "The 'view' object argument should not have any properties");
 ```
 
 ### --seed--
@@ -3648,7 +3648,7 @@ assert.match(lastOutput, /"This game is finished. The secret word, 'HTML', was g
 
 ### --description--
 
-Looks like everything is working. There's one last thing to do. To optimize the way your contract data is stored, you should prefer to use collections from the `nead-sdk-js` package for things stored on the blockchain.
+Looks like everything is working. There's one last thing to do. To optimize the way your contract data is stored, you should prefer to use collections from the `near-sdk-js` package for things stored on the blockchain.
 
 There are collections for vectors, sets, and maps. You will use the `Vector` collection, which is similar to an array. At the top, import `Vector` with the rest of the imports.
 
@@ -4163,7 +4163,7 @@ I made a small script that will initialize your contract. Enter `node init.js` i
 
 ### --tests--
 
-You should run node `init.js` in the terminal
+You should run `node init.js` in the terminal
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
