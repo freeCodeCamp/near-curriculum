@@ -4,11 +4,19 @@ import { execSync } from 'child_process';
 console.log('Getting previous hints...');
 
 const hints = [
-  'hint 1',
-  'hint 2',
-  'hint 3',
-  'hint 4',
-  'hint 5'
+  'Im a...',
+  '418',
+  'Its six letters',
+  'HTTP response',
+  'The server refused to brew coffee because its a...',
+  't_____',
+  't____t',
+  't___ot',
+  'te__ot',
+  'tea_ot',
+  'teapot',
+  'Its teapot',
+  'Guess teapot'
 ]
 
 async function main() {

@@ -7,12 +7,12 @@ async function main() {
   try {
     const id = await readFile('/workspace/near-curriculum/learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account', 'utf8');
     
-    execSync(`NEAR_ENV=testnet near call ${id} init '{ "secretWord": "hello" }' --accountId ${id}`, {
+    execSync(`NEAR_ENV=testnet near call ${id} init '{ "secretWord": "teapot" }' --accountId ${id}`, {
       shell: '/bin/bash'
     });
 
     console.log('Contract initialized. Adding hint...');
-    execSync(`NEAR_ENV=testnet near call ${id} addHint '{ "hint": "hint1" }' --accountId ${id}`, {
+    execSync(`NEAR_ENV=testnet near call ${id} addHint '{ "hint": "Im a..." }' --accountId ${id}`, {
       shell: '/bin/bash'
     });
 

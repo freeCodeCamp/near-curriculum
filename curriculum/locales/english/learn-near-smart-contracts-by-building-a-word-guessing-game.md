@@ -94,6 +94,16 @@ const method = imports?.specifiers?.find(s => s.local?.name === 'NearBindgen');
 assert.exists(method);
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+export class WordGuess {
+
+}
+```
+
 ## 5
 
 ### --description--
@@ -116,6 +126,18 @@ assert.equal(exp?.arguments[0]?.type, 'ObjectExpression', "The 'NearBindgen' exp
 assert.lengthOf(exp?.arguments[0]?.properties, 0, "The 'NearBindgen' object argument should not have an properties");
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen } from 'near-sdk-js';
+
+export class WordGuess {
+
+}
+```
+
 ## 6
 
 ### --description--
@@ -130,6 +152,19 @@ You should have `constructor() { }` at the top of your class
 await new Promise(res => setTimeout(res, 1000));
 const fileContents = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
 assert.match(fileContents, /WordGuess\s*{\s*constructor\s*\(\s*\)\s*{\s*}\s*;?\s*}\s*;?\s*$/);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen } from 'near-sdk-js';
+
+@NearBindgen({})
+export class WordGuess {
+
+}
 ```
 
 ## 7
@@ -149,6 +184,21 @@ const babelised = await __helpers.babeliser(code?.replace('export',''));
 const construct = babelised?.getType('ClassMethod').find(c => c.kind === 'constructor');
 const recreatedCode = babelised?.generateCode(construct);
 assert.match(recreatedCode, /{\s*this\.secretWord\s*=\s*('|"|`)\1;\s*}/);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen } from 'near-sdk-js';
+
+@NearBindgen({})
+export class WordGuess {
+  constructor() {
+
+  }
+}
 ```
 
 ## 8
@@ -174,6 +224,21 @@ assert.equal(init?.params[0]?.properties[0]?.value?.name, 'secretWord', "You sho
 assert.lengthOf(init?.body?.body, 0, "Your 'init' function should be empty");
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen } from 'near-sdk-js';
+
+@NearBindgen({})
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+  }
+}
+```
+
 ## 9
 
 ### --description--
@@ -191,6 +256,25 @@ const babelised = await __helpers.babeliser(code?.replace('export',''));
 const imports = babelised?.getImportDeclarations().find(i => i.source?.value === 'near-sdk-js');
 const method = imports?.specifiers?.find(s => s.local?.name === 'initialize');
 assert.exists(method);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen } from 'near-sdk-js';
+
+@NearBindgen({})
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+  }
+
+  init({ secretWord }) {
+
+  }
+}
 ```
 
 ## 10
@@ -215,6 +299,25 @@ assert.equal(exp?.arguments[0]?.type, 'ObjectExpression', "The 'initialize' expr
 assert.lengthOf(exp?.arguments[0]?.properties, 0, "The 'initialize' object argument should not have any properties");
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize } from 'near-sdk-js';
+
+@NearBindgen({})
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+  }
+
+  init({ secretWord }) {
+
+  }
+}
+```
+
 ## 11
 
 ### --description--
@@ -232,6 +335,26 @@ const babelised = await __helpers.babeliser(code?.replace('export',''));
 const init = babelised?.getType('ClassMethod').find(c => c.key?.name === 'init' && c.key?.scope?.includes('WordGuess'));
 const initCode = babelised?.generateCode(init);
 assert.match(initCode, /\)\s*{\s*this\.secretWord\s*=\s*secretWord;\s*}/);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize } from 'near-sdk-js';
+
+@NearBindgen({})
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+  }
+
+  @initialize({})
+  init({ secretWord }) {
+
+  }
+}
 ```
 
 ## 12
@@ -253,6 +376,26 @@ const initCode = babelised?.generateCode(init);
 assert.match(initCode, /return\s*`The secret word has been set to '\${secretWord}'`;\s*}/);
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize } from 'near-sdk-js';
+
+@NearBindgen({})
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+  }
+
+  @initialize({})
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+  }
+}
+```
+
 ## 13
 
 ### --description--
@@ -272,6 +415,27 @@ const classCode = babelised?.generateCode(wordGuess);
 assert.match(classCode, /^@NearBindgen\({\s*requireInit:\s*true\s*}\)/);
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize } from 'near-sdk-js';
+
+@NearBindgen({})
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+  }
+
+  @initialize({})
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+}
+```
+
 ## 14
 
 ### --description--
@@ -289,6 +453,27 @@ const babelised = await __helpers.babeliser(code?.replace('export',''));
 const imports = babelised?.getImportDeclarations().find(i => i.source?.value === 'near-sdk-js');
 const method = imports?.specifiers?.find(s => s.local?.name === 'view');
 assert.exists(method);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+  }
+
+  @initialize({})
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+}
 ```
 
 ## 15
@@ -324,6 +509,27 @@ assert.equal(exp?.arguments[0]?.type, 'ObjectExpression', "The 'view' decorator 
 assert.lengthOf(exp?.arguments[0]?.properties, 0, "The 'view' object argument should not have an properties");
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+  }
+
+  @initialize({})
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+}
+```
+
 ## 16
 
 ### --description--
@@ -341,6 +547,32 @@ const babelised = await __helpers.babeliser(code?.replace('export',''));
 const secretFn = babelised?.getType('ClassMethod').find(c => c.key?.name === 'viewSecretWord' && c.key?.scope?.includes('WordGuess'));
 const secretCode = babelised?.generateCode(secretFn);
 assert.match(secretCode, /{\s*return\s+`The secret word is '\${\s*this\s*\.\s*secretWord\s*}'`\s*;?\s*}\s*$/);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+  }
+
+  @initialize({})
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @view({})
+  viewSecretWord() {
+
+  }
+}
 ```
 
 ## 17
@@ -365,6 +597,32 @@ You should have a `build/word-guess.wasm` file as a result of building the contr
 await new Promise(res => setTimeout(res, 1000));
 const fileExists = await __helpers.fileExists('learn-near-smart-contracts-by-building-a-word-guessing-game/build/word-guess.wasm');
 assert.isTrue(fileExists);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+  }
+
+  @initialize({})
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @view({})
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+}
 ```
 
 ## 18
@@ -562,6 +820,33 @@ const method = imports?.specifiers?.find(s => s.local?.name === 'call');
 assert.exists(method);
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+  }
+
+  @initialize({})
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @view({})
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+}
+```
+
 ## 26
 
 ### --description--
@@ -599,6 +884,33 @@ assert.equal(exp?.arguments[0]?.type, 'ObjectExpression', "The 'call' decorator 
 assert.lengthOf(exp?.arguments[0]?.properties, 0, "The 'call' object argument should not have any properties");
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+  }
+
+  @initialize({})
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @view({})
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+}
+```
+
 ## 27
 
 ### --description--
@@ -618,6 +930,38 @@ const recreatedCode = babelised?.generateCode(addHint);
 assert.match(recreatedCode, /{\s*this\.hints\.push\(hint\);\s*}\s*$/);
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+  }
+
+  @initialize({})
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @view({})
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({})
+  addHint({ hint }) {
+
+  }
+}
+```
+
 ## 28
 
 ### --description--
@@ -635,6 +979,38 @@ const babelised = await __helpers.babeliser(code?.replace('export',''));
 const addHint = babelised?.getType('ClassMethod').find(c => c.key?.name === 'addHint' && c.key?.scope?.includes('WordGuess'));
 const recreatedCode = babelised?.generateCode(addHint);
 assert.match(recreatedCode, /return\s+('|"|`)Your hint was added\1;\s*}\s*$/);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+  }
+
+  @initialize({})
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @view({})
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({})
+  addHint({ hint }) {
+    this.hints.push(hint);
+  }
+}
 ```
 
 ## 29
@@ -670,6 +1046,39 @@ assert.equal(exp?.arguments[0]?.type, 'ObjectExpression', "The 'view' decorator 
 assert.lengthOf(exp?.arguments[0]?.properties, 0, "The 'view' object argument should not have an properties");
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+  }
+
+  @initialize({})
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @view({})
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({})
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+}
+```
+
 ## 30
 
 ### --description--
@@ -687,6 +1096,44 @@ const babelised = await __helpers.babeliser(code?.replace('export',''));
 const viewHints = babelised?.getType('ClassMethod').find(c => c.key?.name === 'viewHints' && c.key?.scope?.includes('WordGuess'));
 const recreatedCode = babelised?.generateCode(viewHints);
 assert.match(recreatedCode, /{\s*return\s+this\.hints;\s*}\s*$/);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+  }
+
+  @initialize({})
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @view({})
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({})
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+
+  }
+}
 ```
 
 ## 31
@@ -719,6 +1166,44 @@ Your `build/methods.h` file should have a `viewHints` method as a result of buil
 await new Promise(res => setTimeout(res, 1000));
 const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/build/methods.h');
 assert.match(code, /viewHints/);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+  }
+
+  @initialize({})
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @view({})
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({})
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+}
 ```
 
 ## 32
@@ -1216,6 +1701,44 @@ const lastOutput = splitOutput[splitOutput.length - 1];
 assert.match(lastOutput, /Generated build\/word-guess\.wasm contract successfully!\s*$/);
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+  }
+
+  @initialize({})
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @view({})
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+}
+```
+
 ## 48
 
 ### --description--
@@ -1315,7 +1838,7 @@ assert.match(lastOutput, /Function is private/);
 
 ### --description--
 
-It didn't work. The `addHint` function can only be called by the contract account. Add the same `It is 12 letters` hint, but use the contract (`neardev`) account to do it.
+It didn't work. It says that the function is private. The `addHint` function can only be called by the contract account. Add the same `It is 12 letters` hint, but use the contract (`neardev`) account to do it.
 
 ### --tests--
 
@@ -1417,6 +1940,44 @@ assert.equal(exp?.arguments[0]?.properties[0]?.key?.name, 'privateFunction', "Th
 assert.equal(exp?.arguments[0]?.properties[0]?.value?.value, true, "The 'call' object argument 'privateFunction' value should be 'true' (boolean)");
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @view({})
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+}
+```
+
 ## 55
 
 ### --description--
@@ -1434,6 +1995,44 @@ const babelised = await __helpers.babeliser(code?.replace('export',''));
 const construct = babelised?.getType('ClassMethod').find(c => c.kind === 'constructor');
 const recreatedCode = babelised?.generateCode(construct);
 assert.match(recreatedCode, /this\.guesses\s*=\s*\[\s*\];\s*}/);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+}
 ```
 
 ## 56
@@ -1469,6 +2068,45 @@ assert.equal(exp?.arguments[0]?.type, 'ObjectExpression', "The 'view' decorator 
 assert.lengthOf(exp?.arguments[0]?.properties, 0, "The 'view' object argument should not have an properties");
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+    this.guesses = [];
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+}
+```
+
 ## 57
 
 ### --description--
@@ -1486,6 +2124,50 @@ const babelised = await __helpers.babeliser(code?.replace('export',''));
 const viewGuesses = babelised?.getType('ClassMethod').find(c => c.key?.name === 'viewGuesses' && c.key?.scope?.includes('WordGuess'));
 const recreatedCode = babelised?.generateCode(viewGuesses);
 assert.match(recreatedCode, /{\s*return\s+this\.guesses;\s*}\s*$/);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+    this.guesses = [];
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+
+  @view({})
+  viewGuesses() {
+
+  }
+}
 ```
 
 ## 58
@@ -1525,6 +2207,50 @@ assert.equal(exp?.arguments[0]?.type, 'ObjectExpression', "The 'call' decorator 
 assert.lengthOf(exp?.arguments[0]?.properties, 0, "The 'call' object argument should not have any properties");
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+    this.guesses = [];
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses;
+  }
+}
+```
+
 ## 59
 
 ### --description--
@@ -1542,6 +2268,55 @@ const babelised = await __helpers.babeliser(code?.replace('export',''));
 const makeGuess = babelised?.getType('ClassMethod').find(c => c.key?.name === 'makeGuess' && c.key?.scope?.includes('WordGuess'));
 const recreatedCode = babelised?.generateCode(makeGuess);
 assert.match(recreatedCode, /{\s*const lastGuess = this\.guesses\[this\.guesses\.length - 1\];\s*}\s*$/);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+    this.guesses = [];
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses;
+  }
+
+  @call({})
+  makeGuess({ guess }) {
+
+  }
+}
 ```
 
 ## 60
@@ -1563,6 +2338,56 @@ const recreatedCode = babelised?.generateCode(makeGuess);
 assert.match(recreatedCode, /if \(lastGuess\?\.guess === this\.secretWord\) {}\s*}\s*$/);
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+    this.guesses = [];
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses;
+  }
+
+  @call({})
+  makeGuess({ guess }) {
+    const lastGuess = this.guesses[this.guesses.length - 1];
+
+  }
+}
+```
+
 ## 61
 
 ### --description--
@@ -1571,7 +2396,7 @@ In the `if` condition, use a template literal to return `This game is finished. 
 
 ### --tests--
 
-You should have ``return `This game is finished. The secret word, '<secret_word>', was guessed by ${lastGuess.guesser}`;`` in your `if` condition
+You should have ``return `This game is finished. The secret word, '${this.secretWord}', was guessed by ${lastGuess.guesser}`;`` in your `if` condition
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -1581,6 +2406,59 @@ const makeGuess = babelised?.getType('ClassMethod').find(c => c.key?.name === 'm
 const ifCond = makeGuess?.body?.body[1]?.consequent?.body[0];
 const recreatedCode = babelised?.generateCode(ifCond);
 assert.match(recreatedCode, /^\s*return `This game is finished\. The secret word, '\${this\.secretWord}', was guessed by \${lastGuess\.guesser}`;\s*$/);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+    this.guesses = [];
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses;
+  }
+
+  @call({})
+  makeGuess({ guess }) {
+    const lastGuess = this.guesses[this.guesses.length - 1];
+
+    if (lastGuess?.guess === this.secretWord) {
+
+    }
+  }
+}
 ```
 
 ## 62
@@ -1602,6 +2480,59 @@ assert.isNotNull(ifCond?.alternate, "Your 'if' condition should have an 'else' a
 assert.isEmpty(ifCond?.alternate?.body, "Your 'else' area should be empty");
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+    this.guesses = [];
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses;
+  }
+
+  @call({})
+  makeGuess({ guess }) {
+    const lastGuess = this.guesses[this.guesses.length - 1];
+
+    if (lastGuess?.guess === this.secretWord) {
+      return `This game is finished. The secret word, '${this.secretWord}', was guessed by ${lastGuess.guesser}`;
+    }
+  }
+}
+```
+
 ## 63
 
 ### --description--
@@ -1619,6 +2550,61 @@ const babelised = await __helpers.babeliser(code?.replace('export',''));
 const imports = babelised?.getImportDeclarations().find(i => i.source?.value === 'near-sdk-js');
 const method = imports?.specifiers?.find(s => s.local?.name === 'near');
 assert.exists(method);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+    this.guesses = [];
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses;
+  }
+
+  @call({})
+  makeGuess({ guess }) {
+    const lastGuess = this.guesses[this.guesses.length - 1];
+
+    if (lastGuess?.guess === this.secretWord) {
+      return `This game is finished. The secret word, '${this.secretWord}', was guessed by ${lastGuess.guesser}`;
+    } else {
+
+    }
+  }
+}
 ```
 
 ## 64
@@ -1645,6 +2631,61 @@ assert.equal(callee?.object?.name, 'near');
 assert.equal(callee?.property?.name, 'predecessorAccountId');
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call, near } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+    this.guesses = [];
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses;
+  }
+
+  @call({})
+  makeGuess({ guess }) {
+    const lastGuess = this.guesses[this.guesses.length - 1];
+
+    if (lastGuess?.guess === this.secretWord) {
+      return `This game is finished. The secret word, '${this.secretWord}', was guessed by ${lastGuess.guesser}`;
+    } else {
+
+    }
+  }
+}
+```
+
 ## 65
 
 ### --description--
@@ -1663,6 +2704,62 @@ const ifCond = babelised?.getType('IfStatement').find(i => i.scope.includes('mak
 const nearLog = ifCond?.alternate?.body[1];
 const recreatedCode = babelised?.generateCode(nearLog);
 assert.match(recreatedCode, /^\s*near\.log\(`\\nguesser = \${guesser}`\);\s*$/);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call, near } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+    this.guesses = [];
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses;
+  }
+
+  @call({})
+  makeGuess({ guess }) {
+    const lastGuess = this.guesses[this.guesses.length - 1];
+
+    if (lastGuess?.guess === this.secretWord) {
+      return `This game is finished. The secret word, '${this.secretWord}', was guessed by ${lastGuess.guesser}`;
+    } else {
+      const guesser = near.predecessorAccountId();
+
+    }
+  }
+}
 ```
 
 ## 66
@@ -1685,6 +2782,63 @@ const recreatedCode = babelised?.generateCode(nearLog);
 assert.match(recreatedCode, /^\s*near\.log\(`\\nguess = \${guess}`\);\s*$/);
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call, near } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+    this.guesses = [];
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses;
+  }
+
+  @call({})
+  makeGuess({ guess }) {
+    const lastGuess = this.guesses[this.guesses.length - 1];
+
+    if (lastGuess?.guess === this.secretWord) {
+      return `This game is finished. The secret word, '${this.secretWord}', was guessed by ${lastGuess.guesser}`;
+    } else {
+      const guesser = near.predecessorAccountId();
+      near.log(`\nguesser = ${guesser}`);
+
+    }
+  }
+}
+```
+
 ## 67
 
 ### --description--
@@ -1703,6 +2857,64 @@ const ifCond = babelised?.getType('IfStatement').find(i => i.scope.includes('mak
 const newGuess = ifCond?.alternate?.body[3];
 const recreatedCode = babelised?.generateCode(newGuess);
 assert.match(recreatedCode, /^\s*this\.guesses\.push\({\s*guesser,\s*guess\s*}\);\s*$/);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call, near } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+    this.guesses = [];
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses;
+  }
+
+  @call({})
+  makeGuess({ guess }) {
+    const lastGuess = this.guesses[this.guesses.length - 1];
+
+    if (lastGuess?.guess === this.secretWord) {
+      return `This game is finished. The secret word, '${this.secretWord}', was guessed by ${lastGuess.guesser}`;
+    } else {
+      const guesser = near.predecessorAccountId();
+      near.log(`\nguesser = ${guesser}`);
+      near.log(`\nguess = ${guess}`);
+
+    }
+  }
+}
 ```
 
 ## 68
@@ -1726,6 +2938,65 @@ console.log(recreatedCode)
 assert.match(recreatedCode, /^\s*if \(guess === this\.secretWord\) {}\s*$/);
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call, near } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+    this.guesses = [];
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses;
+  }
+
+  @call({})
+  makeGuess({ guess }) {
+    const lastGuess = this.guesses[this.guesses.length - 1];
+
+    if (lastGuess?.guess === this.secretWord) {
+      return `This game is finished. The secret word, '${this.secretWord}', was guessed by ${lastGuess.guesser}`;
+    } else {
+      const guesser = near.predecessorAccountId();
+      near.log(`\nguesser = ${guesser}`);
+      near.log(`\nguess = ${guess}`);
+      this.guesses.push({ guesser, guess });
+
+    }
+  }
+}
+```
+
 ## 69
 
 ### --description--
@@ -1744,6 +3015,68 @@ const ifCond1 = babelised?.getType('IfStatement').find(i => i.scope.includes('ma
 const ifCond2 = ifCond1?.alternate?.body[4];
 const recreatedCode = babelised?.generateCode(ifCond2);
 assert.match(recreatedCode, /{\s*return `You got it! The secret word is '\${this\.secretWord}'`;\s*}/);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call, near } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+    this.guesses = [];
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses;
+  }
+
+  @call({})
+  makeGuess({ guess }) {
+    const lastGuess = this.guesses[this.guesses.length - 1];
+
+    if (lastGuess?.guess === this.secretWord) {
+      return `This game is finished. The secret word, '${this.secretWord}', was guessed by ${lastGuess.guesser}`;
+    } else {
+      const guesser = near.predecessorAccountId();
+      near.log(`\nguesser = ${guesser}`);
+      near.log(`\nguess = ${guess}`);
+      this.guesses.push({ guesser, guess });
+
+      if (guess === this.secretWord) {
+
+      }
+    }
+  }
+}
 ```
 
 ## 70
@@ -1766,6 +3099,68 @@ assert.isNotNull(ifCond2?.alternate, "Your second 'if' condition should have an 
 assert.isEmpty(ifCond2?.alternate?.body, "Your 'else' area should be empty");
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call, near } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+    this.guesses = [];
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses;
+  }
+
+  @call({})
+  makeGuess({ guess }) {
+    const lastGuess = this.guesses[this.guesses.length - 1];
+
+    if (lastGuess?.guess === this.secretWord) {
+      return `This game is finished. The secret word, '${this.secretWord}', was guessed by ${lastGuess.guesser}`;
+    } else {
+      const guesser = near.predecessorAccountId();
+      near.log(`\nguesser = ${guesser}`);
+      near.log(`\nguess = ${guess}`);
+      this.guesses.push({ guesser, guess });
+
+      if (guess === this.secretWord) {
+        return `You got it! The secret word is '${this.secretWord}'`;
+      }
+    }
+  }
+}
+```
+
 ## 71
 
 ### --description--
@@ -1784,6 +3179,70 @@ const ifCond1 = babelised?.getType('IfStatement').find(i => i.scope.includes('ma
 const ifCond2 = ifCond1?.alternate?.body[4];
 const recreatedCode = babelised?.generateCode(ifCond2);
 assert.match(recreatedCode, /{\s*return `Sorry, '\${guess}' is not the secret word`;\s*}\s*$/);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call, near } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+    this.guesses = [];
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses;
+  }
+
+  @call({})
+  makeGuess({ guess }) {
+    const lastGuess = this.guesses[this.guesses.length - 1];
+
+    if (lastGuess?.guess === this.secretWord) {
+      return `This game is finished. The secret word, '${this.secretWord}', was guessed by ${lastGuess.guesser}`;
+    } else {
+      const guesser = near.predecessorAccountId();
+      near.log(`\nguesser = ${guesser}`);
+      near.log(`\nguess = ${guess}`);
+      this.guesses.push({ guesser, guess });
+
+      if (guess === this.secretWord) {
+        return `You got it! The secret word is '${this.secretWord}'`;
+      } else {
+
+      }
+    }
+  }
+}
 ```
 
 ## 72
@@ -1826,6 +3285,70 @@ const output = await __helpers.getTerminalOutput();
 const splitOutput = output?.replaceAll(/\s+/g, ' ').split('Doing account.functionCall()');
 const lastOutput = splitOutput[splitOutput.length - 1];
 assert.match(lastOutput, /Generated build\/word-guess\.wasm contract successfully!\s*$/);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call, near } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+    this.guesses = [];
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses;
+  }
+
+  @call({})
+  makeGuess({ guess }) {
+    const lastGuess = this.guesses[this.guesses.length - 1];
+
+    if (lastGuess?.guess === this.secretWord) {
+      return `This game is finished. The secret word, '${this.secretWord}', was guessed by ${lastGuess.guesser}`;
+    } else {
+      const guesser = near.predecessorAccountId();
+      near.log(`\nguesser = ${guesser}`);
+      near.log(`\nguess = ${guess}`);
+      this.guesses.push({ guesser, guess });
+
+      if (guess === this.secretWord) {
+        return `You got it! The secret word is '${this.secretWord}'`;
+      } else {
+        return `Sorry, '${guess}' is not the secret word`;
+      }
+    }
+  }
+}
 ```
 
 ## 73
@@ -2127,7 +3650,7 @@ assert.match(lastOutput, /"This game is finished. The secret word, 'HTML', was g
 
 Looks like everything is working. There's one last thing to do. To optimize the way your contract data is stored, you should prefer to use collections from the `nead-sdk-js` package for things stored on the blockchain.
 
-There are collections for vectors, sets, and maps. You will use the `Vector` collection, which is basically an array. At the top, import `Vector` with the rest of the imports.
+There are collections for vectors, sets, and maps. You will use the `Vector` collection, which is similar to an array. At the top, import `Vector` with the rest of the imports.
 
 ### --tests--
 
@@ -2146,7 +3669,7 @@ assert.exists(method);
 
 ### --description--
 
-To create a vector collection, you can use `new Vector('id')`. The ID is required an can be anything unique. Change the `hints` declaration in your constructor to use a vector, give it an id of `hints`.
+To create a vector collection, you can use `new Vector('id')`. The ID is required and can be anything unique. Change the `hints` declaration in your constructor to use a vector, give it an id of `hints`.
 
 ### --tests--
 
@@ -2159,6 +3682,70 @@ const babelised = await __helpers.babeliser(code?.replace('export',''));
 const construct = babelised?.getType('ClassMethod').find(c => c.kind === 'constructor');
 const recreatedCode = babelised?.generateCode(construct);
 assert.match(recreatedCode, /this\.hints = new Vector\(('|"|`)hints\1\);/);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call, near, Vector } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+    this.guesses = [];
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses;
+  }
+
+  @call({})
+  makeGuess({ guess }) {
+    const lastGuess = this.guesses[this.guesses.length - 1];
+
+    if (lastGuess?.guess === this.secretWord) {
+      return `This game is finished. The secret word, '${this.secretWord}', was guessed by ${lastGuess.guesser}`;
+    } else {
+      const guesser = near.predecessorAccountId();
+      near.log(`\nguesser = ${guesser}`);
+      near.log(`\nguess = ${guess}`);
+      this.guesses.push({ guesser, guess });
+
+      if (guess === this.secretWord) {
+        return `You got it! The secret word is '${this.secretWord}'`;
+      } else {
+        return `Sorry, '${guess}' is not the secret word`;
+      }
+    }
+  }
+}
 ```
 
 ## 85
@@ -2180,6 +3767,70 @@ const recreatedCode = babelised?.generateCode(construct);
 assert.match(recreatedCode, /this\.guesses = new Vector\(('|"|`)guesses\1\);/);
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call, near, Vector } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = new Vector('hints');
+    this.guesses = [];
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses;
+  }
+
+  @call({})
+  makeGuess({ guess }) {
+    const lastGuess = this.guesses[this.guesses.length - 1];
+
+    if (lastGuess?.guess === this.secretWord) {
+      return `This game is finished. The secret word, '${this.secretWord}', was guessed by ${lastGuess.guesser}`;
+    } else {
+      const guesser = near.predecessorAccountId();
+      near.log(`\nguesser = ${guesser}`);
+      near.log(`\nguess = ${guess}`);
+      this.guesses.push({ guesser, guess });
+
+      if (guess === this.secretWord) {
+        return `You got it! The secret word is '${this.secretWord}'`;
+      } else {
+        return `Sorry, '${guess}' is not the secret word`;
+      }
+    }
+  }
+}
+```
+
 ## 86
 
 ### --description--
@@ -2199,6 +3850,70 @@ const recreatedCode = babelised?.generateCode(viewHints);
 assert.match(recreatedCode, /{\s*return this\.hints\.toArray\(\);\s*}/);
 ```
 
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call, near, Vector } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = new Vector('hints');
+    this.guesses = new Vector('guesses');
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses;
+  }
+
+  @call({})
+  makeGuess({ guess }) {
+    const lastGuess = this.guesses[this.guesses.length - 1];
+
+    if (lastGuess?.guess === this.secretWord) {
+      return `This game is finished. The secret word, '${this.secretWord}', was guessed by ${lastGuess.guesser}`;
+    } else {
+      const guesser = near.predecessorAccountId();
+      near.log(`\nguesser = ${guesser}`);
+      near.log(`\nguess = ${guess}`);
+      this.guesses.push({ guesser, guess });
+
+      if (guess === this.secretWord) {
+        return `You got it! The secret word is '${this.secretWord}'`;
+      } else {
+        return `Sorry, '${guess}' is not the secret word`;
+      }
+    }
+  }
+}
+```
+
 ## 87
 
 ### --description--
@@ -2216,6 +3931,70 @@ const babelised = await __helpers.babeliser(code?.replace('export',''));
 const viewGuesses = babelised?.getType('ClassMethod').find(c => c.key?.name === 'viewGuesses' && c.key?.scope?.includes('WordGuess'));
 const recreatedCode = babelised?.generateCode(viewGuesses);
 assert.match(recreatedCode, /{\s*return this\.guesses\.toArray\(\);\s*}/);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call, near, Vector } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = new Vector('hints');
+    this.guesses = new Vector('guesses');
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints.toArray();
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses;
+  }
+
+  @call({})
+  makeGuess({ guess }) {
+    const lastGuess = this.guesses[this.guesses.length - 1];
+
+    if (lastGuess?.guess === this.secretWord) {
+      return `This game is finished. The secret word, '${this.secretWord}', was guessed by ${lastGuess.guesser}`;
+    } else {
+      const guesser = near.predecessorAccountId();
+      near.log(`\nguesser = ${guesser}`);
+      near.log(`\nguess = ${guess}`);
+      this.guesses.push({ guesser, guess });
+
+      if (guess === this.secretWord) {
+        return `You got it! The secret word is '${this.secretWord}'`;
+      } else {
+        return `Sorry, '${guess}' is not the secret word`;
+      }
+    }
+  }
+}
 ```
 
 ## 88
@@ -2250,6 +4029,70 @@ const output = await __helpers.getTerminalOutput();
 const splitOutput = output?.replaceAll(/\s+/g, ' ').split('Doing account.functionCall()');
 const lastOutput = splitOutput[splitOutput.length - 1];
 assert.match(lastOutput, /Generated build\/word-guess\.wasm contract successfully!\s*$/);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call, near, Vector } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = new Vector('hints');
+    this.guesses = new Vector('guesses');
+  }
+
+  @initialize({ privateFunction: true })
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints.toArray();
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses.toArray();
+  }
+
+  @call({})
+  makeGuess({ guess }) {
+    const lastGuess = this.guesses[this.guesses.length - 1];
+
+    if (lastGuess?.guess === this.secretWord) {
+      return `This game is finished. The secret word, '${this.secretWord}', was guessed by ${lastGuess.guesser}`;
+    } else {
+      const guesser = near.predecessorAccountId();
+      near.log(`\nguesser = ${guesser}`);
+      near.log(`\nguess = ${guess}`);
+      this.guesses.push({ guesser, guess });
+
+      if (guess === this.secretWord) {
+        return `You got it! The secret word is '${this.secretWord}'`;
+      } else {
+        return `Sorry, '${guess}' is not the secret word`;
+      }
+    }
+  }
+}
 ```
 
 ## 89
@@ -2316,7 +4159,7 @@ assert.match(lastOutput, re);
 
 ### --description--
 
-I made a small script that will initialize your contract. Run `node init.js` in the terminal.
+I made a small script that will initialize your contract. Enter `node init.js` in the terminal to run it.
 
 ### --tests--
 
@@ -2326,9 +4169,8 @@ You should run node `init.js` in the terminal
 await new Promise(res => setTimeout(res, 1000));
 const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
-const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewHints\\s*$`, 'g');
+const re = new RegExp(`^\\s*node\\s+init\.js\\s*$`, 'g');
 assert.match(lastCommand, re);
-assert(false);
 ```
 
 The terminal should print `Your game is ready.`
@@ -2340,15 +4182,14 @@ const output = await __helpers.getTerminalOutput();
 const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewHints\\s*$`, 'g');
 const splitOutput = output?.replaceAll(/\s+/g, ' ').split(re);
 const lastOutput = splitOutput[splitOutput.length - 1];
-assert.match(lastOutput, /\[\]\s*$/);
-assert(false);
+assert.match(lastOutput, /Your game is ready\.\s*$/);
 ```
 
 ## 92
 
 ### --description--
 
-I initialized the contract and added the first hint. Call the contract to view it.
+I initialized the contract and added the first hint. Call the contract to view the hint.
 
 ### --tests--
 
@@ -2360,10 +4201,9 @@ const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-wor
 const lastCommand = await __helpers.getLastCommand();
 const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewHints\\s*$`, 'g');
 assert.match(lastCommand, re);
-assert(false);
 ```
 
-The terminal should print the hint array
+The terminal should print `[ 'Its three numbers' ]`
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
@@ -2372,8 +4212,7 @@ const output = await __helpers.getTerminalOutput();
 const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewHints\\s*$`, 'g');
 const splitOutput = output?.replaceAll(/\s+/g, ' ').split(re);
 const lastOutput = splitOutput[splitOutput.length - 1];
-assert.match(lastOutput, /\[\]\s*$/);
-assert(false);
+assert.match(lastOutput, /\[ 'Im a...' \]\s*$/);
 ```
 
 ## 93
@@ -2391,9 +4230,8 @@ await new Promise(res => setTimeout(res, 1000));
 const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
 const id1 = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev-1/dev-account');
 const lastCommand = await __helpers.getLastCommand();
-const re = new RegExp(`^\\s*near\\s+call\\s+${id}\\s+makeGuess\\s+[\\s\\S]*?JavaScript[\\s\\S]*?--accountId\\s+${id1}`, 'g');
+const re = new RegExp(`^\\s*near\\s+call\\s+${id}\\s+makeGuess\\s+[\\s\\S]*?--accountId\\s+${id1}`, 'g');
 assert.match(lastCommand, re);
-assert(false);
 ```
 
 The terminal should print the response for a correct or incorrect guess
@@ -2403,15 +4241,14 @@ await new Promise(res => setTimeout(res, 1000));
 const output = await __helpers.getTerminalOutput();
 const splitOutput = output?.replaceAll(/\s+/g, ' ').split('Doing account.functionCall()');
 const lastOutput = splitOutput[splitOutput.length - 1];
-assert.match(lastOutput, /"Sorry, 'JavaScript' is not the secret word"\s*$/);
-assert(false);
+assert.match(lastOutput, /(You got it!|is not the secret word)/);
 ```
 
 ## 94
 
 ### --description--
 
-This is the last step. Use your `neardev-1` account to guess the correct word and finish playing the game. If you need more hints, run `node add-hint.js`.
+This is the last step. Use your `neardev-1` account to guess the word and finish playing the game. If you want me to add more hints, run `node add-hint.js`.
 
 ### --tests--
 
@@ -2422,20 +4259,18 @@ await new Promise(res => setTimeout(res, 1000));
 const id = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev/dev-account');
 const id1 = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/neardev-1/dev-account');
 const lastCommand = await __helpers.getLastCommand();
-const re = new RegExp(`^\\s*near\\s+call\\s+${id}\\s+makeGuess\\s+[\\s\\S]*?JavaScript[\\s\\S]*?--accountId\\s+${id1}`, 'g');
+const re = new RegExp(`^\\s*near\\s+call\\s+${id}\\s+makeGuess\\s+[\\s\\S]*?--accountId\\s+${id1}`, 'g');
 assert.match(lastCommand, re);
-assert(false);
 ```
 
-The terminal should print `You got it! The secret word is '<secret_word>'`
+The terminal should print the `You got it!` or `This game is finished` message
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
 const output = await __helpers.getTerminalOutput();
 const splitOutput = output?.replaceAll(/\s+/g, ' ').split('Doing account.functionCall()');
 const lastOutput = splitOutput[splitOutput.length - 1];
-assert.match(lastOutput, /"Sorry, 'JavaScript' is not the secret word"\s*$/);
-assert(false);
+assert.match(lastOutput, /(You got it!|This game is finished)/);
 ```
 
 ## --fcc-end--
