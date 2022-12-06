@@ -25,7 +25,7 @@
     "title": "Build a Sentence Making Smart Contract",
     "dashedName": "build-a-sentence-making-smart-contract",
     "isIntegrated": true,
-    "description": "In this integrated project, you test what you've learned by building a NEAR smart contract where people add words to a string, one at a time, to form a sentence.",
+    "description": "In this integrated project, you test what you've learned by building a NEAR smart contract where you add words to a string, one at a time, to form a sentence.",
     "isPublic": true,
     "currentLesson": 1,
     "numberOfLessons": 1
