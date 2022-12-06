@@ -30,6 +30,7 @@
     "learn-near-smart-contracts-by-building-a-word-guessing-game": true,
     "learn-near-smart-contracts-by-building-a-word-guessing-game/init.js": true,
     "learn-near-smart-contracts-by-building-a-word-guessing-game/add-hint.js": true,
+    "build-a-sentence-making-smart-contract": true,
     "js/ts.implicitProjectConfig.experimentalDecorators": true
   },
   "terminal.integrated.profiles.linux": {
