@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:word-guess": "near-sdk-js build src/word-guess.js build/word-guess.wasm",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:word-guess": "near-sdk-js build src/word-guess.js build/word-guess.wasm"
   },
   "author": "",
   "license": "ISC",

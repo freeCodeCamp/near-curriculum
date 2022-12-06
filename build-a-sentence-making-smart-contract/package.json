@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:sentence-maker": "near-sdk-js build src/sentence-maker.js build/sentence-maker.wasm",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:sentence-maker": "near-sdk-js build src/sentence-maker.js build/sentence-maker.wasm"
   },
   "author": "",
   "license": "ISC",
