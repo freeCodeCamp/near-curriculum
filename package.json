@@ -9,7 +9,6 @@
   "author": "Shaun Hamilton",
   "type": "module",
   "dependencies": {
-    "@freecodecamp/freecodecamp-os": "1.6.5",
-    "babeliser": "0.6.0"
+    "@freecodecamp/freecodecamp-os": "1.6.5"
   }
 }
