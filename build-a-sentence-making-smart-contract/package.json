@@ -1,10 +1,10 @@
 {
-  "name": "learn-near-smart-contracts-by-building-a-word-guessing-game",
+  "name": "build-a-sentence-making-smart-contract",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:word-guess": "near-sdk-js build src/word-guess.js build/word-guess.wasm"
+    "build:sentence-maker": "near-sdk-js build src/sentence-maker.js build/sentence-maker.wasm"
   },
   "author": "",
   "license": "ISC",
