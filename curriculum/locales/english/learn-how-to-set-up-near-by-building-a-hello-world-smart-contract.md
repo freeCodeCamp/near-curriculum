@@ -230,7 +230,7 @@ assert.match(fileContents, /constructor\s*\(\s*\)\s*{\s*super\s*\(\s*\)\s*;?\s*}
 
 ### --description--
 
-In your constructor, below the `super()` call, set the intial value of the `message` variable to `Hello`.
+In your constructor, below the `super()` call, set the initial value of the `message` variable to `Hello`.
 
 ### --tests--
 
@@ -435,7 +435,7 @@ assert.match(lastCommand, /near\s+--help/);
 
 ### --description--
 
-There are commands in there for working directly with the blockchain. You're going to use that `dev-deploy` command to deploy your built contract to the NEAR testnet. Enter `near dev-deploy build/hello-near.wasm` to do that. Enter `y` or `n` when prompted.
+There are commands in there for working directly with the blockchain. You're going to use that `dev-deploy` command to deploy your built contract to the NEAR testnet. Enter `near dev-deploy build/hello-near.wasm` to do that. Enter `y` or `n` if prompted.
 
 ### --tests--
 
@@ -459,7 +459,7 @@ assert.include(learnDir, 'neardev');
 
 ### --description--
 
-You contract has been deployed, there's some feedback about it in the terminal. Check that help menu for the NEAR CLI tools again.
+Your contract has been deployed, there's some feedback about it in the terminal. Check that help menu for the NEAR CLI tools again.
 
 ### --tests--
 
@@ -880,7 +880,7 @@ assert.match(lastCommand, /near\s+--help/);
 
 ### --description--
 
-Looks like you can see some infomation about accounts with `near state <account_id>`. View the info about the first account you created, the one in the `oldneardev` folder.
+Looks like you can see some information about accounts with `near state <account_id>`. View the info about the first account you created, the one in the `oldneardev` folder.
 
 ### --tests--
 
@@ -977,7 +977,7 @@ const re = new RegExp(`${oldId}`, 'g');
 assert.match(lastCommand, re);
 ```
 
-The `<reciever_id>` should match the account name in the `neardev` folder
+The `<receiver_id>` should match the account name in the `neardev` folder
 
 ```js
 await new Promise(res => setTimeout(res, 1000));

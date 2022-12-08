@@ -8,11 +8,11 @@ For this project, you will be making a NEAR smart contract using JavaScript wher
 
 Start by going into the `build-a-sentence-making-smart-contract` folder in your terminal and running `npm install` to install the dependencies. Then, create your smart contract in the `src/sentence-maker.js` file. When you're ready, run `npm build:sentence-maker` to build your contract, and deploy it with `near dev-deploy build/sentence-maker.wasm`.
 
-You will need to have at least two different accounts (generated when using `dev-deploy`) to fulfill the user stories and pass the tests. Rename one of the generated `neardev` folders to a `neardev-1` folder. The tests will use this to call your contract, you will likely want to use it as well. Once you have deployed and **completely finished** your contract, move the finished contract account info to a `neardev-final` folder.
+You will need to have at least two different accounts (generated when using `dev-deploy`) to fulfill the user stories and pass the tests. Rename one of the generated `neardev` folders to a `neardev-1` folder. The tests will use this to call your contract, you will likely want to use it as well. Once you have deployed and **completely finished** your contract, move the **finished contract** account info to a `neardev-final` folder and make sure a `neardev` folder doesn't exist.
 
 **User Stories:**
 
-1. You should export a `SentenceMaker` class in your smart contract file
+1. You should export a `SentenceMaker` class in your smart contract file with `export class SentenceMaker { }`
 
 1. Your smart contract should store a sentence
 
@@ -44,7 +44,7 @@ You will need to have at least two different accounts (generated when using `dev
 
 1. Only the contract account should be able to run the `viewWords` method
 
-1. All your contract methods should have the appropriate decorators where needed
+1. Your contract class and all its methods should have the appropriate decorators where needed
 
 1. You should use the `Vector` collection at least once
 
@@ -79,17 +79,15 @@ You should have `neardev-1` and `neardev-final` folders, each with account info
 // test 1
 const learnDir = await __helpers.getDirectory(__projectDir);
 assert.include(learnDir, 'neardev-1', "You should have a 'neardev-1' folder");
-assert.include(learnDir, 'neardev-final' "You should have a `neardev-final` folder");
-
+assert.include(learnDir, 'neardev-final', "You should have a `neardev-final` folder");
 const neardev1Dir = await __helpers.getDirectory(__neardev1Dir);
 const neardevFinalDir = await __helpers.getDirectory(__neardevFinalDir);
 assert.include(neardev1Dir, 'dev-account', "Your 'neardev-1' folder needs a 'dev-account' file")
 assert.include(neardevFinalDir, 'dev-account', "Your 'neardev-final' folder should have a 'dev-account' file")
-
 const neardev1File = await __helpers.getFile(`${__neardev1Dir}/dev-account`);
 const neardevFinalFile = await __helpers.getFile(`${__neardevFinalDir}/dev-account`);
-assert.match(nearadev1File, /dev-d+-d+/, "Your 'neardev-1/dev-account' file should have a dev account id");
-assert.match(nearadevFinalFile, /dev-d+-d+/, "Your 'neardev-final/dev-account' file should have a dev account id");
+assert.match(neardev1File, /dev-\d+-\d+/, "Your 'neardev-1/dev-account' file should have a dev account id");
+assert.match(neardevFinalFile, /dev-\d+-\d+/, "Your 'neardev-final/dev-account' file should have a dev account id");
 ```
 
 Your contract should use a `Vector` collection at least once
@@ -214,11 +212,11 @@ assert.include(deployOut?.stdout, 'Done deploying', "Something went wrong trying
 
 // get the two accounts used to call the contract
 const contractId = await __helpers.getFile(`${__neardevDir}/dev-account`);
-const otherId = await __helpers.getFile(`${neardev1Dir}/dev-account`);
+const otherId = await __helpers.getFile(`${__neardev1Dir}/dev-account`);
 
 // Running `near view <contract> viewSentence` on the freshly deployed contract should give a `Contract must be initialized` error
 const uninitOut = await __helpers.getCommandOutput(`NEAR_ENV=testnet near view ${contractId} viewSentence`, __projectDir);
-assert.include(uninitOut?.stderr, 'Contract must be initialized', "Running the 'viewSentence' method on the uninitilialized contract should give a 'Contract must be initialized' error");
+assert.include(uninitOut?.stderr, 'Contract must be initialized', "Running the 'viewSentence' method on the uninitialized contract should give a 'Contract must be initialized' error");
 
 // Running `near call <contract> init '{ "word": "A" }' --accountId <contract_account>` should return `Sentence initialized with 'A'`
 const initOut = await __helpers.getCommandOutput(`NEAR_ENV=testnet near call ${contractId} init '{ "word": "A" }' --accountId ${contractId}`, __projectDir);
