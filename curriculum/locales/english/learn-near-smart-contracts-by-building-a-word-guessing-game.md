@@ -1896,31 +1896,7 @@ assert.match(lastOutput, /\[ '[\s\S]*?'[\s\S]*?\]\s*$/);
 
 ### --description--
 
-So only someone with the contract account credentials will be able to add hints. You also don't want others to be able to initialize the contract, so make that a private function as well.
-
-### --tests--
-
-You should have `@initialize({ privateFunction: true })` as your `init` function decorator
-
-```js
-await new Promise(res => setTimeout(res, 1000));
-const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
-const babelised = await __helpers.babeliser(code?.replace('export',''));
-const init = babelised?.getType('ClassMethod').find(c => c.key?.name === 'init' && c.key?.scope?.includes('WordGuess'));
-const exp = init?.decorators[0]?.expression;
-assert.equal(exp?.callee?.name, 'initialize', "You should have a '@initialize()' decorator on your 'init' function");
-assert.lengthOf(exp?.arguments, 1, "The 'initialize' decorator should have one argument");
-assert.equal(exp?.arguments[0]?.type, 'ObjectExpression', "The 'initialize' decorator argument should be an object");
-assert.lengthOf(exp?.arguments[0]?.properties, 1, "The 'initialize' object argument should have one property");
-assert.equal(exp?.arguments[0]?.properties[0]?.key?.name, 'privateFunction', "The 'initialize' object argument should have a 'privateFunction' property");
-assert.equal(exp?.arguments[0]?.properties[0]?.value?.value, true, "The 'initialize' object argument 'privateFunction' value should be 'true' (boolean)");
-```
-
-## 54
-
-### --description--
-
-Same for viewing the secret word, except `view` methods are public for everyone and cannot be made private. So turn it into a `call` method and make it private.
+So only someone with the contract account credentials will be able to add hints. You want to do the same to the `viewSecretWord` method, except `view` methods are public for everyone. Only `call` methods can be made private, so turn it into a `call` method and make it private.
 
 ### --tests--
 
@@ -1954,7 +1930,7 @@ export class WordGuess {
     this.hints = [];
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -1978,7 +1954,7 @@ export class WordGuess {
 }
 ```
 
-## 55
+## 54
 
 ### --description--
 
@@ -2011,7 +1987,7 @@ export class WordGuess {
     this.hints = [];
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -2035,7 +2011,7 @@ export class WordGuess {
 }
 ```
 
-## 56
+## 55
 
 ### --description--
 
@@ -2083,7 +2059,7 @@ export class WordGuess {
     this.guesses = [];
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -2107,7 +2083,7 @@ export class WordGuess {
 }
 ```
 
-## 57
+## 56
 
 ### --description--
 
@@ -2141,7 +2117,7 @@ export class WordGuess {
     this.guesses = [];
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -2170,7 +2146,7 @@ export class WordGuess {
 }
 ```
 
-## 58
+## 57
 
 ### --description--
 
@@ -2222,7 +2198,7 @@ export class WordGuess {
     this.guesses = [];
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -2251,7 +2227,7 @@ export class WordGuess {
 }
 ```
 
-## 59
+## 58
 
 ### --description--
 
@@ -2285,7 +2261,7 @@ export class WordGuess {
     this.guesses = [];
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -2319,7 +2295,7 @@ export class WordGuess {
 }
 ```
 
-## 60
+## 59
 
 ### --description--
 
@@ -2353,7 +2329,7 @@ export class WordGuess {
     this.guesses = [];
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -2388,7 +2364,7 @@ export class WordGuess {
 }
 ```
 
-## 61
+## 60
 
 ### --description--
 
@@ -2423,7 +2399,7 @@ export class WordGuess {
     this.guesses = [];
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -2461,7 +2437,7 @@ export class WordGuess {
 }
 ```
 
-## 62
+## 61
 
 ### --description--
 
@@ -2495,7 +2471,7 @@ export class WordGuess {
     this.guesses = [];
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -2533,7 +2509,7 @@ export class WordGuess {
 }
 ```
 
-## 63
+## 62
 
 ### --description--
 
@@ -2567,7 +2543,86 @@ export class WordGuess {
     this.guesses = [];
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses;
+  }
+
+  @call({})
+  makeGuess({ guess }) {
+    const lastGuess = this.guesses[this.guesses.length - 1];
+
+    if (lastGuess?.guess === this.secretWord) {
+      return `This game is finished. The secret word, '${this.secretWord}', was guessed by ${lastGuess.guesser}`;
+    } else {
+
+    }
+  }
+}
+```
+
+## 63
+
+### --description--
+
+Back in the empty `else` area, create a `const guesser` variable and set it to `near.predecessorAccountId()` to get the account making the guess.
+
+### --tests--
+
+You should have `const guesser = near.predecessorAccountId();` as the only thing in your `else` area
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const ifCond = babelised?.getType('IfStatement').find(i => i.scope.includes('makeGuess') && i.scope.includes('WordGuess'));
+const elseArea = ifCond?.alternate?.body[0];
+assert.equal(elseArea?.kind, 'const');
+assert.equal(elseArea?.declarations[0]?.id?.name, 'guesser');
+const callee = elseArea?.declarations[0]?.init?.callee;
+assert.equal(callee?.type, 'MemberExpression');
+assert.equal(callee?.object?.name, 'near');
+assert.equal(callee?.property?.name, 'predecessorAccountId');
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call, near } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = [];
+    this.guesses = [];
+  }
+
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -2611,85 +2666,6 @@ export class WordGuess {
 
 ### --description--
 
-Back in the empty `else` area, create a `const guesser` variable and set it to `near.predecessorAccountId()` to get the account making the guess.
-
-### --tests--
-
-You should have `const guesser = near.predecessorAccountId();` as the only thing in your `else` area
-
-```js
-await new Promise(res => setTimeout(res, 1000));
-const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
-const babelised = await __helpers.babeliser(code?.replace('export',''));
-const ifCond = babelised?.getType('IfStatement').find(i => i.scope.includes('makeGuess') && i.scope.includes('WordGuess'));
-const elseArea = ifCond?.alternate?.body[0];
-assert.equal(elseArea?.kind, 'const');
-assert.equal(elseArea?.declarations[0]?.id?.name, 'guesser');
-const callee = elseArea?.declarations[0]?.init?.callee;
-assert.equal(callee?.type, 'MemberExpression');
-assert.equal(callee?.object?.name, 'near');
-assert.equal(callee?.property?.name, 'predecessorAccountId');
-```
-
-### --seed--
-
-#### --"src/word-guess.js"--
-
-```js
-import { NearBindgen, initialize, view, call, near } from 'near-sdk-js';
-
-@NearBindgen({ requireInit: true })
-export class WordGuess {
-  constructor() {
-    this.secretWord = '';
-    this.hints = [];
-    this.guesses = [];
-  }
-
-  @initialize({ privateFunction: true })
-  init({ secretWord }) {
-    this.secretWord = secretWord;
-    return `The secret word has been set to '${secretWord}'`;
-  }
-
-  @call({ privateFunction: true })
-  viewSecretWord() {
-    return `The secret word is '${this.secretWord}'`;
-  }
-
-  @call({ privateFunction: true })
-  addHint({ hint }) {
-    this.hints.push(hint);
-    return 'Your hint was added';
-  }
-
-  @view({})
-  viewHints() {
-    return this.hints;
-  }
-
-  @view({})
-  viewGuesses() {
-    return this.guesses;
-  }
-
-  @call({})
-  makeGuess({ guess }) {
-    const lastGuess = this.guesses[this.guesses.length - 1];
-
-    if (lastGuess?.guess === this.secretWord) {
-      return `This game is finished. The secret word, '${this.secretWord}', was guessed by ${lastGuess.guesser}`;
-    } else {
-
-    }
-  }
-}
-```
-
-## 65
-
-### --description--
-
 Below that, add a `near.log` that uses a template literal to print `\nguesser = ${guesser}`.
 
 ### --tests--
@@ -2721,7 +2697,7 @@ export class WordGuess {
     this.guesses = [];
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -2762,7 +2738,7 @@ export class WordGuess {
 }
 ```
 
-## 66
+## 65
 
 ### --description--
 
@@ -2797,7 +2773,7 @@ export class WordGuess {
     this.guesses = [];
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -2839,7 +2815,7 @@ export class WordGuess {
 }
 ```
 
-## 67
+## 66
 
 ### --description--
 
@@ -2874,7 +2850,7 @@ export class WordGuess {
     this.guesses = [];
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -2917,7 +2893,7 @@ export class WordGuess {
 }
 ```
 
-## 68
+## 67
 
 ### --description--
 
@@ -2953,7 +2929,7 @@ export class WordGuess {
     this.guesses = [];
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -2997,7 +2973,7 @@ export class WordGuess {
 }
 ```
 
-## 69
+## 68
 
 ### --description--
 
@@ -3032,7 +3008,7 @@ export class WordGuess {
     this.guesses = [];
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -3079,7 +3055,7 @@ export class WordGuess {
 }
 ```
 
-## 70
+## 69
 
 ### --description--
 
@@ -3114,7 +3090,7 @@ export class WordGuess {
     this.guesses = [];
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -3161,7 +3137,7 @@ export class WordGuess {
 }
 ```
 
-## 71
+## 70
 
 ### --description--
 
@@ -3196,7 +3172,7 @@ export class WordGuess {
     this.guesses = [];
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -3245,7 +3221,7 @@ export class WordGuess {
 }
 ```
 
-## 72
+## 71
 
 ### --description--
 
@@ -3302,7 +3278,7 @@ export class WordGuess {
     this.guesses = [];
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -3351,7 +3327,7 @@ export class WordGuess {
 }
 ```
 
-## 73
+## 72
 
 ### --description--
 
@@ -3375,7 +3351,7 @@ const learnDir = await __helpers.getDirectory('learn-near-smart-contracts-by-bui
 assert.include(learnDir, 'neardev-1');
 ```
 
-## 74
+## 73
 
 ### --description--
 
@@ -3411,7 +3387,7 @@ const re = new RegExp(`Done deploying to ${id}\\s*$`);
 assert.match(lastOutput, re);
 ```
 
-## 75
+## 74
 
 ### --description--
 
@@ -3439,7 +3415,7 @@ const lastOutput = splitOutput[splitOutput.length - 1];
 assert.match(lastOutput, /"The secret word has been set to 'HTML'"\s*$/i);
 ```
 
-## 76
+## 75
 
 ### --description--
 
@@ -3469,7 +3445,7 @@ const lastOutput = splitOutput[splitOutput.length - 1];
 assert.match(lastOutput, /"The secret word is 'HTML'"\s*$/i);
 ```
 
-## 77
+## 76
 
 ### --description--
 
@@ -3497,7 +3473,7 @@ const lastOutput = splitOutput[splitOutput.length - 1];
 assert.match(lastOutput, /'Your hint was added'\s*$/);
 ```
 
-## 78
+## 77
 
 ### --description--
 
@@ -3527,7 +3503,7 @@ const lastOutput = splitOutput[splitOutput.length - 1];
 assert.match(lastOutput, /\[ '[\s\S]*?'[\s\S]*?\]\s*$/);
 ```
 
-## 79
+## 78
 
 ### --description--
 
@@ -3556,7 +3532,7 @@ const lastOutput = splitOutput[splitOutput.length - 1];
 assert.match(lastOutput, /"Sorry, 'JavaScript' is not the secret word"\s*$/);
 ```
 
-## 80
+## 79
 
 ### --description--
 
@@ -3586,7 +3562,7 @@ const lastOutput = splitOutput[splitOutput.length - 1];
 assert.match(lastOutput, /\[\s*{\s*guesser[\s\S]*?guess[\s\S]*?}\s*\]\s*$/);
 ```
 
-## 81
+## 80
 
 ### --description--
 
@@ -3615,7 +3591,7 @@ const lastOutput = splitOutput[splitOutput.length - 1];
 assert.match(lastOutput, /"You got it! The secret word is 'HTML'"\s*$/);
 ```
 
-## 82
+## 81
 
 ### --description--
 
@@ -3644,7 +3620,7 @@ const lastOutput = splitOutput[splitOutput.length - 1];
 assert.match(lastOutput, /"This game is finished. The secret word, 'HTML', was guessed by [\s\S]*?"\s*$/);
 ```
 
-## 83
+## 82
 
 ### --description--
 
@@ -3665,7 +3641,7 @@ const method = imports?.specifiers?.find(s => s.local?.name === 'Vector');
 assert.exists(method);
 ```
 
-## 84
+## 83
 
 ### --description--
 
@@ -3699,7 +3675,90 @@ export class WordGuess {
     this.guesses = [];
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
+  init({ secretWord }) {
+    this.secretWord = secretWord;
+    return `The secret word has been set to '${secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  viewSecretWord() {
+    return `The secret word is '${this.secretWord}'`;
+  }
+
+  @call({ privateFunction: true })
+  addHint({ hint }) {
+    this.hints.push(hint);
+    return 'Your hint was added';
+  }
+
+  @view({})
+  viewHints() {
+    return this.hints;
+  }
+
+  @view({})
+  viewGuesses() {
+    return this.guesses;
+  }
+
+  @call({})
+  makeGuess({ guess }) {
+    const lastGuess = this.guesses[this.guesses.length - 1];
+
+    if (lastGuess?.guess === this.secretWord) {
+      return `This game is finished. The secret word, '${this.secretWord}', was guessed by ${lastGuess.guesser}`;
+    } else {
+      const guesser = near.predecessorAccountId();
+      near.log(`\nguesser = ${guesser}`);
+      near.log(`\nguess = ${guess}`);
+      this.guesses.push({ guesser, guess });
+
+      if (guess === this.secretWord) {
+        return `You got it! The secret word is '${this.secretWord}'`;
+      } else {
+        return `Sorry, '${guess}' is not the secret word`;
+      }
+    }
+  }
+}
+```
+
+## 84
+
+### --description--
+
+Change the guesses array to a vector, as well. Use `guesses` for the ID.
+
+### --tests--
+
+You should have `this.guesses = new Vector('guesses');` in your constructor function
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
+const babelised = await __helpers.babeliser(code?.replace('export',''));
+const construct = babelised?.getType('ClassMethod').find(c => c.kind === 'constructor');
+const recreatedCode = babelised?.generateCode(construct);
+assert.match(recreatedCode, /this\.guesses = new Vector\(('|"|`)guesses\1\);/);
+```
+
+### --seed--
+
+#### --"src/word-guess.js"--
+
+```js
+import { NearBindgen, initialize, view, call, near, Vector } from 'near-sdk-js';
+
+@NearBindgen({ requireInit: true })
+export class WordGuess {
+  constructor() {
+    this.secretWord = '';
+    this.hints = new Vector('hints');
+    this.guesses = [];
+  }
+
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -3752,19 +3811,19 @@ export class WordGuess {
 
 ### --description--
 
-Change the guesses array to a vector, as well. Use `guesses` for the ID.
+Vectors aren't arrays, but they have many similar methods like `push`, `pop`, and `length`. So where you use those methods, the code shouldn't need to change. Some other methods are `clear`, `isEmpty`, and `toArray`. Where you return the `hints` variable in the `viewHints` function, transform the vector to an array.
 
 ### --tests--
 
-You should have `this.guesses = new Vector('guesses');` in your constructor function
+You should have `return this.hints.toArray()` in your `viewHints` method.
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
 const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
 const babelised = await __helpers.babeliser(code?.replace('export',''));
-const construct = babelised?.getType('ClassMethod').find(c => c.kind === 'constructor');
-const recreatedCode = babelised?.generateCode(construct);
-assert.match(recreatedCode, /this\.guesses = new Vector\(('|"|`)guesses\1\);/);
+const viewHints = babelised?.getType('ClassMethod').find(c => c.key?.name === 'viewHints' && c.key?.scope?.includes('WordGuess'));
+const recreatedCode = babelised?.generateCode(viewHints);
+assert.match(recreatedCode, /{\s*return this\.hints\.toArray\(\);\s*}/);
 ```
 
 ### --seed--
@@ -3779,10 +3838,10 @@ export class WordGuess {
   constructor() {
     this.secretWord = '';
     this.hints = new Vector('hints');
-    this.guesses = [];
+    this.guesses = new Vector('guesses');
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -3835,89 +3894,6 @@ export class WordGuess {
 
 ### --description--
 
-Vectors aren't arrays, but they have many similar methods like `push`, `pop`, and `length`. So where you use those methods, the code shouldn't need to change. Some other methods are `clear`, `isEmpty`, and `toArray`. Where you return the `hints` variable in the `viewHints` function, transform the vector to an array.
-
-### --tests--
-
-You should have `return this.hints.toArray()` in your `viewHints` method.
-
-```js
-await new Promise(res => setTimeout(res, 1000));
-const code = await __helpers.getFile('learn-near-smart-contracts-by-building-a-word-guessing-game/src/word-guess.js');
-const babelised = await __helpers.babeliser(code?.replace('export',''));
-const viewHints = babelised?.getType('ClassMethod').find(c => c.key?.name === 'viewHints' && c.key?.scope?.includes('WordGuess'));
-const recreatedCode = babelised?.generateCode(viewHints);
-assert.match(recreatedCode, /{\s*return this\.hints\.toArray\(\);\s*}/);
-```
-
-### --seed--
-
-#### --"src/word-guess.js"--
-
-```js
-import { NearBindgen, initialize, view, call, near, Vector } from 'near-sdk-js';
-
-@NearBindgen({ requireInit: true })
-export class WordGuess {
-  constructor() {
-    this.secretWord = '';
-    this.hints = new Vector('hints');
-    this.guesses = new Vector('guesses');
-  }
-
-  @initialize({ privateFunction: true })
-  init({ secretWord }) {
-    this.secretWord = secretWord;
-    return `The secret word has been set to '${secretWord}'`;
-  }
-
-  @call({ privateFunction: true })
-  viewSecretWord() {
-    return `The secret word is '${this.secretWord}'`;
-  }
-
-  @call({ privateFunction: true })
-  addHint({ hint }) {
-    this.hints.push(hint);
-    return 'Your hint was added';
-  }
-
-  @view({})
-  viewHints() {
-    return this.hints;
-  }
-
-  @view({})
-  viewGuesses() {
-    return this.guesses;
-  }
-
-  @call({})
-  makeGuess({ guess }) {
-    const lastGuess = this.guesses[this.guesses.length - 1];
-
-    if (lastGuess?.guess === this.secretWord) {
-      return `This game is finished. The secret word, '${this.secretWord}', was guessed by ${lastGuess.guesser}`;
-    } else {
-      const guesser = near.predecessorAccountId();
-      near.log(`\nguesser = ${guesser}`);
-      near.log(`\nguess = ${guess}`);
-      this.guesses.push({ guesser, guess });
-
-      if (guess === this.secretWord) {
-        return `You got it! The secret word is '${this.secretWord}'`;
-      } else {
-        return `Sorry, '${guess}' is not the secret word`;
-      }
-    }
-  }
-}
-```
-
-## 87
-
-### --description--
-
 Do the same for the guesses in the `viewGuesses` method.
 
 ### --tests--
@@ -3948,7 +3924,7 @@ export class WordGuess {
     this.guesses = new Vector('guesses');
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -3997,7 +3973,7 @@ export class WordGuess {
 }
 ```
 
-## 88
+## 87
 
 ### --description--
 
@@ -4046,7 +4022,7 @@ export class WordGuess {
     this.guesses = new Vector('guesses');
   }
 
-  @initialize({ privateFunction: true })
+  @initialize({})
   init({ secretWord }) {
     this.secretWord = secretWord;
     return `The secret word has been set to '${secretWord}'`;
@@ -4095,7 +4071,7 @@ export class WordGuess {
 }
 ```
 
-## 89
+## 88
 
 ### --description--
 
@@ -4119,7 +4095,7 @@ const learnDir = await __helpers.getDirectory('learn-near-smart-contracts-by-bui
 assert.include(learnDir, 'neardev-1');
 ```
 
-## 90
+## 89
 
 ### --description--
 
@@ -4155,7 +4131,7 @@ const re = new RegExp(`Done deploying to ${id}\\s*$`);
 assert.match(lastOutput, re);
 ```
 
-## 91
+## 90
 
 ### --description--
 
@@ -4185,7 +4161,7 @@ const lastOutput = splitOutput[splitOutput.length - 1];
 assert.match(lastOutput, /Your game is ready\.\s*$/);
 ```
 
-## 92
+## 91
 
 ### --description--
 
@@ -4215,7 +4191,7 @@ const lastOutput = splitOutput[splitOutput.length - 1];
 assert.match(lastOutput, /\[ 'Im a...' \]\s*$/);
 ```
 
-## 93
+## 92
 
 ### --description--
 
@@ -4244,7 +4220,7 @@ const lastOutput = splitOutput[splitOutput.length - 1];
 assert.match(lastOutput, /(You got it!|is not the secret word)/);
 ```
 
-## 94
+## 93
 
 ### --description--
 
