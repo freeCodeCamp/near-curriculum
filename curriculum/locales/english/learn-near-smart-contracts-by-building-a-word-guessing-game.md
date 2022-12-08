@@ -2301,7 +2301,7 @@ export class WordGuess {
 
 ### --description--
 
-The guesses array will keep track of the `guess` and who made it. Add an `if` condition that checks if `lastGuess?.guess` is equal to the secret word. This will be for if the word has been guessed and the game is over.
+The guesses array will keep track of the `guess` and who made it (`guesser`). Add an `if` condition that checks if `lastGuess?.guess` is equal to the secret word. This will be for if the word has been guessed and the game is over.
 
 ### --tests--
 
@@ -3421,7 +3421,7 @@ assert.match(lastOutput, /"The secret word has been set to 'HTML'"\s*$/i);
 
 ### --description--
 
-Run the function to view the secret word.
+Run the method to view the secret word. Remember that you set it to private, so you need to provide the contract account ID to run it.
 
 ### --tests--
 
@@ -3451,7 +3451,7 @@ assert.match(lastOutput, /"The secret word is 'HTML'"\s*$/i);
 
 ### --description--
 
-Add a hint of `Language for coding websites`.
+Add a hint of `Language for coding websites`. 
 
 ### --tests--
 
@@ -3628,7 +3628,7 @@ assert.match(lastOutput, /"This game is finished. The secret word, 'HTML', was g
 
 Looks like everything is working. There's one last thing to do. To optimize the way your contract data is stored, you should prefer to use collections from the `near-sdk-js` package for things stored on the blockchain.
 
-There are collections for vectors, sets, and maps. You will use the `Vector` collection, which is similar to an array. At the top, import `Vector` with the rest of the imports.
+There are collections for vectors, sets, and maps. You will use the `Vector` collection, which is similar to an array. At the top of your contract file, import `Vector` with the rest of the imports.
 
 ### --tests--
 
@@ -4167,7 +4167,7 @@ assert.match(lastOutput, /Your game is ready\.\s*$/);
 
 ### --description--
 
-I initialized the contract and added the first hint. Call the contract to view the hint.
+I initialized the contract and added the first hint. View the hints on the contract.
 
 ### --tests--
 
