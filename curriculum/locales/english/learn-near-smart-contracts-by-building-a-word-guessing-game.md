@@ -4181,7 +4181,7 @@ const re = new RegExp(`^\\s*near\\s+view\\s+${id}\\s+viewHints\\s*$`, 'g');
 assert.match(lastCommand, re);
 ```
 
-The terminal should print `[ 'Its three numbers' ]`
+The terminal should print `[ 'Im a...' ]`
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
