@@ -846,7 +846,7 @@ You should run `near tx-status <hash> --accountId <account_id>` in the terminal
 await new Promise(res => setTimeout(res, 1000));
 const id = await __helpers.getFile('learn-how-to-set-up-near-by-building-a-hello-world-smart-contract/neardev/dev-account');
 const lastCommand = await __helpers.getLastCommand();
-const re = new RegExp(`near\\s+tx-status\\s+\\S\{44\}\\s+--accountId\\s+${id}`, 'g');
+const re = new RegExp(`near\\s+tx-status\\s+\\S\{20,\}\\s+--accountId\\s+${id}`, 'g');
 assert.match(lastCommand, re);
 ```
 
