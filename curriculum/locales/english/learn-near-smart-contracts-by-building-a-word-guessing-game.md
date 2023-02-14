@@ -33,7 +33,7 @@ assert.include(cwd, 'learn-near-smart-contracts-by-building-a-word-guessing-game
 
 For this project, you will be making a word guessing game in a NEAR smart contract. Open your `package.json` file. There's a few dependencies in there you will need. Mainly, the `near-sdk-js` package. Run `npm install` to install them.
 
-**Note:** This project is using a newer version `near-sdk-js` than the `hello-near` project, and will have some slighlty different syntax in places.
+**Note:** This project is using a newer version `near-sdk-js` than the `hello-near` project, and will have some slightly different syntax in places.
 
 ### --tests--
 
