@@ -32,6 +32,17 @@
   },
   {
     "id": 3,
+    "title": "Learn NEAR Accounts by Creating a Named Testnet Account",
+    "dashedName": "learn-near-accounts-by-creating-a-named-testnet-account",
+    "isIntegrated": false,
+    "description": "In this course, you will learn about NEAR accounts by creating your own testnet account.",
+    "isPublic": true,
+    "currentLesson": 1,
+    "runTestsOnWatch": true,
+    "isResetEnabled": true
+  },
+  {
+    "id": 4,
     "title": "More Coming Soon...",
     "dashedName": "build-x-using-y",
     "isIntegrated": true,
