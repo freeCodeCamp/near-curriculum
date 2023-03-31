@@ -9,7 +9,7 @@
   "author": "Shaun Hamilton",
   "type": "module",
   "dependencies": {
-    "@freecodecamp/freecodecamp-os": "1.7.3",
+    "@freecodecamp/freecodecamp-os": "1.8.3",
     "babeliser": "0.6.0"
   }
 }
