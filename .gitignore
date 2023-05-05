@@ -6,3 +6,6 @@ Cargo.lock
 
 # Should be included in repo, but does not get updated
 test-ledger
+
+# Untracked files that should not be removed when lesson is reset
+*.testnet*
