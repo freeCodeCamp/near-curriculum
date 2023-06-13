@@ -43,6 +43,17 @@
   },
   {
     "id": 4,
+    "title": "Learn How to Interact with NEAR Programs Using the NEAR JavaScript API and Node",
+    "dashedName": "learn-how-to-interact-with-near-programs-using-the-near-javascript-api-and-node",
+    "isIntegrated": false,
+    "description": "In this course, you will learn about the NEAR JavaScript API and how to use it to interact with programs stored on the NEAR blockchain",
+    "isPublic": true,
+    "currentLesson": 1,
+    "runTestsOnWatch": true,
+    "isResetEnabled": false
+  },
+  {
+    "id": 5,
     "title": "More Coming Soon...",
     "dashedName": "build-x-using-y",
     "isIntegrated": true,

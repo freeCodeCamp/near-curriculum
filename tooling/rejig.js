@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'fs/promises';
 
 const PATH =
-  '../curriculum/locales/english/learn-near-accounts-by-creating-a-named-testnet-account.md';
+  '../curriculum/locales/english/learn-how-to-interact-with-near-programs-using-the-near-javascript-api-and-node.md';
 
 /**
  * Ensures all lessons are incremented by 1
