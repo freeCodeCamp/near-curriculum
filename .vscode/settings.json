@@ -33,6 +33,7 @@
     "learn-near-accounts-by-creating-a-named-testnet-account": true,
     "learn-how-to-interact-with-near-programs-using-the-near-javascript-api-and-node": true,
     "build-a-sentence-making-smart-contract": true,
+    "build-a-fortune-telling-smart-contract": true,
     "js/ts.implicitProjectConfig.experimentalDecorators": true
   },
   "terminal.integrated.profiles.linux": {

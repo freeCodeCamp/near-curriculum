@@ -54,6 +54,16 @@
   },
   {
     "id": 5,
+    "title": "Build a Fortune Telling Smart Contract",
+    "dashedName": "build-a-fortune-telling-smart-contract",
+    "isIntegrated": true,
+    "description": "In this integrated project, you will use your testnet account to create and deploy a smart contract that can tell your fortune. Then a Node client to interact with the contract.",
+    "isPublic": true,
+    "currentLesson": 1,
+    "numberOfLessons": 1
+  },
+  {
+    "id": 6,
     "title": "More Coming Soon...",
     "dashedName": "build-x-using-y",
     "isIntegrated": true,
