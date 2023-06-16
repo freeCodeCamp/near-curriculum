@@ -2795,7 +2795,7 @@ assert.match(lastOutput, /"The secret word is 'web3'"/g);
 
 This is the last step. With all but the functional key deleted. The account and contract are effectively stuck, ensuring that neither of them can be changed. But you can still use the functional key to call the methods the key allows.
 
-Make sure you have the seed for your main account saved somewhere and, when you are done, enter `done` in the terminal.
+Make sure you have the seed for your main account saved somewhere, you will need it for the upcoming courses. When you are done, enter `done` in the terminal.
 
 ### --tests--
 
