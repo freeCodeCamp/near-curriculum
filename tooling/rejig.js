@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'fs/promises';
 
 const PATH =
-  '../curriculum/locales/english/learn-near-smart-contracts-by-building-a-word-guessing-game.md';
+  '../curriculum/locales/english/learn-how-to-interact-with-near-programs-using-the-near-javascript-api-and-node.md';
 
 /**
  * Ensures all lessons are incremented by 1

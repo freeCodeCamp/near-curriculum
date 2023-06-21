@@ -32,6 +32,38 @@
   },
   {
     "id": 3,
+    "title": "Learn NEAR Accounts by Creating a Named Testnet Account",
+    "dashedName": "learn-near-accounts-by-creating-a-named-testnet-account",
+    "isIntegrated": false,
+    "description": "In this course, you will learn about NEAR accounts by creating your own testnet account.",
+    "isPublic": true,
+    "currentLesson": 1,
+    "runTestsOnWatch": true,
+    "isResetEnabled": true
+  },
+  {
+    "id": 4,
+    "title": "Learn How to Interact with NEAR Programs Using the NEAR JavaScript API and Node",
+    "dashedName": "learn-how-to-interact-with-near-programs-using-the-near-javascript-api-and-node",
+    "isIntegrated": false,
+    "description": "In this course, you will learn about the NEAR JavaScript API and how to use it to interact with programs stored on the NEAR blockchain",
+    "isPublic": true,
+    "currentLesson": 1,
+    "runTestsOnWatch": true,
+    "isResetEnabled": false
+  },
+  {
+    "id": 5,
+    "title": "Build a Fortune Telling Smart Contract",
+    "dashedName": "build-a-fortune-telling-smart-contract",
+    "isIntegrated": true,
+    "description": "In this integrated project, you will use your testnet account to create and deploy a smart contract that can tell your fortune. Then a Node client to interact with the contract.",
+    "isPublic": true,
+    "currentLesson": 1,
+    "numberOfLessons": 1
+  },
+  {
+    "id": 6,
     "title": "More Coming Soon...",
     "dashedName": "build-x-using-y",
     "isIntegrated": true,

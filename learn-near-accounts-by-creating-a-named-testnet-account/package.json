@@ -1,0 +1,19 @@
+{
+  "name": "learn-near-accounts-by-creating-a-named-testnet-account",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:word-guess": "near-sdk-js build src/word-guess.js build/word-guess.wasm"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "near-sdk-js": "0.6.0",
+    "near-seed-phrase": "^0.2.0"
+  },
+  "devDependencies": {
+    "ts-morph": "^16.0.0"
+  }
+}
