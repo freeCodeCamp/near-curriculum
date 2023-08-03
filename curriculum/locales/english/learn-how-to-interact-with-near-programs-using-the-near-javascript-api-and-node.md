@@ -809,7 +809,7 @@ assert.lengthOf(e, 0);
 
 ### --description--
 
-You are going to deploy the word guess contract from a node script. Export a new `const conractAccount` variable, and set the value get your sub-account from the blockchain.
+You are going to deploy the word guess contract from a node script. Export a new `const contractAccount` variable, and set the value get your sub-account from the blockchain.
 
 ### --tests--
 
@@ -894,7 +894,7 @@ assert.match(lastOutput, /Generated build\/word-guess\.wasm contract successfull
 
 ### --description--
 
-Create a `deploy-contract.js` file. You will use this to deploy your conract.
+Create a `deploy-contract.js` file. You will use this to deploy your contract.
 
 ### --tests--
 
