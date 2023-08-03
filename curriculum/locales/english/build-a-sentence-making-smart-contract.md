@@ -68,8 +68,8 @@ The last test at the bottom deploys your `build/sentence-maker.wasm` contract fi
 - Running `near call <contract> addWord '{ "word": "test." }' --accountId <non_contract_account>` should return `Your word was added`
 - Running `near call <contract> addWord '{ "word": "test." }' --accountId <contract_account>` should return `The sentence is complete, more words cannot be added`
 - Running `near view <contract_name> viewSentence` should return `A test.`
-- Running `near call <contract_name> viewWords --accountId <non_contract_account>` should give a `Function is private` error 
-- Running `near view <contract_name> viewWords --accountId <contract_account>`  should return an array with two objects in the form `{ id, word }` 
+- Running `near call <contract_name> viewWords --accountId <non_contract_account>` should give a `Function is private` error
+- Running `near call <contract_name> viewWords --accountId <contract_account>` should return an array with two objects in the form `{ id, word }`
 
 ### --tests--
 
@@ -220,7 +220,7 @@ assert.include(uninitOut?.stderr, 'Contract must be initialized', "Running the '
 
 // Running `near call <contract> init '{ "word": "A" }' --accountId <contract_account>` should return `Sentence initialized with 'A'`
 const initOut = await __helpers.getCommandOutput(`NEAR_ENV=testnet near call ${contractId} init '{ "word": "A" }' --accountId ${contractId}`, __projectDir);
-assert.match(initOut?.stdout, /"Sentence initialized with 'A'"\s*$/, `Running the 'addWord' method with a '{ "word": "A" }' argument should return "Sentence initialized with 'A'"`);
+assert.match(initOut?.stdout, /"Sentence initialized with 'A'"\s*$/, `Running the 'init' method with a '{ "word": "A" }' argument should return "Sentence initialized with 'A'"`);
 
 // Running `near call <contract> addWord '{ "word": "test" }' --accountId <contract_account>` should return `You cannot add two words in a row`
 const noTwoWordsOut = await __helpers.getCommandOutput(`NEAR_ENV=testnet near call ${contractId} addWord '{ "word": "test" }' --accountId ${contractId}`, __projectDir);
