@@ -7,7 +7,8 @@
     "description": "In this course, you will learn how to set up NEAR by building a simple hello world application.",
     "isPublic": true,
     "currentLesson": 1,
-    "runTestsOnWatch": true
+    "runTestsOnWatch": true,
+    "numberOfLessons": 57
   },
   {
     "id": 1,
@@ -18,7 +19,8 @@
     "isPublic": true,
     "currentLesson": 1,
     "runTestsOnWatch": true,
-    "isResetEnabled": true
+    "isResetEnabled": true,
+    "numberOfLessons": 93
   },
   {
     "id": 2,
@@ -39,7 +41,8 @@
     "isPublic": true,
     "currentLesson": 1,
     "runTestsOnWatch": true,
-    "isResetEnabled": true
+    "isResetEnabled": true,
+    "numberOfLessons": 78
   },
   {
     "id": 4,
@@ -50,7 +53,8 @@
     "isPublic": true,
     "currentLesson": 1,
     "runTestsOnWatch": true,
-    "isResetEnabled": false
+    "isResetEnabled": false,
+    "numberOfLessons": 83
   },
   {
     "id": 5,
@@ -64,11 +68,22 @@
   },
   {
     "id": 6,
+    "title": "Learn How to Integrate NEAR into an App",
+    "dashedName": "learn-how-to-integrate-near-into-an-app",
+    "isIntegrated": true,
+    "description": "",
+    "isPublic": true,
+    "currentLesson": 1,
+    "numberOfLessons": 1
+  },
+  {
+    "id": 7,
     "title": "More Coming Soon...",
     "dashedName": "build-x-using-y",
     "isIntegrated": true,
     "description": "",
     "isPublic": false,
-    "currentLesson": 1
+    "currentLesson": 1,
+    "numberOfLessons": 1
   }
 ]

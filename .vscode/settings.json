@@ -36,11 +36,15 @@
     "build-a-fortune-telling-smart-contract": true,
     "js/ts.implicitProjectConfig.experimentalDecorators": true
   },
+  "terminal.integrated.defaultProfile.linux": "bash",
   "terminal.integrated.profiles.linux": {
     "bash": {
       "path": "bash",
       "icon": "terminal-bash",
-      "args": ["--init-file", "./bash/sourcerer.sh"]
+      "args": [
+        "--init-file",
+        "./bash/sourcerer.sh"
+      ]
     }
   },
   "workbench.colorTheme": "freeCodeCamp Dark Theme"
