@@ -173,13 +173,54 @@ const keyStore = new keyStores.BrowserLocalStorageKeyStore();
 You should have `const keyStore = new keyStores.BrowserLocalStorageKeyStore();` in `client/wallet.js`.
 
 ```js
-
+const variableDeclaration = babelisedCode.getVariableDeclarations().find(v => {
+  return v.declarations?.[0]?.id?.name === 'keyStore';
+});
+assert.exists(
+  variableDeclaration,
+  'A variable named `keyStore` should exist'
+);
+const memberExpression = variableDeclaration.declarations[0].init.callee;
+const {object, property} = memberExpression;
+assert.equal(object.name, 'keyStores');
+assert.equal(property.name, 'BrowserLocalStorageKeyStore');
 ```
 
 You should import `keyStores` from `near-api-js` in `client/wallet.js`.
 
 ```js
+const importDeclaration = babelisedCode.getImportDeclarations().find(i => {
+  return i.source?.value === 'near-api-js';
+});
+assert.exists(
+  importDeclaration,
+  'An import from `near-api-js` should exist'
+);
 
+const specifierNames = importDeclaration.specifiers?.map(s => {
+  return s?.local?.name;
+});
+assert.include(
+  specifierNames,
+  'keyStores',
+  'The `keyStores` module should be imported from `near-api-js`'
+);
+```
+
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/wallet.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 7
@@ -244,7 +285,7 @@ assert.exists(nodeUrl);
 
 ```js
 const file = await __helpers.getFile(join(project.dashedName,'client/wallet.js'));
-global.__babelised = await __helpers.babeliser(file);
+global.__babelised = await __helpers.Babeliser(file);
 ```
 
 ### --after-all--
@@ -434,7 +475,27 @@ At the bottom of your `client/wallet.js` file, create a `const contractId` varia
 You should have `const contractId = "<ACCOUNT_NAME>.testnet"` at the bottom of your `client/wallet.js` file.
 
 ```js
+// TODO
+const accountName = '';
+const expectedCodeString = `const contractId = "${accountName}.testnet"`;
+const babelisedCode = new __helpers.Babeliser(codeString);
+const actualCodeString = babelisedCode.generateCode(babelisedCode.parsedCode, { compact: true });
+assert.include(actualCodeString, expectedCodeString);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/wallet.js`
+);
+global.__codeString = codeString;
+```
+
+### --after-all--
+
+```js
+delete global.__codeString;
 ```
 
 ## 16
@@ -470,7 +531,24 @@ Export a class named `Wallet` from `client/wallet.js`.
 You should have `export class Wallet {}` in your `client/wallet.js` file.
 
 ```js
+const exportDeclaration = babelisedCode.getType("ExportNamedDeclaration").find(e => e.declaration?.id?.name === "Wallet");
+assert.exists(exportDeclaration);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/wallet.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 18
@@ -484,7 +562,27 @@ Add a `constructor` to the `Wallet` class.
 You should have a `constructor` in your `Wallet` class.
 
 ```js
+const classDeclaration = babelisedCode.getType("ClassDeclaration").find(c => c.id?.name === "Wallet");
+assert.exists(classDeclaration, `A class named Wallet should exist in the client/wallet.js file`);
 
+const classMethod = classDeclaration.body?.body?.find(b => b.key?.name === "constructor");
+assert.exists(classMethod, `A constructor should exist in the Wallet class`);
+```
+
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/wallet.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 19
@@ -505,6 +603,22 @@ You should import `WalletConnection` from `near-api-js`.
 
 ```js
 
+```
+
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/wallet.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 20
@@ -959,6 +1073,50 @@ You should have the app running on port `5173`.
 ## 51
 
 ### --description--
+
+Use the app to sign in to your wallet.
+
+### --tests--
+
+You should sign in to your wallet using the app.
+
+```js
+
+```
+
+## 52
+
+### --description--
+
+Signing in should create an access key for the app.
+Run `near keys <your_account>` to see the access key.
+
+### --tests--
+
+You should run `near keys <your_account>` in the terminal.
+
+```js
+
+```
+
+## 53
+
+### --description--
+
+Use the app to make at least one guess.
+
+### --tests--
+
+You should make at least one guess using the app.
+
+```js
+
+```
+
+## 54
+
+### --description--
+
 
 
 
