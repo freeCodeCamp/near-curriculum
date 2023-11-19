@@ -596,13 +596,34 @@ Within the `constructor`, initialize a `this.walletConnection` property. Set it 
 You should have `this.walletConnection = new WalletConnection(nearConnection, <UNIQUE_NAME>);` in your `Wallet` class.
 
 ```js
-
+const classMethod = babelisedCode.getType("ClassMethod").find(c => c.key?.name === "constructor");
+const expressionStatement = classMethod.body.body.find(b => b.expression?.left?.property?.name === "walletConnection");
+const newExpression = expressionStatement.expression.right;
+assert.equal(newExpression.callee.name, "WalletConnection");
+const [firstArg, secondArg] = newExpression.arguments;
+assert.equal(firstArg.name, "nearConnection");
+assert.equal(secondArg.type, "StringLiteral");
 ```
 
 You should import `WalletConnection` from `near-api-js`.
 
 ```js
+const importDeclaration = babelisedCode.getImportDeclarations().find(i => {
+  return i.source?.value === 'near-api-js';
+});
+assert.exists(
+  importDeclaration,
+  'An import from `near-api-js` should exist'
+);
 
+const specifierNames = importDeclaration.specifiers?.map(s => {
+  return s?.local?.name;
+});
+assert.include(
+  specifierNames,
+  'WalletConnection',
+  'The `WalletConnection` class should be imported from `near-api-js`'
+);
 ```
 
 ### --before-all--
@@ -632,13 +653,51 @@ Within the `constructor`, initialize a `this.contract` property. Set it to `new 
 You should have `this.contract = new Contract(contractAccount, contractId, {});` in your `Wallet` class.
 
 ```js
-
+const classMethod = babelisedCode.getType("ClassMethod").find(c => c.key?.name === "constructor");
+const expressionStatement = classMethod.body.body.find(b => b.expression?.left?.property?.name === "contract");
+const newExpression = expressionStatement.expression.right;
+assert.equal(newExpression.callee.name, "Contract");
+const [firstArg, secondArg, thirdArg] = newExpression.arguments;
+assert.equal(firstArg.name, "contractAccount");
+assert.equal(secondArg.name, "contractId");
+assert.equal(thirdArg.type, "ObjectExpression");
 ```
 
 You should import `Contract` from `near-api-js`.
 
 ```js
+const importDeclaration = babelisedCode.getImportDeclarations().find(i => {
+  return i.source?.value === 'near-api-js';
+});
+assert.exists(
+  importDeclaration,
+  'An import from `near-api-js` should exist'
+);
 
+const specifierNames = importDeclaration.specifiers?.map(s => {
+  return s?.local?.name;
+});
+assert.include(
+  specifierNames,
+  'Contract',
+  'The `Contract` class should be imported from `near-api-js`'
+);
+```
+
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/wallet.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 21
@@ -652,7 +711,36 @@ For the contract, allow the `viewHints`, `viewGuesses`, and `makeGuess` methods 
 You should have `this.contract = new Contract(contractAccount, contractId, { viewMethods: ['viewHints', 'viewGuesses'], changeMethods: ['makeGuess'] });` in your `Wallet` class.
 
 ```js
+const classMethod = babelisedCode.getType("ClassMethod").find(c => c.key?.name === "constructor");
+const expressionStatement = classMethod.body.body.find(b => b.expression?.left?.property?.name === "contract");
+const newExpression = expressionStatement.expression.right;
+const [firstArg, secondArg, thirdArg] = newExpression.arguments;
+const options = thirdArg.properties;
+const viewMethods = options.find(o => o.key.name === "viewMethods");
+const changeMethods = options.find(o => o.key.name === "changeMethods");
+assert.exists(viewMethods);
+assert.exists(changeMethods);
+const viewMethodsArray = viewMethods.value.elements;
+const changeMethodsArray = changeMethods.value.elements;
+assert.equal(viewMethodsArray[0].value, "viewHints");
+assert.equal(viewMethodsArray[1].value, "viewGuesses");
+assert.equal(changeMethodsArray[0].value, "makeGuess");
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/wallet.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 22
