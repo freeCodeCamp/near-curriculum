@@ -1,0 +1,22 @@
+{
+  "name": "learn-how-to-integrate-near-into-an-app",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build:word-guess": "near-sdk-js build contract/word-guess.js build/word-guess.wasm",
+    "build:client": "vite build client",
+    "dev": "vite client"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "buffer": "6.0.3",
+    "near-api-js": "2.1.4"
+  },
+  "devDependencies": {
+    "near-sdk-js": "1.0.0",
+    "ts-morph": "16.0.0",
+    "vite": "4.4.5"
+  }
+}
