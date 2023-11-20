@@ -14,7 +14,7 @@ You should use the change directory command (`cd`) in the terminal.
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
-let lastCommand = await __helpers.getLastCommand()
+let lastCommand = await __helpers.getLastCommand();
 lastCommand = lastCommand?.trim().replaceAll(/\s+/g, ' ');
 assert.match(lastCommand, /^\s*cd/);
 ```
@@ -40,7 +40,7 @@ You should run `npm install` in the terminal.
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
-let lastCommand = await __helpers.getLastCommand()
+let lastCommand = await __helpers.getLastCommand();
 lastCommand = lastCommand?.trim().replaceAll(/\s+/g, ' ');
 assert.match(lastCommand, /^npm\s+(i|install)$/);
 ```
@@ -77,12 +77,11 @@ Run `npm run build:word-guess` to build the word guessing game smart contract fr
 
 ### --tests--
 
-
 You should run `npm run build:word-guess` in the terminal.
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
-let lastCommand = await __helpers.getLastCommand()
+let lastCommand = await __helpers.getLastCommand();
 lastCommand = lastCommand?.trim().replaceAll(/\s+/g, ' ');
 assert.match(lastCommand, /^npm\s+run\s+build:word-guess$/);
 ```
@@ -91,7 +90,9 @@ You should have a `build/word-guess.wasm` file as a result of building the contr
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
-const fileExists = await __helpers.fileExists(`${project.dashedName}/build/word-guess.wasm`);
+const fileExists = await __helpers.fileExists(
+  `${project.dashedName}/build/word-guess.wasm`
+);
 assert.isTrue(fileExists);
 ```
 
@@ -100,9 +101,14 @@ The terminal should print `Generated build/word-guess.wasm contract successfully
 ```js
 await new Promise(res => setTimeout(res, 1000));
 const output = await __helpers.getTerminalOutput();
-const splitOutput = output?.replaceAll(/\s+/g, ' ').split('Doing account.functionCall()');
+const splitOutput = output
+  ?.replaceAll(/\s+/g, ' ')
+  .split('Doing account.functionCall()');
 const lastOutput = splitOutput[splitOutput.length - 1];
-assert.match(lastOutput, /Generated build\/word-guess\.wasm contract successfully!\s*$/);
+assert.match(
+  lastOutput,
+  /Generated build\/word-guess\.wasm contract successfully!\s*$/
+);
 ```
 
 ## 4
@@ -117,7 +123,7 @@ You should run `near dev-deploy build/word-guess.wasm` in the terminal.
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
-let lastCommand = await __helpers.getLastCommand()
+let lastCommand = await __helpers.getLastCommand();
 lastCommand = lastCommand?.trim().replaceAll(/\s+/g, ' ');
 assert.match(lastCommand, /near\s+dev-deploy\s+build\/word-guess\.wasm/);
 ```
@@ -126,7 +132,7 @@ You should have a `neardev` folder as a result of deploying the contract.
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
-const learnDir = await __helpers.getDirectory(project.dashedName)
+const learnDir = await __helpers.getDirectory(project.dashedName);
 assert.include(learnDir, 'neardev');
 ```
 
@@ -136,7 +142,9 @@ The terminal output should include `Done deploying to <contract_name>`, where th
 await new Promise(res => setTimeout(res, 1000));
 const id = await __helpers.getFile(`${project.dashedName}/neardev/dev-account`);
 const output = await __helpers.getTerminalOutput();
-const splitOutput = output?.replaceAll(/\s+/g, ' ').split('near dev-deploy build/word-guess.wasm');
+const splitOutput = output
+  ?.replaceAll(/\s+/g, ' ')
+  .split('near dev-deploy build/word-guess.wasm');
 const lastOutput = splitOutput[splitOutput.length - 1];
 const re = new RegExp(`Done deploying to ${id}\\s*$`);
 assert.match(lastOutput, re);
@@ -154,7 +162,10 @@ You should create a `client/wallet.js` file.
 
 ```js
 const { access, constants } = await import('fs.promises');
-const fileExists = await access(`${project.dashedName}/client/wallet.js`, constants.F_OK)
+const fileExists = await access(
+  `${project.dashedName}/client/wallet.js`,
+  constants.F_OK
+);
 assert.isTrue(fileExists);
 ```
 
@@ -176,12 +187,9 @@ You should have `const keyStore = new keyStores.BrowserLocalStorageKeyStore();` 
 const variableDeclaration = babelisedCode.getVariableDeclarations().find(v => {
   return v.declarations?.[0]?.id?.name === 'keyStore';
 });
-assert.exists(
-  variableDeclaration,
-  'A variable named `keyStore` should exist'
-);
+assert.exists(variableDeclaration, 'A variable named `keyStore` should exist');
 const memberExpression = variableDeclaration.declarations[0].init.callee;
-const {object, property} = memberExpression;
+const { object, property } = memberExpression;
 assert.equal(object.name, 'keyStores');
 assert.equal(property.name, 'BrowserLocalStorageKeyStore');
 ```
@@ -192,10 +200,7 @@ You should import `keyStores` from `near-api-js` in `client/wallet.js`.
 const importDeclaration = babelisedCode.getImportDeclarations().find(i => {
   return i.source?.value === 'near-api-js';
 });
-assert.exists(
-  importDeclaration,
-  'An import from `near-api-js` should exist'
-);
+assert.exists(importDeclaration, 'An import from `near-api-js` should exist');
 
 const specifierNames = importDeclaration.specifiers?.map(s => {
   return s?.local?.name;
@@ -235,9 +240,13 @@ You should have `const connectionConfig = {}` at the bottom of your `wallet.js` 
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
-const code = await __helpers.getFile(join(project.dashedName,'client/wallet.js'));
+const code = await __helpers.getFile(
+  join(project.dashedName, 'client/wallet.js')
+);
 const babelised = await __helpers.babeliser(code);
-const testCode = babelised.getVariableDeclarations().find(v => v.declarations?.[0]?.id?.name === 'connectionConfig');
+const testCode = babelised
+  .getVariableDeclarations()
+  .find(v => v.declarations?.[0]?.id?.name === 'connectionConfig');
 const recreatedCode = babelised?.generateCode(testCode, { compact: true });
 assert.match(recreatedCode, /const connectionConfig={};/);
 ```
@@ -256,18 +265,26 @@ You should have `networkId: "testnet"` in your `connectionConfig` object.
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
-const testCode = __babelised.getVariableDeclarations().find(v => v.declarations?.[0]?.id?.name === 'connectionConfig');
+const testCode = __babelised
+  .getVariableDeclarations()
+  .find(v => v.declarations?.[0]?.id?.name === 'connectionConfig');
 const props = testCode?.declarations?.[0]?.init?.properties;
-const networkId = props.find(p => p.key.name === 'networkId' && p.value?.value === 'testnet');
+const networkId = props.find(
+  p => p.key.name === 'networkId' && p.value?.value === 'testnet'
+);
 assert.exists(networkId);
 ```
 
 You should have `keyStore` in your `connectionConfig` object.
 
 ```js
-const testCode = __babelised.getVariableDeclarations().find(v => v.declarations?.[0]?.id?.name === 'connectionConfig');
+const testCode = __babelised
+  .getVariableDeclarations()
+  .find(v => v.declarations?.[0]?.id?.name === 'connectionConfig');
 const props = testCode?.declarations?.[0]?.init?.properties;
-const keyStore = props.find(p => p.key.name === 'keyStore' && p.value?.name === 'keyStore');
+const keyStore = props.find(
+  p => p.key.name === 'keyStore' && p.value?.name === 'keyStore'
+);
 assert.exists(keyStore);
 ```
 
@@ -275,16 +292,24 @@ You should have `nodeUrl: "https://rpc.testnet.near.org"` in your `connectionCon
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
-const testCode = __babelised.getVariableDeclarations().find(v => v.declarations?.[0]?.id?.name === 'connectionConfig');
+const testCode = __babelised
+  .getVariableDeclarations()
+  .find(v => v.declarations?.[0]?.id?.name === 'connectionConfig');
 const props = testCode?.declarations?.[0]?.init?.properties;
-const nodeUrl = props.find(p => p.key.name === 'nodeUrl' && p.value?.value === 'https://rpc.testnet.near.org');
+const nodeUrl = props.find(
+  p =>
+    p.key.name === 'nodeUrl' &&
+    p.value?.value === 'https://rpc.testnet.near.org'
+);
 assert.exists(nodeUrl);
 ```
 
 ### --before-all--
 
 ```js
-const file = await __helpers.getFile(join(project.dashedName,'client/wallet.js'));
+const file = await __helpers.getFile(
+  join(project.dashedName, 'client/wallet.js')
+);
 global.__babelised = await __helpers.Babeliser(file);
 ```
 
@@ -310,7 +335,9 @@ const code = await __helpers.getFile(
   join(project.dashedName, 'client/wallet.js')
 );
 const babelised = await __helpers.babeliser(code);
-const imports = babelised?.getImportDeclarations().find(i => i.source?.value === 'near-api-js');
+const imports = babelised
+  ?.getImportDeclarations()
+  .find(i => i.source?.value === 'near-api-js');
 const method = imports?.specifiers?.find(s => s.local?.name === 'connect');
 assert.exists(method);
 ```
@@ -329,9 +356,14 @@ You should have `const nearConnection = await connect(connectionConfig);` at the
 const projectLoc = join(project.dashedName, 'client/wallet.js');
 const code = await __helpers.getFile(projectLoc);
 const babelised = await __helpers.babeliser(code);
-const testCode = babelised.getVariableDeclarations().find(v => v.declarations?.[0]?.id?.name === 'nearConnection');
+const testCode = babelised
+  .getVariableDeclarations()
+  .find(v => v.declarations?.[0]?.id?.name === 'nearConnection');
 const recreatedCode = babelised?.generateCode(testCode, { compact: true });
-assert.match(recreatedCode, /const nearConnection=await connect\(connectionConfig\);/);
+assert.match(
+  recreatedCode,
+  /const nearConnection=await connect\(connectionConfig\);/
+);
 ```
 
 ## 11
@@ -359,7 +391,10 @@ Running `near state <your_account>` should print your account information.
 await new Promise(res => setTimeout(res, 1000));
 const dir = await __helpers.getDirectory(project.dashedName);
 const file = dir.find(file => file.endsWith('.testnet'));
-const output = await __helpers.getCommandOutput(`NEAR_ENV=testnet near state ${file}`, project.dashedName);
+const output = await __helpers.getCommandOutput(
+  `NEAR_ENV=testnet near state ${file}`,
+  project.dashedName
+);
 const re = new RegExp(`Account\\s+${file}\\s*{\\s*amount`, 'g');
 assert.match(output?.stdout, re);
 ```
@@ -385,7 +420,7 @@ You should run `npm run build:word-guess` in the terminal.
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
-let lastCommand = await __helpers.getLastCommand()
+let lastCommand = await __helpers.getLastCommand();
 lastCommand = lastCommand?.trim().replaceAll(/\s+/g, ' ');
 assert.match(lastCommand, /^npm\s+run\s+build:word-guess$/);
 ```
@@ -394,7 +429,9 @@ You should have a `build/word-guess.wasm` file as a result of building the contr
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
-const fileExists = await __helpers.fileExists(join(project.dashedName, '/build/word-guess.wasm'));
+const fileExists = await __helpers.fileExists(
+  join(project.dashedName, '/build/word-guess.wasm')
+);
 assert.isTrue(fileExists);
 ```
 
@@ -403,9 +440,14 @@ The terminal should print `Generated build/word-guess.wasm contract successfully
 ```js
 await new Promise(res => setTimeout(res, 1000));
 const output = await __helpers.getTerminalOutput();
-const splitOutput = output?.replaceAll(/\s+/g, ' ').split('Doing account.functionCall()');
+const splitOutput = output
+  ?.replaceAll(/\s+/g, ' ')
+  .split('Doing account.functionCall()');
 const lastOutput = splitOutput[splitOutput.length - 1];
-assert.match(lastOutput, /Generated build\/word-guess\.wasm contract successfully!\s*$/);
+assert.match(
+  lastOutput,
+  /Generated build\/word-guess\.wasm contract successfully!\s*$/
+);
 ```
 
 ## 13
@@ -420,7 +462,7 @@ You should run `node deploy-contract.js` in the terminal.
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
-let lastCommand = await __helpers.getLastCommand()
+let lastCommand = await __helpers.getLastCommand();
 lastCommand = lastCommand?.trim().replaceAll(/\s+/g, ' ');
 const re = new RegExp(`^\\s*node deploy-contract\.js\\s*$`, 'g');
 assert.match(lastCommand, re);
@@ -431,7 +473,9 @@ The terminal should print that the deployment was successful.
 ```js
 await new Promise(res => setTimeout(res, 1000));
 const output = await __helpers.getTerminalOutput();
-const splitOutput = output?.replaceAll(/\s+/g, ' ').split('node deploy-contract.js');
+const splitOutput = output
+  ?.replaceAll(/\s+/g, ' ')
+  .split('node deploy-contract.js');
 const lastOutput = splitOutput[splitOutput.length - 1];
 assert.match(lastOutput, /{\s*receipts_outcome/);
 ```
@@ -448,7 +492,7 @@ You should run `node init-contract.js` in the terminal.
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
-let lastCommand = await __helpers.getLastCommand()
+let lastCommand = await __helpers.getLastCommand();
 lastCommand = lastCommand?.trim().replaceAll(/\s+/g, ' ');
 const re = new RegExp(`^\\s*node init-contract\.js\\s*$`, 'g');
 assert.match(lastCommand, re);
@@ -459,7 +503,9 @@ The terminal should print that the contract was initialized.
 ```js
 await new Promise(res => setTimeout(res, 1000));
 const output = await __helpers.getTerminalOutput();
-const splitOutput = output?.replaceAll(/\s+/g, ' ').split('node init-contract.js');
+const splitOutput = output
+  ?.replaceAll(/\s+/g, ' ')
+  .split('node init-contract.js');
 const lastOutput = splitOutput[splitOutput.length - 1];
 assert.match(lastOutput, /The secret word has been set/);
 ```
@@ -479,7 +525,9 @@ You should have `const contractId = "<ACCOUNT_NAME>.testnet"` at the bottom of y
 const accountName = '';
 const expectedCodeString = `const contractId = "${accountName}.testnet"`;
 const babelisedCode = new __helpers.Babeliser(codeString);
-const actualCodeString = babelisedCode.generateCode(babelisedCode.parsedCode, { compact: true });
+const actualCodeString = babelisedCode.generateCode(babelisedCode.parsedCode, {
+  compact: true
+});
 assert.include(actualCodeString, expectedCodeString);
 ```
 
@@ -509,12 +557,19 @@ Create a `const contractAccount` variable, and set the value to await `nearConne
 You should have `const contractAccount = await nearConnection.account("<ACCOUNT_NAME>");` at the bottom of your `client/wallet.js` file
 
 ```js
-const codeString = await __helpers.getFile(join(project.dashedName,'client/wallet.js'));
+const codeString = await __helpers.getFile(
+  join(project.dashedName, 'client/wallet.js')
+);
 const babelisedCode = await __helpers.babeliser(code);
-const variableDeclaration = babelised.getVariableDeclarations().find(v => v.declarations?.[0]?.id?.name === 'contractAccount');
+const variableDeclaration = babelised
+  .getVariableDeclarations()
+  .find(v => v.declarations?.[0]?.id?.name === 'contractAccount');
 const generatedCode = babelisedCode.generateCode(testCode, { compact: true });
 const rebabelisedCode = new __helpers.Babeliser(generatedCode);
-const actualCodeString = rebabelisedCode.generateCode(rebabelisedCode.parsedCode, { compact: true });
+const actualCodeString = rebabelisedCode.generateCode(
+  rebabelisedCode.parsedCode,
+  { compact: true }
+);
 
 const expectedCodeString = `const contractAccount=await nearConnection.account(`;
 assert.include(actualCodeString, expectedCodeString);
@@ -531,7 +586,9 @@ Export a class named `Wallet` from `client/wallet.js`.
 You should have `export class Wallet {}` in your `client/wallet.js` file.
 
 ```js
-const exportDeclaration = babelisedCode.getType("ExportNamedDeclaration").find(e => e.declaration?.id?.name === "Wallet");
+const exportDeclaration = babelisedCode
+  .getType('ExportNamedDeclaration')
+  .find(e => e.declaration?.id?.name === 'Wallet');
 assert.exists(exportDeclaration);
 ```
 
@@ -562,10 +619,17 @@ Add a `constructor` to the `Wallet` class.
 You should have a `constructor` in your `Wallet` class.
 
 ```js
-const classDeclaration = babelisedCode.getType("ClassDeclaration").find(c => c.id?.name === "Wallet");
-assert.exists(classDeclaration, `A class named Wallet should exist in the client/wallet.js file`);
+const classDeclaration = babelisedCode
+  .getType('ClassDeclaration')
+  .find(c => c.id?.name === 'Wallet');
+assert.exists(
+  classDeclaration,
+  `A class named Wallet should exist in the client/wallet.js file`
+);
 
-const classMethod = classDeclaration.body?.body?.find(b => b.key?.name === "constructor");
+const classMethod = classDeclaration.body?.body?.find(
+  b => b.key?.name === 'constructor'
+);
 assert.exists(classMethod, `A constructor should exist in the Wallet class`);
 ```
 
@@ -596,13 +660,17 @@ Within the `constructor`, initialize a `this.walletConnection` property. Set it 
 You should have `this.walletConnection = new WalletConnection(nearConnection, <UNIQUE_NAME>);` in your `Wallet` class.
 
 ```js
-const classMethod = babelisedCode.getType("ClassMethod").find(c => c.key?.name === "constructor");
-const expressionStatement = classMethod.body.body.find(b => b.expression?.left?.property?.name === "walletConnection");
+const classMethod = babelisedCode
+  .getType('ClassMethod')
+  .find(c => c.key?.name === 'constructor');
+const expressionStatement = classMethod.body.body.find(
+  b => b.expression?.left?.property?.name === 'walletConnection'
+);
 const newExpression = expressionStatement.expression.right;
-assert.equal(newExpression.callee.name, "WalletConnection");
+assert.equal(newExpression.callee.name, 'WalletConnection');
 const [firstArg, secondArg] = newExpression.arguments;
-assert.equal(firstArg.name, "nearConnection");
-assert.equal(secondArg.type, "StringLiteral");
+assert.equal(firstArg.name, 'nearConnection');
+assert.equal(secondArg.type, 'StringLiteral');
 ```
 
 You should import `WalletConnection` from `near-api-js`.
@@ -611,10 +679,7 @@ You should import `WalletConnection` from `near-api-js`.
 const importDeclaration = babelisedCode.getImportDeclarations().find(i => {
   return i.source?.value === 'near-api-js';
 });
-assert.exists(
-  importDeclaration,
-  'An import from `near-api-js` should exist'
-);
+assert.exists(importDeclaration, 'An import from `near-api-js` should exist');
 
 const specifierNames = importDeclaration.specifiers?.map(s => {
   return s?.local?.name;
@@ -653,14 +718,18 @@ Within the `constructor`, initialize a `this.contract` property. Set it to `new 
 You should have `this.contract = new Contract(contractAccount, contractId, {});` in your `Wallet` class.
 
 ```js
-const classMethod = babelisedCode.getType("ClassMethod").find(c => c.key?.name === "constructor");
-const expressionStatement = classMethod.body.body.find(b => b.expression?.left?.property?.name === "contract");
+const classMethod = babelisedCode
+  .getType('ClassMethod')
+  .find(c => c.key?.name === 'constructor');
+const expressionStatement = classMethod.body.body.find(
+  b => b.expression?.left?.property?.name === 'contract'
+);
 const newExpression = expressionStatement.expression.right;
-assert.equal(newExpression.callee.name, "Contract");
+assert.equal(newExpression.callee.name, 'Contract');
 const [firstArg, secondArg, thirdArg] = newExpression.arguments;
-assert.equal(firstArg.name, "contractAccount");
-assert.equal(secondArg.name, "contractId");
-assert.equal(thirdArg.type, "ObjectExpression");
+assert.equal(firstArg.name, 'contractAccount');
+assert.equal(secondArg.name, 'contractId');
+assert.equal(thirdArg.type, 'ObjectExpression');
 ```
 
 You should import `Contract` from `near-api-js`.
@@ -669,10 +738,7 @@ You should import `Contract` from `near-api-js`.
 const importDeclaration = babelisedCode.getImportDeclarations().find(i => {
   return i.source?.value === 'near-api-js';
 });
-assert.exists(
-  importDeclaration,
-  'An import from `near-api-js` should exist'
-);
+assert.exists(importDeclaration, 'An import from `near-api-js` should exist');
 
 const specifierNames = importDeclaration.specifiers?.map(s => {
   return s?.local?.name;
@@ -711,20 +777,24 @@ For the contract, allow the `viewHints`, `viewGuesses`, and `makeGuess` methods 
 You should have `this.contract = new Contract(contractAccount, contractId, { viewMethods: ['viewHints', 'viewGuesses'], changeMethods: ['makeGuess'] });` in your `Wallet` class.
 
 ```js
-const classMethod = babelisedCode.getType("ClassMethod").find(c => c.key?.name === "constructor");
-const expressionStatement = classMethod.body.body.find(b => b.expression?.left?.property?.name === "contract");
+const classMethod = babelisedCode
+  .getType('ClassMethod')
+  .find(c => c.key?.name === 'constructor');
+const expressionStatement = classMethod.body.body.find(
+  b => b.expression?.left?.property?.name === 'contract'
+);
 const newExpression = expressionStatement.expression.right;
 const [firstArg, secondArg, thirdArg] = newExpression.arguments;
 const options = thirdArg.properties;
-const viewMethods = options.find(o => o.key.name === "viewMethods");
-const changeMethods = options.find(o => o.key.name === "changeMethods");
+const viewMethods = options.find(o => o.key.name === 'viewMethods');
+const changeMethods = options.find(o => o.key.name === 'changeMethods');
 assert.exists(viewMethods);
 assert.exists(changeMethods);
 const viewMethodsArray = viewMethods.value.elements;
 const changeMethodsArray = changeMethods.value.elements;
-assert.equal(viewMethodsArray[0].value, "viewHints");
-assert.equal(viewMethodsArray[1].value, "viewGuesses");
-assert.equal(changeMethodsArray[0].value, "makeGuess");
+assert.equal(viewMethodsArray[0].value, 'viewHints');
+assert.equal(viewMethodsArray[1].value, 'viewGuesses');
+assert.equal(changeMethodsArray[0].value, 'makeGuess');
 ```
 
 ### --before-all--
@@ -754,7 +824,30 @@ Add an asynchronous method to your `Wallet` class named `call`.
 You should have an asynchronous `call` method in your `Wallet` class.
 
 ```js
+const classMethod = babelisedCode
+  .getType('ClassMethod')
+  .find(c => c.key?.name === 'call');
+assert.exists(
+  classMethod,
+  `A method named call should exist in the Wallet class`
+);
+assert.equal(classMethod.async, true, `The call method should be asynchronous`);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/wallet.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 23
@@ -768,7 +861,37 @@ The `call` method should expect a parameter of `{method, args}`. Default the `ar
 You should have `async call({method, args = {}}) {}` in your `Wallet` class.
 
 ```js
+const classMethod = babelisedCode
+  .getType('ClassMethod')
+  .find(c => c.key?.name === 'call');
+const params = classMethod.params;
+assert.lengthOf(params, 1);
+const [firstParam] = params;
+assert.equal(firstParam.type, 'ObjectPattern');
+const { properties } = firstParam;
+assert.lengthOf(properties, 2);
+const method = properties.find(p => p.key.name === 'method');
+const args = properties.find(p => p.key.name === 'args');
+assert.exists(method);
+assert.exists(args);
+assert.equal(args.value.type, 'AssignmentPattern');
+assert.equal(args.value.right.type, 'ObjectExpression');
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/wallet.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 24
@@ -779,10 +902,34 @@ Within the `call` method, create a `const response` variable. Set it to `await t
 
 ### --tests--
 
-You should have `const response = await this.contract[method](args);` in your `call` method.
+You should have `const response = await this.contract[method](args)` in your `call` method.
 
 ```js
+const classMethod = babelisedCode
+  .getType('ClassMethod')
+  .find(c => c.key?.name === 'call');
+const blockStatement = classMethod.body;
+const actualCodeString = babelisedCode.generateCode(body, {
+  compact: true
+});
+const expectedCodeString = `const response=await this.contract[method](args)`;
+assert.include(actualCodeString, expectedCodeString);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/wallet.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 25
@@ -796,7 +943,31 @@ Within the `call` method, return the `response`.
 You should have `return response;` in your `call` method.
 
 ```js
+const classMethod = babelisedCode
+  .getType('ClassMethod')
+  .find(c => c.key?.name === 'call');
+const blockStatement = classMethod.body;
+const actualCodeString = babelisedCode.generateCode(body, {
+  compact: true
+});
+const expectedCodeString = `return response`;
+assert.include(actualCodeString, expectedCodeString);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/wallet.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 26
@@ -812,7 +983,29 @@ Add a `signIn` method to your `Wallet` class.
 You should have a `signIn` method in your `Wallet` class.
 
 ```js
+const classMethod = babelisedCode
+  .getType('ClassMethod')
+  .find(c => c.key?.name === 'signIn');
+assert.exists(
+  classMethod,
+  `A method named signIn should exist in the Wallet class`
+);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/wallet.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 27
@@ -826,7 +1019,31 @@ Within the `signIn` method, call the `requestSignIn` method on `this.walletConne
 You should have `this.walletConnection.requestSignIn();` in your `signIn` method.
 
 ```js
+const classMethod = babelisedCode
+  .getType('ClassMethod')
+  .find(c => c.key?.name === 'signIn');
+const blockStatement = classMethod.body;
+const actualCodeString = babelisedCode.generateCode(body, {
+  compact: true
+});
+const expectedCodeString = `this.walletConnection.requestSignIn()`;
+assert.include(actualCodeString, expectedCodeString);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/wallet.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 28
@@ -842,7 +1059,31 @@ Pass `{contractId}` to the `requestSignIn` method.
 You should have `this.walletConnection.requestSignIn({contractId});` in your `signIn` method.
 
 ```js
+const classMethod = babelisedCode
+  .getType('ClassMethod')
+  .find(c => c.key?.name === 'signIn');
+const blockStatement = classMethod.body;
+const actualCodeString = babelisedCode.generateCode(body, {
+  compact: true
+});
+const expectedCodeString = `this.walletConnection.requestSignIn({contractId})`;
+assert.include(actualCodeString, expectedCodeString);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/wallet.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 29
@@ -858,7 +1099,29 @@ Add a `signOut` method to your `Wallet` class.
 You should have a `signOut` method in your `Wallet` class.
 
 ```js
+const classMethod = babelisedCode
+  .getType('ClassMethod')
+  .find(c => c.key?.name === 'signOut');
+assert.exists(
+  classMethod,
+  `A method named signOut should exist in the Wallet class`
+);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/wallet.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 30
@@ -872,13 +1135,36 @@ Within the `signOut` method, call the `signOut` method on `this.walletConnection
 You should have `this.walletConnection.signOut();` in your `signOut` method.
 
 ```js
+const classMethod = babelisedCode
+  .getType('ClassMethod')
+  .find(c => c.key?.name === 'signOut');
+const blockStatement = classMethod.body;
+const actualCodeString = babelisedCode.generateCode(body, {
+  compact: true
+});
+const expectedCodeString = `this.walletConnection.signOut()`;
+assert.include(actualCodeString, expectedCodeString);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/wallet.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 31
 
 ### --description--
-
 
 Your `Wallet` class is finished. Now, use it in the `client/main.js` file.
 
@@ -889,7 +1175,35 @@ Start by importing it at the top of the `client/main.js` file.
 You should have `import { Wallet } from './wallet.js';` at the top of your `client/main.js` file.
 
 ```js
+const importDeclaration = babelisedCode.getImportDeclarations().find(i => {
+  return i.source?.value === './wallet.js';
+});
+assert.exists(importDeclaration, 'An import from `./wallet.js` should exist');
 
+const specifierNames = importDeclaration.specifiers?.map(s => {
+  return s?.local?.name;
+});
+assert.include(
+  specifierNames,
+  'Wallet',
+  'The `Wallet` class should be imported from `./wallet.js`'
+);
+```
+
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/main.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 32
@@ -903,7 +1217,28 @@ Create a `const wallet` variable. Set it to a new instance of your `Wallet` clas
 You should have `const wallet = new Wallet();` in your `client/main.js` file.
 
 ```js
+const variableDeclaration = babelisedCode.getVariableDeclarations().find(v => {
+  return v.declarations?.[0]?.id?.name === 'wallet';
+});
+assert.exists(variableDeclaration, 'A variable named `wallet` should exist');
+const newExpression = variableDeclaration.declarations[0].init;
+assert.equal(newExpression.callee.name, 'Wallet');
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/main.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 33
@@ -917,7 +1252,35 @@ Within the `window.onload` function, replace the `isSignedIn` value with the res
 You should have `const isSignedIn = wallet.walletConnection.isSignedIn();` in your `client/main.js` file.
 
 ```js
+const callExpression = babelisedCode
+  .getType('CallExpression')
+  .find(
+    c =>
+      c.callee?.object?.name === 'window' &&
+      c.callee?.property?.name === 'onload'
+  );
+const body = callExpression.arguments[0].body;
+const actualCodeString = babelisedCode.generateCode(body, {
+  compact: true
+});
+const expectedCodeString = `const isSignedIn=wallet.walletConnection.isSignedIn()`;
+assert.include(actualCodeString, expectedCodeString);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/main.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 34
@@ -931,7 +1294,35 @@ Within the `connectWalletBtn` click event listener callback, replace the `isSign
 You should have `const isSignedIn = wallet.walletConnection.isSignedIn();` in your `client/main.js` file.
 
 ```js
+const callExpression = babelisedCode
+  .getType('CallExpression')
+  .find(
+    c =>
+      c.callee?.object?.name === 'connectWalletBtn' &&
+      c.callee?.property?.name === 'addEventListener'
+  );
+const body = callExpression.arguments[1].body;
+const actualCodeString = babelisedCode.generateCode(body, {
+  compact: true
+});
+const expectedCodeString = `const isSignedIn=wallet.walletConnection.isSignedIn()`;
+assert.include(actualCodeString, expectedCodeString);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/main.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 35
@@ -945,7 +1336,35 @@ Within the `connectWalletBtn` click event listener callback, if the wallet is si
 You should have `wallet.signOut();` in your `client/main.js` file.
 
 ```js
+const callExpression = babelisedCode
+  .getType('CallExpression')
+  .find(
+    c =>
+      c.callee?.object?.name === 'connectWalletBtn' &&
+      c.callee?.property?.name === 'addEventListener'
+  );
+const body = callExpression.arguments[1].body;
+const actualCodeString = babelisedCode.generateCode(body, {
+  compact: true
+});
+const expectedCodeString = `wallet.signOut()`;
+assert.include(actualCodeString, expectedCodeString);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/main.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 36
@@ -959,7 +1378,35 @@ Within the `connectWalletBtn` click event listener callback, if the wallet is no
 You should have `wallet.signIn();` in your `client/main.js` file.
 
 ```js
+const callExpression = babelisedCode
+  .getType('CallExpression')
+  .find(
+    c =>
+      c.callee?.object?.name === 'connectWalletBtn' &&
+      c.callee?.property?.name === 'addEventListener'
+  );
+const body = callExpression.arguments[1].body;
+const actualCodeString = babelisedCode.generateCode(body, {
+  compact: true
+});
+const expectedCodeString = `wallet.signIn()`;
+assert.include(actualCodeString, expectedCodeString);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/main.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 37
@@ -973,7 +1420,34 @@ At the bottom of the `client/main.js` file, declare an asynchronous function nam
 You should have an asynchronous `viewHints` function at the bottom of your `client/main.js` file.
 
 ```js
+const functionDeclaration = babelisedCode
+  .getType('FunctionDeclaration')
+  .find(f => f.id?.name === 'viewHints');
+assert.exists(
+  functionDeclaration,
+  `A function named viewHints should exist in the client/main.js file`
+);
+assert.equal(
+  functionDeclaration.async,
+  true,
+  `The viewHints function should be asynchronous`
+);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/main.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 38
@@ -987,7 +1461,31 @@ Within the `viewHints` function, create a `const hints` variable, and assign it 
 You should have `const hints = await wallet.call({ method: 'viewHints' });` in your `viewHints` function.
 
 ```js
+const functionDeclaration = babelisedCode
+  .getType('FunctionDeclaration')
+  .find(f => f.id?.name === 'viewHints');
+const body = functionDeclaration.body;
+const actualCodeString = babelisedCode.generateCode(body, {
+  compact: true
+});
+const expectedCodeString = `const hints=await wallet.call({method:'viewHints'})`;
+assert.include(actualCodeString, expectedCodeString);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/main.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 39
@@ -1001,7 +1499,31 @@ Within the `viewHints` function, return the hints.
 You should have `return hints;` in your `viewHints` function.
 
 ```js
+const functionDeclaration = babelisedCode
+  .getType('FunctionDeclaration')
+  .find(f => f.id?.name === 'viewHints');
+const body = functionDeclaration.body;
+const actualCodeString = babelisedCode.generateCode(body, {
+  compact: true
+});
+const expectedCodeString = `return hints`;
+assert.include(actualCodeString, expectedCodeString);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/main.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 40
@@ -1015,7 +1537,34 @@ At the bottom of the `client/main.js` file, declare an asynchronous function nam
 You should have an asynchronous `viewGuesses` function at the bottom of your `client/main.js` file.
 
 ```js
+const functionDeclaration = babelisedCode
+  .getType('FunctionDeclaration')
+  .find(f => f.id?.name === 'viewGuesses');
+assert.exists(
+  functionDeclaration,
+  `A function named viewGuesses should exist in the client/main.js file`
+);
+assert.equal(
+  functionDeclaration.async,
+  true,
+  `The viewGuesses function should be asynchronous`
+);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/main.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 41
@@ -1029,7 +1578,31 @@ Within the `viewGuesses` function, create a `const guesses` variable, and assign
 You should have `const guesses = await wallet.call({ method: 'viewGuesses' });` in your `viewGuesses` function.
 
 ```js
+const functionDeclaration = babelisedCode
+  .getType('FunctionDeclaration')
+  .find(f => f.id?.name === 'viewGuesses');
+const body = functionDeclaration.body;
+const actualCodeString = babelisedCode.generateCode(body, {
+  compact: true
+});
+const expectedCodeString = `const guesses=await wallet.call({method:'viewGuesses'})`;
+assert.include(actualCodeString, expectedCodeString);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/main.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 42
@@ -1043,7 +1616,31 @@ Within the `viewGuesses` function, return the guesses.
 You should have `return guesses;` in your `viewGuesses` function.
 
 ```js
+const functionDeclaration = babelisedCode
+  .getType('FunctionDeclaration')
+  .find(f => f.id?.name === 'viewGuesses');
+const body = functionDeclaration.body;
+const actualCodeString = babelisedCode.generateCode(body, {
+  compact: true
+});
+const expectedCodeString = `return guesses`;
+assert.include(actualCodeString, expectedCodeString);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/main.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 43
@@ -1057,7 +1654,34 @@ At the bottom of the `client/main.js` file, declare an asynchronous function nam
 You should have an asynchronous `makeGuess` function at the bottom of your `client/main.js` file.
 
 ```js
+const functionDeclaration = babelisedCode
+  .getType('FunctionDeclaration')
+  .find(f => f.id?.name === 'makeGuess');
+assert.exists(
+  functionDeclaration,
+  `A function named makeGuess should exist in the client/main.js file`
+);
+assert.equal(
+  functionDeclaration.async,
+  true,
+  `The makeGuess function should be asynchronous`
+);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/main.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 44
@@ -1071,7 +1695,29 @@ Set the `makeGuess` function to have a parameter named `guess`.
 You should have `async makeGuess(guess) {}` in your `client/main.js` file.
 
 ```js
+const functionDeclaration = babelisedCode
+  .getType('FunctionDeclaration')
+  .find(f => f.id?.name === 'makeGuess');
+const params = functionDeclaration.params;
+assert.lengthOf(params, 1);
+const [firstParam] = params;
+assert.equal(firstParam.name, 'guess');
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/main.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 45
@@ -1085,7 +1731,31 @@ Within the `makeGuess` function, create a `const resp` variable, and assign it t
 You should have `const resp = await wallet.call({ method: 'makeGuess', args: { guess } });` in your `makeGuess` function.
 
 ```js
+const functionDeclaration = babelisedCode
+  .getType('FunctionDeclaration')
+  .find(f => f.id?.name === 'makeGuess');
+const body = functionDeclaration.body;
+const actualCodeString = babelisedCode.generateCode(body, {
+  compact: true
+});
+const expectedCodeString = `const resp=await wallet.call({method:'makeGuess',args:{guess}})`;
+assert.include(actualCodeString, expectedCodeString);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/main.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 46
@@ -1099,7 +1769,31 @@ Within the `makeGuess` function, return the response.
 You should have `return resp;` in your `makeGuess` function.
 
 ```js
+const functionDeclaration = babelisedCode
+  .getType('FunctionDeclaration')
+  .find(f => f.id?.name === 'makeGuess');
+const body = functionDeclaration.body;
+const actualCodeString = babelisedCode.generateCode(body, {
+  compact: true
+});
+const expectedCodeString = `return resp`;
+assert.include(actualCodeString, expectedCodeString);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/main.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 47
@@ -1113,7 +1807,35 @@ Within the `window.onload` function, replace the `guesses` value with the result
 You should have `const guesses = await viewGuesses();` in your `client/main.js` file.
 
 ```js
+const callExpression = babelisedCode
+  .getType('CallExpression')
+  .find(
+    c =>
+      c.callee?.object?.name === 'window' &&
+      c.callee?.property?.name === 'onload'
+  );
+const body = callExpression.arguments[0].body;
+const actualCodeString = babelisedCode.generateCode(body, {
+  compact: true
+});
+const expectedCodeString = `const guesses=await viewGuesses()`;
+assert.include(actualCodeString, expectedCodeString);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/main.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 48
@@ -1127,7 +1849,35 @@ Within the `guessBtn` click event listener callback, replace the `resp` value wi
 You should have `const resp = await makeGuess(guess);` in your `client/main.js` file.
 
 ```js
+const callExpression = babelisedCode
+  .getType('CallExpression')
+  .find(
+    c =>
+      c.callee?.object?.name === 'guessBtn' &&
+      c.callee?.property?.name === 'addEventListener'
+  );
+const body = callExpression.arguments[1].body;
+const actualCodeString = babelisedCode.generateCode(body, {
+  compact: true
+});
+const expectedCodeString = `const resp=await makeGuess(guess)`;
+assert.include(actualCodeString, expectedCodeString);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/main.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 49
@@ -1141,7 +1891,35 @@ Within the `hintsBtn` click event listener callback, replace the `hints` value w
 You should have `const hints = await viewHints();` in your `client/main.js` file.
 
 ```js
+const callExpression = babelisedCode
+  .getType('CallExpression')
+  .find(
+    c =>
+      c.callee?.object?.name === 'hintsBtn' &&
+      c.callee?.property?.name === 'addEventListener'
+  );
+const body = callExpression.arguments[1].body;
+const actualCodeString = babelisedCode.generateCode(body, {
+  compact: true
+});
+const expectedCodeString = `const hints=await viewHints()`;
+assert.include(actualCodeString, expectedCodeString);
+```
 
+### --before-all--
+
+```js
+const codeString = await __helpers.getFile(
+  `${project.dashedName}/client/main.js`
+);
+const babelisedCode = new __helpers.Babeliser(codeString);
+global.babelisedCode = babelisedCode;
+```
+
+### --after-all--
+
+```js
+delete global.babelisedCode;
 ```
 
 ## 50
@@ -1155,7 +1933,12 @@ Run `npm run dev` to serve the web app on port `5173`.
 You should have the app running on port `5173`.
 
 ```js
-
+try {
+  const response = await fetch('http://localhost:5173');
+  assert.equal(response.status, 200);
+} catch (e) {
+  assert.fail('The app should be running on port 5173');
+}
 ```
 
 ## 51
@@ -1204,8 +1987,5 @@ You should make at least one guess using the app.
 ## 54
 
 ### --description--
-
-
-
 
 ## --fcc-end--
