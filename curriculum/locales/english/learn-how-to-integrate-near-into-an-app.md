@@ -1952,7 +1952,25 @@ Use the app to sign in to your wallet.
 You should sign in to your wallet using the app.
 
 ```js
-
+const userAccount = await __helpers.getFile(
+  `${project.dashedName}/neardev/dev-account`
+);
+const output = await __helpers.getCommandOutput(
+  `NEAR_ENV=testnet near keys ${userAccount}`,
+  project.dashedName
+);
+const splitOutput = output.stdout.split('[');
+const strArr = `[${splitOutput[1]}`;
+const strJson = strArr
+  .replaceAll('\n', '')
+  .replaceAll("'", '"')
+  .replaceAll(/(({|,)\s*)(\w+)/gm, '$1"$3"');
+const json = JSON.parse(strJson);
+assert.isAtLeast(
+  json.length,
+  2,
+  "There should be at least 2 access keys for the app's account"
+);
 ```
 
 ## 52
@@ -1967,7 +1985,11 @@ Run `near keys <your_account>` to see the access key.
 You should run `near keys <your_account>` in the terminal.
 
 ```js
-
+const id = await __helpers.getFile(`${project.dashedName}/neardev/dev-account`);
+let lastCommand = await __helpers.getLastCommand();
+lastCommand = lastCommand?.trim().replaceAll(/\s+/g, ' ');
+const re = new RegExp(`near\\s+keys\\s+${id}`, 'g');
+assert.match(lastCommand, re);
 ```
 
 ## 53
@@ -1981,11 +2003,43 @@ Use the app to make at least one guess.
 You should make at least one guess using the app.
 
 ```js
-
+const contractAccount = await __helpers.getFile(
+  `${project.dashedName}/neardev/dev-account`
+);
+const command = `near view-state ${contractAccount} --finality optimistic --utf8 guesses`;
+const { stdout, stderr } = await __helpers.getCommandOutput(command);
+try {
+  const jsonOut = JSON.parse(stdout);
+  assert.isAtLeast(
+    jsonOut.length,
+    1,
+    'There should be at least one guess in the contract state'
+  );
+} catch (e) {
+  assert.fail(
+    e,
+    'If this fail, you might need to manually re-run the tests until your guess/transaction is confirmed.'
+  );
+}
 ```
 
 ## 54
 
 ### --description--
+
+This is the last step. Feel free to play the game and mess with the UI.
+
+When you are done, enter `done` in the terminal.
+
+### --tests--
+
+You should enter `done` in the terminal
+
+```js
+await new Promise(res => setTimeout(res, 1000));
+let lastCommand = await __helpers.getLastCommand();
+lastCommand = lastCommand?.trim().replaceAll(/\s+/g, ' ');
+assert.match(lastCommand, /^\s*done\s*$/);
+```
 
 ## --fcc-end--
