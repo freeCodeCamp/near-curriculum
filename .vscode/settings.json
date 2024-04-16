@@ -36,6 +36,7 @@
     "build-a-fortune-telling-smart-contract": true,
     "js/ts.implicitProjectConfig.experimentalDecorators": true
   },
+  "terminal.integrated.defaultProfile.linux": "bash",
   "terminal.integrated.profiles.linux": {
     "bash": {
       "path": "bash",
