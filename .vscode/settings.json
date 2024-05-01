@@ -1,6 +1,6 @@
 {
   "files.exclude": {
-    ".devcontainer": true,
+    ".devcontainer.json": true,
     ".editorconfig": true,
     ".freeCodeCamp": true,
     ".github": true,
