@@ -10,6 +10,6 @@
   },
   "forwardPorts": [8080],
   "workspaceFolder": "/workspace/near-curriculum",
-  "dockerFile": "../Dockerfile",
-  "context": ".."
+  "dockerFile": "./Dockerfile",
+  "context": "."
 }
