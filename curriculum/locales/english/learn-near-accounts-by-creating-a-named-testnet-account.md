@@ -32,7 +32,7 @@ assert.include(cwd, 'learn-near-accounts-by-creating-a-named-testnet-account');
 
 ### --description--
 
-You will be creating your own NEAR testnet account and learn how accounts work. There are some dependencies you need, run `npm install` to install them.
+You will be creating your own NEAR testnet account and learn how accounts work. There are some dependencies you need. Run `npm install` to install them.
 
 ### --tests--
 
@@ -205,7 +205,7 @@ assert.match(lastCommand, re);
 
 ### --description--
 
-There's one access key for the account stored on the testnet. Credentials are stored locally that allow you to use that key. Run `ls -l ~/.near-credentials/testnet`.
+There's one access key for the account stored on the testnet. Credentials are stored locally which allow you to use that key. Run `ls -l ~/.near-credentials/testnet`.
 
 ### --tests--
 
@@ -298,7 +298,7 @@ assert.include(lastOutput, `Account ${account} is not found in testnet`);
 
 ### --description--
 
-Create an `<account>.json` file, with `<account>` being the available name from the last step. e.g. `account_name.testnet`. This file will only be used for your reference and testing.
+Create an `<account>.testnet.json` file, with `<account>` being the available name from the last step. e.g. `account_name.testnet`. This file will only be used for your reference and testing.
 
 ### --tests--
 
@@ -336,7 +336,8 @@ assert.match(output?.stdout, re);
 
 ### --description--
 
-There are many ways to create an account. Here, you will first generate a keypair and seed phrase you can use to create and recover an account. Create a `generate-seed.js` file, this will be a small script for that.
+There are many ways to create an account. Here, you will first generate a keypair and seed phrase you can use to create and recover an account. Create a `generate-seed.js` file. This file will generate will be used to create and recover
+an account. 
 
 ### --tests--
 
@@ -1015,7 +1016,7 @@ assert.include(lastOutput, `Account ${userAccount}`);
 
 ### --description--
 
-You will want to know a way to give yourself more NEAR in case you run out. Delete the `neardev` folder.
+Delete the `neardev` folder.
 
 ### --tests--
 
@@ -2608,7 +2609,11 @@ await new Promise(res => setTimeout(res, 1000));
 const dir = await __helpers.getDirectory('learn-near-accounts-by-creating-a-named-testnet-account');
 const file = dir.find(file => file.endsWith('.testnet.json') && file.match(/\./g).length === 3);
 const jsonFile = await __helpers.getJsonFile(`learn-near-accounts-by-creating-a-named-testnet-account/${file}`)
-const userCreds = await __helpers.getJsonFile(`../../root/.near-credentials/testnet/${file}`);
+const userFile = fs.readFileSync(
+  join(process.env.HOME, `.near-credentials/testnet/${file}`),
+  'utf-8'
+);
+const userCreds = JSON.parse(userFile);
 assert.property(userCreds, 'account_id');
 assert.property(userCreds, 'public_key');
 assert.property(userCreds, 'private_key');
