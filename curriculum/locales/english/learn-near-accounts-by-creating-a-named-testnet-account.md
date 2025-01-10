@@ -298,11 +298,11 @@ assert.include(lastOutput, `Account ${account} is not found in testnet`);
 
 ### --description--
 
-Create an `<account>.testnet.json` file, with `<account>` being the available name from the last step. e.g. `account_name.testnet`. This file will only be used for your reference and testing.
+Create an `<account>.json` file, with `<account>` being the available name from the last step. e.g. `account_name.testnet`. This file will only be used for your reference and testing.
 
 ### --tests--
 
-You should create an `<account>.testnet.json` file
+You should create an `<account>.json` file where the account name ends in `.testnet`  
 
 ```js
 await new Promise(res => setTimeout(res, 1000));
