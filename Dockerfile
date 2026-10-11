@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:26.04
 
 ARG USERNAME=camper
 ARG REPO_NAME=near-curriculum
